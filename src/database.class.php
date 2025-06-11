@@ -27,10 +27,13 @@ $indexed = $db->runQuery("SELECT id, name FROM users")->fetchAll(PDO::FETCH_KEY_
 */
 class database {
 
-	public function __construct($pdo)
-        {
-            $this->pdo = $pdo;
-        }
+    /** @var PDO */
+    private $pdo;
+
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
     
 	public function runQuery($sql, $parameters = []) {
     

@@ -1,10 +1,13 @@
 <?php
 class AdvancedAnalytics {
-    
-    public function __construct($pdo)
-        {
-            $this->pdo = $pdo;
-        }
+
+    /** @var PDO */
+    private $pdo;
+
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
     
     public function startSession() {
         if (!isset($_SESSION['session_start_time'])) {
