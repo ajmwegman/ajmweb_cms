@@ -28,7 +28,7 @@ $indexed = $db->runQuery("SELECT id, name FROM users")->fetchAll(PDO::FETCH_KEY_
 class database {
 
     /** @var PDO */
-    private $pdo;
+    private PDO $pdo;
 
     public function __construct(PDO $pdo)
     {

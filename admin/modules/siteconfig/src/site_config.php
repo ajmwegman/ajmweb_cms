@@ -1,6 +1,9 @@
 <?php
 class siteConfig {
 
+  /** @var PDO */
+  private PDO $pdo;
+
   function __construct( $pdo ) {
     $this->pdo = $pdo;
   }

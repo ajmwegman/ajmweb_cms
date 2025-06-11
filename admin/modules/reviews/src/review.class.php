@@ -13,8 +13,11 @@ reviewdate
 modified
 active
 */
-	function __construct($pdo) {
-		$this->pdo = $pdo;
+        /** @var PDO */
+        private PDO $pdo;
+
+        function __construct($pdo) {
+                $this->pdo = $pdo;
     }
 
 	function getAllReviews() {
