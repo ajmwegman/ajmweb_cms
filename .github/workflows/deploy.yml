@@ -20,7 +20,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /public_html/            # Doelmap op server
+          server-dir: /public_html/uptools/     # Doelmap op server
           local-dir: ./                         # Map in je repo om te uploaden (root van repo)
           dangerous-clean-slate: false          # Zet op true als je de hele map elke keer wilt wissen (niet aanbevolen)
           exclude: |
