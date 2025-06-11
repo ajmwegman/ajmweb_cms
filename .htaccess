@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+
+php_value upload_max_filesize 20M
+
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+Options +MultiViews
+
+   RewriteEngine On
+   
+   RewriteRule ^admin/([^/]*)/([^/]*)/([^/]*)/$ admin/index.php?module=$1&action=$2&id=$3 [L]
+   RewriteRule ^admin/([^/]*)/([^/]*)/$ admin/index.php?module=$1&page=$2 [L]
+   RewriteRule ^admin/([^/]*)/$ admin/index.php?module=$1 [L]
+	
+
+# Voor de product URLs
+RewriteRule ^veiling/([^/]*)/?$ auctionpage.php?p=$1 [L]
+
+</IfModule>

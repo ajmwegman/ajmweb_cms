@@ -1,0 +1,1 @@
+<h2>New module</h2>
