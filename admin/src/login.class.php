@@ -1,8 +1,11 @@
 <?php
 class login {
+
+    /** @var PDO */
+    private PDO $pdo;
 	
-	function __construct($pdo) {
-		$this->pdo = $pdo;
+        function __construct($pdo) {
+                $this->pdo = $pdo;
     }
 
     function checkLogin( $username, $hash ) {
