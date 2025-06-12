@@ -1,35 +1,27 @@
 <?php
-class carousel {
+class Carousel {
 
-	public function __construct($pdo)
-        {
-            $this->pdo = $pdo;
-        }
-	
-	function getItems() {
+    private PDO $pdo;
 
-		$sql = "SELECT * FROM group_carousel WHERE active = 'y' ORDER BY sortnum ASC";
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
 
-        $stmt = $this->pdo->prepare( $sql );
-		$stmt->execute();
-		
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
-		return($row);
+    public function getItems(): array
+    {
+        $sql = "SELECT * FROM group_carousel WHERE active = 'y' ORDER BY sortnum ASC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-	}
-    
-    function getCarouselSettings($group_id) {
-
-		$sql = "SELECT * FROM group_carousel_settings WHERE group_id = :group_id";
-
-        $stmt = $this->pdo->prepare( $sql );
-		$stmt->execute( [ 'group_id' => $group_id ] );
-		
-        $row = $stmt->fetch();
-		
-		return($row);
-
-	}
+    public function getCarouselSettings(int $group_id): array|false
+    {
+        $sql = "SELECT * FROM group_carousel_settings WHERE group_id = :group_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['group_id' => $group_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 ?>
