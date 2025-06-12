@@ -1,5 +1,8 @@
 <?php
 class banner {
+
+        /** @var PDO */
+        private $pdo;
 	
 /*
 id

@@ -1,5 +1,8 @@
 <?php
 class review {
+
+        /** @var PDO */
+        private $pdo;
 	
 /*
 id

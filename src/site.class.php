@@ -1,13 +1,5 @@
 <?php
 class site {
-
-    /** @var PDO */
-    private PDO $pdo;
-
-    public function __construct(PDO $pdo)
-    {
-        $this->pdo = $pdo;
-    }
     
     /* START GETTNG DATA FOR WEBSITES */
 	function getConfig ($loc_website) {

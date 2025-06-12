@@ -19,9 +19,6 @@ function active_session( $time = 600 ) {
 }
 */
 class menu {
-
-        /** @var PDO */
-        private PDO $pdo;
 	
         function __construct($pdo) {
                 $this->pdo = $pdo;

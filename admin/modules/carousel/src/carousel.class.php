@@ -1,22 +1,7 @@
 <?php
 class carousel {
-	
-/*
-id
-subject
-location
-description
-sortnum
-image
-modified
-active
-*/
-        /** @var PDO */
-        private PDO $pdo;
 
-        function __construct($pdo) {
-                $this->pdo = $pdo;
-    }
+        private PDO $pdo;
 
 	function getAllImages() {
 

@@ -1,7 +1,6 @@
 <?php
+#[\AllowDynamicProperties]
 class gallery {
-
-    private PDO $pdo;
 
     public function __construct(PDO $pdo)
     {
