@@ -2,9 +2,9 @@
 class carousel {
 
         /** @var PDO */
-        private $pdo;
+        private PDO $pdo;
 
-	public function __construct($pdo)
+        public function __construct(PDO $pdo)
         {
             $this->pdo = $pdo;
         }
