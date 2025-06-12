@@ -1,4 +1,5 @@
 <?php
+#[\AllowDynamicProperties]
 class gallery {
 
         private PDO $pdo;
