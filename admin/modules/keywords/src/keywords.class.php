@@ -1,5 +1,8 @@
 <?php
 class keywords {
+
+        /** @var PDO */
+        private $pdo;
 	
 	function __construct($pdo) {
 		$this->pdo = $pdo;

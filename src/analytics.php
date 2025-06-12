@@ -1,5 +1,8 @@
 <?php
 class AdvancedAnalytics {
+
+    /** @var PDO */
+    private $pdo;
     
     public function __construct($pdo)
         {

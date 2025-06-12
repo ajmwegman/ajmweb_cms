@@ -1,5 +1,8 @@
 <?php
 class gallery {
+
+        /** @var PDO */
+        private $pdo;
 	
 /*
 id
