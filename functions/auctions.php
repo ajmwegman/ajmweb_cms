@@ -1,241 +1,168 @@
 <?php
 class Auction {
 
-    private $pdo;
+    private PDO $pdo;
 
-    public function __construct($pdo)
+    public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
     }
 
-    public function getProductBySeoTitle($seoTitle)
+    public function getProductBySeoTitle(string $seoTitle): ?array
     {
-        try {            
-            $sql = "SELECT * FROM group_products  WHERE group_products.active = 'y' AND group_products.seoTitle = :seoTitle 
-                    LIMIT 1";
-
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(':seoTitle', $seoTitle, PDO::PARAM_STR);
-            $stmt->execute();
-
+        try {
+            $stmt = $this->pdo->prepare("SELECT * FROM group_products WHERE active = 'y' AND seoTitle = :seoTitle LIMIT 1");
+            $stmt->execute(['seoTitle' => $seoTitle]);
             $auction = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($auction !== false) {
-                return $auction;
-            } else {
-                echo "Query is empty.". $sql; // Display the message
-                return null;
-            }
-
+            return $auction ?: null;
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return null; // Return null if there's an error
+            return null;
         }
     }
 
-
-    public function getAuctions()
+    public function getAuctions(): array
     {
         try {
-            $sql = "SELECT * FROM group_auctions WHERE active = 'y' ORDER BY startDate ASC";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute();
-
-            $auctions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            return $auctions;
+            $stmt = $this->pdo->query("SELECT * FROM group_auctions WHERE active = 'y' ORDER BY startDate ASC");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return array(); // Return an empty array if there's an error to avoid potential issues in the calling code
+            return [];
         }
     }
 
-    public function getProductData($productId)
+    public function getProductData(int $productId): array|false
     {
         try {
-            $query = 'SELECT * FROM group_products WHERE id = :productId';
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
-            $stmt->execute();
+            $stmt = $this->pdo->prepare('SELECT * FROM group_products WHERE id = :productId');
+            $stmt->execute(['productId' => $productId]);
             $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Fetch the associated images for the product from 'group_product_images' using the 'hash'
-            $query_images = 'SELECT image FROM group_product_images WHERE hash = :hash';
-            $stmt_images = $this->pdo->prepare($query_images);
-            $stmt_images->bindParam(':hash', $product['hash']);
-            $stmt_images->execute();
-            $images = $stmt_images->fetchAll(PDO::FETCH_COLUMN);
+            if (!$product) return false;
 
-            $product['images'] = $images; // Add the 'images' key to the $product array
+            $stmt = $this->pdo->prepare('SELECT image FROM group_product_images WHERE hash = :hash');
+            $stmt->execute(['hash' => $product['hash']]);
+            $product['images'] = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
             return $product;
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return false; // Return false if there's an error to avoid potential issues in the calling code
+            return false;
         }
     }
-    
-    public function getAuctionData($productId)
+
+    public function getAuctionData(int $productId): array|false
     {
         try {
-            $query = 'SELECT * FROM group_auctions WHERE productId = :productId';
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
-            $stmt->execute();
-            $auction = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            return $auction;
+            $stmt = $this->pdo->prepare('SELECT * FROM group_auctions WHERE productId = :productId');
+            $stmt->execute(['productId' => $productId]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return false; // Return false if there's an error to avoid potential issues in the calling code
+            return false;
         }
     }
 
-    public function checkChanges($id)
+    public function checkChanges(int $id): int
     {
         try {
-            $query = 'SELECT numbids FROM group_auctions WHERE productId = :productId';
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindParam(':productId', $productId);
-            $stmt->execute();
+            $stmt = $this->pdo->prepare('SELECT numbids FROM group_auctions WHERE productId = :productId');
+            $stmt->execute(['productId' => $id]);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            return (intval($row['numbids']) !== 0) ? $row['numbids'] : 0;
+            return $row ? (int) $row['numbids'] : 0;
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return 0; // Return 0 if there's an error to avoid potential issues in the calling code
+            return 0;
         }
     }
 
-    public function registerChanges($id)
+    public function registerChanges(int $id): void
     {
         try {
-            $query = 'UPDATE group_auctions SET numbids = numbids + 1 WHERE productId = :productId';
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindParam(':productId', $productId);
-            $stmt->execute();
+            $stmt = $this->pdo->prepare('UPDATE group_auctions SET numbids = numbids + 1 WHERE productId = :productId');
+            $stmt->execute(['productId' => $id]);
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            // eventueel loggen
         }
     }
 
-    public function getBids($lotid, $limit = 5)
+    public function getBids(int $lotid, int $limit = 5): array
     {
         try {
-            $query = 'SELECT * FROM lotbids WHERE lotid = :lotid ORDER BY timer DESC LIMIT :limit';
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindParam(':lotid', $lotid);
-            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt = $this->pdo->prepare('SELECT * FROM lotbids WHERE lotid = :lotid ORDER BY timer DESC LIMIT :limit');
+            $stmt->bindValue(':lotid', $lotid, PDO::PARAM_INT);
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
             $stmt->execute();
 
-            $bidHistory = array();
+            $bids = [];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $bidHistory[] = array(
-                    'userid' => 'User'.$row['userid'],
-                    'bid' => '&euro; ' . $row['bid'],
-                    'timestamp' => $this->formatRelativeTime($row['timer']) 
-                );
+                $bids[] = [
+                    'userid' => 'User' . $row['userid'],
+                    'bid' => '&euro; ' . number_format($row['bid'], 2, ',', '.'),
+                    'timestamp' => $this->formatRelativeTime($row['timer']),
+                ];
             }
 
-            return $bidHistory;
+            return $bids;
         } catch (PDOException $e) {
-            // Handle the error, you might want to log it
-            return array('error' => 'An error occurred');
+            return ['error' => 'An error occurred'];
         }
     }
-    
-    public function getHighestBid($lotid)
+
+    public function getHighestBid(int $lotid): float
     {
         try {
-            $query = 'SELECT MAX(bid) AS highest_bid FROM lotbids WHERE lotid = :lotid';
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindParam(':lotid', $lotid);
-            $stmt->execute();
-
+            $stmt = $this->pdo->prepare('SELECT MAX(bid) AS highest_bid FROM lotbids WHERE lotid = :lotid');
+            $stmt->execute(['lotid' => $lotid]);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($row && isset($row['highest_bid'])) {
-            return htmlspecialchars($row['highest_bid']);
-            } else {
-                return 0;
-            }
-            
+            return isset($row['highest_bid']) ? (float) $row['highest_bid'] : 0;
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return 'lalala'; // Return an empty string if there's an error to avoid potential issues in the calling code
+            return 0;
         }
     }
-    
-    public function checkBid($bid, $lotid)
+
+    public function checkBid(float $bid, int $lotid): bool|string
     {
         try {
             $bid = floor($bid);
             if (!is_numeric($bid)) {
-                return 'E01'; // Bid refused - not a number
-            } else {
-                $query = 'SELECT bid FROM lotbids WHERE lotid = :lotid ORDER BY bid DESC LIMIT 1';
-                $stmt = $this->pdo->prepare($query);
-                $stmt->bindParam(':lotid', $lotid);
-                $stmt->execute();
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                if ($row === false) {
-                    // No bids found for this lot, so any bid is valid
-                    return true;
-                }
-
-                $currentBid = $row['bid'];
-                if ($currentBid >= $bid) {
-                    return 'E02'; // Bid refused - higher bid already exists
-                } else {
-                    return true;
-                }
+                return 'E01';
             }
+
+            $stmt = $this->pdo->prepare('SELECT bid FROM lotbids WHERE lotid = :lotid ORDER BY bid DESC LIMIT 1');
+            $stmt->execute(['lotid' => $lotid]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$row) return true;
+
+            return ($row['bid'] >= $bid) ? 'E02' : true;
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return false; // Return false if there's an error to avoid potential issues in the calling code
+            return false;
         }
     }
 
-    public function addBid($bid, $lotid)
+    public function addBid(float $bid, int $lotid): bool
     {
         try {
-            $query = 'INSERT INTO lotbids (lotid, bid, timer) VALUES (:lotid, :bid, NOW())';
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindParam(':lotid', $lotid);
-            $stmt->bindParam(':bid', $bid);
-            $result = $stmt->execute();
-            if ($result === true) {
-                $this->registerChanges($lotid);
-            } else {
-                return false;
-            }
+            $stmt = $this->pdo->prepare('INSERT INTO lotbids (lotid, bid, timer) VALUES (:lotid, :bid, NOW())');
+            $stmt->execute(['lotid' => $lotid, 'bid' => $bid]);
+            $this->registerChanges($lotid);
+            return true;
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-            return false; // Return false if there's an error to avoid potential issues in the calling code
+            return false;
         }
     }
-    
-    public function formatRelativeTime($timestamp) {
-    $currentTime = time();
-    $timestamp = strtotime($timestamp);
-    $timeDifference = $currentTime - $timestamp;
-    
-    if ($timeDifference < 60) {
-        return $timeDifference . " seconden geleden";
-    } elseif ($timeDifference < 3600) {
-        $minutes = floor($timeDifference / 60);
-        return $minutes . " minuten geleden";
-    } elseif ($timeDifference < 21600) {
-        $hours = floor($timeDifference / 3600);
-        return $hours . " uur geleden";
-    } elseif ($timeDifference < 86400) {
-        $hours = floor($timeDifference / 3600);
-        return "vandaag " . date("H:i", $timestamp);
-    } elseif ($timeDifference < 172800) {
-        return "gisteren " . date("H:i", $timestamp);
-    } else {
-        return date("d-m-Y H:i", $timestamp);
+
+    public function formatRelativeTime(string $timestamp): string
+    {
+        $currentTime = time();
+        $timestamp = strtotime($timestamp);
+        $timeDifference = $currentTime - $timestamp;
+
+        return match (true) {
+            $timeDifference < 60     => "$timeDifference seconden geleden",
+            $timeDifference < 3600   => floor($timeDifference / 60) . " minuten geleden",
+            $timeDifference < 21600  => floor($timeDifference / 3600) . " uur geleden",
+            $timeDifference < 86400  => "vandaag " . date("H:i", $timestamp),
+            $timeDifference < 172800 => "gisteren " . date("H:i", $timestamp),
+            default                  => date("d-m-Y H:i", $timestamp),
+        };
     }
-}
 }
 ?>

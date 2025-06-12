@@ -19,12 +19,9 @@ function active_session( $time = 600 ) {
 }
 */
 class menu {
-
-        /** @var PDO */
-        private $pdo;
 	
-	function __construct($pdo) {
-		$this->pdo = $pdo;
+        function __construct($pdo) {
+                $this->pdo = $pdo;
     }
 
 	function getGroups() {

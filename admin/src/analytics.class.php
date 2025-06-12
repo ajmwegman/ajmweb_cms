@@ -1,8 +1,5 @@
 <?php
 class Analytics {
-
-    /** @var PDO */
-    private $pdo;
     
     public function __construct($pdo)
         {

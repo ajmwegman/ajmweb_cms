@@ -1,11 +1,9 @@
 <?php
 class keywords {
 
-        /** @var PDO */
-        private $pdo;
 	
-	function __construct($pdo) {
-		$this->pdo = $pdo;
+        function __construct($pdo) {
+                $this->pdo = $pdo;
     }
 
 	function getKeywordsList($groupid ) {

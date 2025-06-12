@@ -26,10 +26,12 @@ status
 	public $seo_url = 0;
 	public $keywords = 0;
 	public $sortnum = 0;
-	public $status = 0;
-	*/
-	function __construct($pdo) {
-		$this->pdo = $pdo;
+        public $status = 0;
+        */
+        /** @var PDO */
+        private PDO $pdo;
+        function __construct($pdo) {
+                $this->pdo = $pdo;
     }
 
 	function getKeywords( $groupid, $keyword ) {
