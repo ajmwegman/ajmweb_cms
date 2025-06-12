@@ -1,6 +1,9 @@
 <?php
 class gallery {
 
+        /** @var PDO */
+        private $pdo;
+
 	public function __construct($pdo)
         {
             $this->pdo = $pdo;

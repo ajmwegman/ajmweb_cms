@@ -1,5 +1,8 @@
 <?php
 class carousel {
+
+        /** @var PDO */
+        private $pdo;
 	
 /*
 id

@@ -1,5 +1,8 @@
 <?php
 class content {
+
+        /** @var PDO */
+        private $pdo;
 	
 /*
 id
