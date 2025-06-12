@@ -2,7 +2,7 @@
 class carousel {
 
         /** @var PDO */
-        private $pdo;
+        private PDO $pdo;
 	
 /*
 id
@@ -14,8 +14,8 @@ image
 modified
 active
 */
-	function __construct($pdo) {
-		$this->pdo = $pdo;
+    function __construct(PDO $pdo) {
+            $this->pdo = $pdo;
     }
 
 	function getAllImages() {
