@@ -1,4 +1,5 @@
-<?php 
+<?php
+declare(strict_types=1);
 session_start();
 $sessid = session_id();
 
@@ -51,17 +52,17 @@ $error = '
             $_SESSION['loggedin'] = true;
             $_SESSION['session_hash'] = $newHash;
             
-            $response = array("success" => true, "message" => "Aanmelden gelukt!");
+            $response = ["success" => true, "message" => "Aanmelden gelukt!"];
             
             $update = $users->updateLogin($userId, $newHash);
     
         } else {
             
-            $response = array("success" => false, "message" => "Ongeldige inloggegevens.");
+            $response = ["success" => false, "message" => "Ongeldige inloggegevens."];
         }
         
     } else {
-        $response = array("success" => false, "message" => "Er is een fout opgetreden");
+        $response = ["success" => false, "message" => "Er is een fout opgetreden"];
     }
 
 // Stuur de JSON-response terug naar JS
