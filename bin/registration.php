@@ -1,4 +1,5 @@
-<?php 
+<?php
+declare(strict_types=1);
 session_start();
 $sessid = session_id();
 
@@ -33,31 +34,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   // Controleer op lege waarden en of het een geldig e-mailadres is
   if (empty($email) || empty($password)) {
-    $response = array("success" => false, "message" => "Vul zowel het e-mailadres als het wachtwoord in.");
+    $response = ["success" => false, "message" => "Vul zowel het e-mailadres als het wachtwoord in."];
   } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $response = array("success" => false, "message" => "Ongeldig e-mailadres.");
+    $response = ["success" => false, "message" => "Ongeldig e-mailadres."];
   } else {
 
     $sql = "SELECT * FROM site_users WHERE email=:email";
     $go = $db->countQuery($sql, ['email'=>$email]);
 
     if($go == true) {
-        $response = array("success" => false, "message" => "Dit e-mailadres is al geregistreerd.");
+        $response = ["success" => false, "message" => "Dit e-mailadres is al geregistreerd."];
     } else {
         // Hash het ingevoerde wachtwoord voordat we het opslaan
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $timestamp = time();
 
-        $values = array('email' => $email, 'password' => $hashedPassword, 'regdate' => date("Y-m-d"));
+        $values = ['email' => $email, 'password' => $hashedPassword, 'regdate' => date("Y-m-d")];
       
         $go = $db->insertdata("site_users", $values);
-        $response = array("success" => true, "message" => "Succesvol geregistreerd!");
+        $response = ["success" => true, "message" => "Succesvol geregistreerd!"];
         
         $_SESSION['loggedin'] = true;
     }
   }
 } else {
-  $response = array("success" => false, "message" => "Ongeldig verzoek.");
+  $response = ["success" => false, "message" => "Ongeldig verzoek."];
 }
 
 // Stuur de JSON-response terug naar JS
