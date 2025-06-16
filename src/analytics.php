@@ -1,5 +1,12 @@
 <?php
 class AdvancedAnalytics {
+
+    private $pdo;
+
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
     
     public function startSession() {
         if (!isset($_SESSION['session_start_time'])) {
