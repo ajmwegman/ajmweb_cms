@@ -14,6 +14,7 @@ sortnum
 status
 */
 	
+	private $pdo;
 	public $id = 0;
 	public $hash = 0;
 	public $group_id = 0;
