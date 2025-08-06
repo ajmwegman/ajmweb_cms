@@ -13,8 +13,25 @@ require_once( "template/navbar.php" );
 <div class="container mt-4">
   <?php
     $module = isset( $_GET[ 'module' ] ) ? $_GET[ 'module' ] : "";
+    $action = isset( $_GET[ 'action' ] ) ? $_GET[ 'action' ] : "";
+    $id = isset( $_GET[ 'id' ] ) ? $_GET[ 'id' ] : "";
 
-    if(!empty($module)) { require_once( "modules/{$module}/index.php" ); } else { require_once( "template/frontpage.php" ); }
+    // Debug output
+    echo "<!-- Debug: Module: {$module}, Action: {$action}, ID: {$id} -->";
+    
+    if(!empty($module)) { 
+        $module_path = "modules/{$module}/index.php";
+        echo "<!-- Debug: Loading module path: {$module_path} -->";
+        
+        if (file_exists($module_path)) {
+            require_once( $module_path ); 
+        } else {
+            echo "<!-- Debug: Module file not found: {$module_path} -->";
+            echo '<div class="alert alert-danger">Module niet gevonden: ' . htmlspecialchars($module) . '</div>';
+        }
+    } else { 
+        require_once( "template/frontpage.php" ); 
+    }
   ?>
 </div>
 <?php require_once("template/footer.php"); ?>

@@ -1,3 +1,10 @@
+<?php
+// DEFAULTS
+$startPrice = '10.00';
+$minUp      = '1.00';
+$commision  = '30'; // percent %
+$shippingcost = '0.00';
+?>
 <form action="/admin/modules/auctions/bin/add.php" enctype="multipart/form-data" method="post" name="menuform" id="menuform" autocomplete="off">
   <input type="hidden" name="group_id" value="<?php echo $group_id; ?>">
   <input type="hidden" id="hash" name="hash" value="">
@@ -10,7 +17,7 @@
         <div class="card-body">
           <div class="row mb-3">
             <div class="col-md-12">
-              <label for="searchInput" class="form-label mb-1">Zoek naar een product:</label>
+              <label for="searchInput" class="form-label mb-1">Zoek naar een product of kavelnummer:</label>
               <input type="text" id="searchInput" name="searchInput" class="form-control" autocomplete="off">
               <div id="searchResults"></div>
             </div>
@@ -59,15 +66,15 @@
                         <div class="row">
                         <div class="form-group mt-2 col-md-4">
                             <label for="minUp" class="form-label mb-1">Minimale verhoging</label>
-                            <?php echo input("text", "minUp", "", "minUp", 'class="form-control"'); ?>
+                            <?php echo input("text", "minUp", $minUp, "minUp", 'class="form-control"'); ?>
                         </div>
                         <div class="form-group mt-2 col-md-4">
-                            <label for="commision" class="form-label mb-1">Commisie</label>
-                            <?php echo input("text", "commision", "", "commision", 'class="form-control"'); ?>
+                            <label for="commision" class="form-label mb-1">Commisie (%)</label>
+                            <?php echo input("text", "commision", $commision, "commision", 'class="form-control"'); ?>
                         </div>
                         <div class="form-group mt-2 col-md-4">
                             <label for="shippingcost" class="form-label mb-1">Verzendkosten</label>
-                            <?php echo input("text", "shippingcost", "", "shippingcost", 'class="form-control"'); ?>
+                            <?php echo input("text", "shippingcost", $shippingcost, "shippingcost", 'class="form-control"'); ?>
                         </div>
                             </div>
                     </div>

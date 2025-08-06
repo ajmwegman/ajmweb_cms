@@ -5,19 +5,28 @@ if(!isset($_GET['id'])) { echo "oeps"; } else { $id = $_GET['id']; }
 
 $banner = new banner($pdo);	
 
+// Debug informatie
+echo "<!-- Debug: ID = {$id} -->";
+
 $row = $banner->getBanner("id", $id );
 
-  	//foreach ( $result as $data => $row ) {	
-		
-		$id 		  = $row['id'];
-		$hash 		  = $row['hash'];
-		$subject	  = $row['subject'];
-		$url          = $row['url'];
-		$startdate	  = $row['startdate'];
-		$enddate	  = $row['enddate'];
-		$image     	  = $row['image'];
-		$description  = $row['description'];
-		$advertiser   = $row['advertiser'];
+if (!$row) {
+    echo '<div class="alert alert-danger">Banner niet gevonden voor ID: ' . htmlspecialchars($id) . '</div>';
+    echo '<a href="/admin/banners/" class="btn btn-secondary">Terug naar overzicht</a>';
+    exit;
+}
+
+//foreach ( $result as $data => $row ) {	
+
+$id 		  = $row['id'];
+$hash 		  = $row['hash'];
+$subject	  = $row['subject'];
+$url          = $row['url'];
+$startdate	  = $row['startdate'];
+$enddate	  = $row['enddate'];
+$image     	  = $row['image'];
+$description  = $row['description'];
+$advertiser   = $row['advertiser'];
 
 ?>
 

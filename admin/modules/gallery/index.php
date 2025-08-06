@@ -1,5 +1,8 @@
 <?php
-if ($module == 'gallery' && isset($_GET['action']) == 'edit') { ?>
+// Debug informatie
+echo "<!-- Debug: Module = {$module}, Action = {$action}, ID = {$id} -->";
+
+if ($module == 'gallery' && $action == 'edit') { ?>
 
 <?php require_once("edit.php"); ?>
 
@@ -34,6 +37,6 @@ if ($module == 'gallery' && isset($_GET['action']) == 'edit') { ?>
     </div>
   </div>
 </div>
-<? } ?>
+<?php } ?>
 
 <script src="/admin/modules/gallery/js/menulist.js"  type="text/javascript"></script>

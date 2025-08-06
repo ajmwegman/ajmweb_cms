@@ -14,7 +14,6 @@ if (isset($config[0])) {
     exit; // Of andere logica die je wilt uitvoeren als er geen data is
 }
 
-
 echo "<h2>" . $menu->getSiteName( $sid ) . "</h2>";
 echo "<small>Site ID: " . $sid . "</small>";
 ?>

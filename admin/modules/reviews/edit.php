@@ -5,19 +5,28 @@ if(!isset($_GET['id'])) { echo "oeps"; } else { $id = $_GET['id']; }
 
 $review = new review($pdo);	
 
+// Debug informatie
+echo "<!-- Debug: ID = {$id} -->";
+
 $result = $review->getReview( $id );
 
-  	foreach ( $result as $data => $row ) {	
-		
-		$id 		  = $row['id'];
-		$hash 		  = $row['hash'];
-		$subject	  = $row['subject'];
-		$location     = $row['location'];
-		$reviewdate	  = $row['reviewdate'];
-		$seo_url 	  = $row['seo_url'];
-		$score     	  = $row['score'];
-		$description  = $row['description'];
-		$reaction 	  = $row['reaction'];
+if (!$result || empty($result)) {
+    echo '<div class="alert alert-danger">Review niet gevonden voor ID: ' . htmlspecialchars($id) . '</div>';
+    echo '<a href="/admin/reviews/" class="btn btn-secondary">Terug naar overzicht</a>';
+    exit;
+}
+
+foreach ( $result as $data => $row ) {	
+
+$id 		  = $row['id'];
+$hash 		  = $row['hash'];
+$subject	  = $row['subject'];
+$location     = $row['location'];
+$reviewdate	  = $row['reviewdate'];
+$seo_url 	  = $row['seo_url'];
+$score     	  = $row['score'];
+$description  = $row['description'];
+$reaction 	  = $row['reaction'];
 
 ?>
 

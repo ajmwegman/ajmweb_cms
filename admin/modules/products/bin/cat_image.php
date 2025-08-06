@@ -33,8 +33,18 @@ if (!empty($hash)) {
 
             echo '<div id="imageBlock' . $row['id'] . '" class="col-md-2 block sortable-item" data-set="' . $row['id'] . '">';
             if (!empty($image)) {
-                echo '<img src="' . $location . $image . '" alt="" class="img-fluid">';
+                echo '<img src="' . $location . $image . '" alt="" class="img-fluid" data-rotation="0">';
+                
+                    // Knop voor linksom draaien
+    echo '<button class="btn btn-secondary btn-sm rotate-left" data-image-id="' . $row['id'] . '"><i class="bi bi-arrow-counterclockwise"></i></button>';
+
+    // Knop voor rechtsom draaien
+    echo '<button class="btn btn-secondary btn-sm rotate-right" data-image-id="' . $row['id'] . '"><i class="bi bi-arrow-clockwise"></i></button>';
+
+                
                 ?>
+
+
                 <button value="<?php echo $row['id']; ?>"
                         data-message="Weet je zeker dat je <?php echo $image; ?> wilt verwijderen?"
                         id="btn<?php echo $row['id']; ?>"

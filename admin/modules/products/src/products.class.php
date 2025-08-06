@@ -48,10 +48,27 @@ active
 			return false;
 		} else {
 
-			$sql = "SELECT * FROM group_product_images WHERE hash = :hash";
+			$sql = "SELECT * FROM group_product_images WHERE hash = :hash ORDER BY sort_num ASC";
 
 			$stmt = $this->pdo->prepare( $sql );
 			$stmt->execute( [ 'hash' => $hash ] );
+
+			$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+            return $row;
+		}
+	}	
+    
+	public function getImagesById( $id ) {
+
+		if(!$id) {
+			return false;
+		} else {
+
+			$sql = "SELECT * FROM group_product_images WHERE id = :id LIMIT 1";
+
+			$stmt = $this->pdo->prepare( $sql );
+			$stmt->execute( [ 'id' => $id ] );
 
 			$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
@@ -119,6 +136,35 @@ active
                return $exts; 
             } 
         } 
+    }
+
+    public function rotateImage($id, $angle, $image_map) {
+        $imageInfo = $this->getImagesById($id);
+
+        if ($imageInfo && count($imageInfo) > 0) {
+            // Stel dat je afbeeldingsnaam of een unieke identifier opgeslagen is in de database
+            $imageName = $imageInfo[0]['image']; // of een andere relevante kolom
+
+            // Construeer het pad naar de afbeelding
+            $imagePath = $image_map . $imageName;
+
+            // Laden van de afbeelding
+            $source = imagecreatefromjpeg($imagePath); // Pas aan voor andere formaten
+
+            // Roteren van de afbeelding
+            $rotate = imagerotate($source, $angle, 0);
+
+            // Opslaan van de geroteerde afbeelding
+            imagejpeg($rotate, $imagePath);
+
+            // Geheugen vrijgeven
+            imagedestroy($source);
+            imagedestroy($rotate);
+
+            return true;
+        }
+
+        return false;
     }
 
     public function image_resize($extension, $max_size, $image_map, $temp_map, $foto_name, $quality) {

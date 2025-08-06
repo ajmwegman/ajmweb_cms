@@ -5,18 +5,27 @@ if(!isset($_GET['id'])) { echo "oeps"; } else { $id = $_GET['id']; }
 
 $gallery = new gallery($pdo);	
 
+// Debug informatie
+echo "<!-- Debug: ID = {$id} -->";
+
 $row = $gallery->getImage("id", $id );
 
-  	//foreach ( $result as $data => $row ) {	
-		
-		$id 		  = $row['id'];
-		$hash 		  = $row['hash'];
-		$subject	  = $row['subject'];
-		$url          = $row['url'];
-        $sortnum      = $row['sortnum'];
-		$image     	  = $row['image'];
-		$description  = $row['description'];
-		$category   = $row['category'];
+if (!$row) {
+    echo '<div class="alert alert-danger">Gallery item niet gevonden voor ID: ' . htmlspecialchars($id) . '</div>';
+    echo '<a href="/admin/gallery/" class="btn btn-secondary">Terug naar overzicht</a>';
+    exit;
+}
+
+//foreach ( $result as $data => $row ) {	
+
+$id 		  = $row['id'];
+$hash 		  = $row['hash'];
+$subject	  = $row['subject'];
+$url          = $row['url'];
+$sortnum      = $row['sortnum'];
+$image     	  = $row['image'];
+$description  = $row['description'];
+$category   = $row['category'];
 
 ?>
 <div id="menuList"></div>

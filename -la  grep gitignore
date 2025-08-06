@@ -1,0 +1,10 @@
+[33m79f4146[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #19 from ajmwegman/codex/fix-undefined-property-and-fatal-error
+[33m8f08212[m[33m ([m[1;31morigin/codex/fix-undefined-property-and-fatal-error[m[33m)[m Fix undefined property pdo in site class
+[33m3a17894[m Merge pull request #18 from ajmwegman/codex/fix-undefined-property-error-in-analytics.php
+[33m2213909[m[33m ([m[1;31morigin/codex/fix-undefined-property-error-in-analytics.php[m[33m)[m Fix undefined pdo property in analytics
+[33maf3f236[m Merge pull request #17 from ajmwegman/codex/update-/bin-files-to-php-8.2.8
+[33m0f670b0[m[33m ([m[1;31morigin/codex/update-/bin-files-to-php-8.2.8[m[33m)[m Add strict typing and modern array syntax
+[33m826504c[m remove test files
+[33m27b6cb4[m Merge pull request #16 from ajmwegman/codex/maak-test.php-bestand-met-boodschap
+[33mf457462[m[33m ([m[1;31morigin/codex/maak-test.php-bestand-met-boodschap[m[33m)[m Add test.php with Hello world
+[33m9257328[m Merge pull request #15 from ajmwegman/codex/add-phpinfo

@@ -12,13 +12,23 @@ echo "<h2>" . $menu->getGroupName( $group_id ) . "</h2>";
 
 require_once("../admin/template/navtabs.php");
 
-if ($module == 'content' && isset($_GET['action']) == 'edit') { ?>
+// Get page and id parameters from URL rewriting OR admin module parameters
+$page = $_GET['page'] ?? '';
+$id = $_GET['id'] ?? 0;
+
+// If we're using admin module routing, convert to URL rewriting format
+if ($module == 'content' && isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
+    $page = 'edit';
+    $id = $_GET['id'];
+}
+
+if ($page == 'edit' && $id > 0) { ?>
 
 <?php require_once("edit.php"); ?>
 
 <?php } else { 
 
-$selectbox = selectbox("Kies menu item", 'location', '', $MenuLocations, $MenuNames, 'class=form-select');
+$selectbox = selectbox("Kies menu item", 'location', '', array_combine($MenuLocations, $MenuNames), 'class="form-select"');
 ?>
 <h2 class="mt-4">Content Beheer</h2>
 

@@ -1,11 +1,8 @@
 <?php
 class adminUsers {
-
-        /** @var PDO */
-        private PDO $pdo;
 	
-        function __construct($pdo) {
-                $this->pdo = $pdo;
+	function __construct($pdo) {
+		$this->pdo = $pdo;
     }
 
 	function getAllAdminUsers() {

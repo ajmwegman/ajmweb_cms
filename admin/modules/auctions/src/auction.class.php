@@ -12,11 +12,8 @@ reaction
 modified
 active
 */
-        /** @var PDO */
-        private PDO $pdo;
-
-        function __construct($pdo) {
-                $this->pdo = $pdo;
+	function __construct($pdo) {
+		$this->pdo = $pdo;
     }
 
 function getAllAuctions($orderBy = 'enddate', $orderDirection = 'ASC') {
@@ -35,9 +32,15 @@ function getAllAuctions($orderBy = 'enddate', $orderDirection = 'ASC') {
     $sql = "
         SELECT 
             group_auctions.*, 
+            group_auctions.id AS auctionId,
             group_auctions.hash AS auctionHash, 
+            group_auctions.active AS auctionActive, 
+            group_auctions.modified AS auctionModified,
             group_products.*, 
-            group_products.hash AS productHash
+            group_products.id AS productId, 
+            group_products.hash AS productHash,
+            group_products.active AS productActive,
+            group_products.modified AS productModified
         FROM group_auctions
         INNER JOIN group_products ON group_auctions.productid = group_products.id
         ORDER BY $orderBy $orderDirection
@@ -51,21 +54,47 @@ function getAllAuctions($orderBy = 'enddate', $orderDirection = 'ASC') {
     return $rows;    
 }
 
-	
+
+
+
+function getHighestBidForLot($lotid) {
+    $sql = "
+        SELECT *
+        FROM lotbids
+        WHERE lotid = :lotid
+        ORDER BY bid DESC
+        LIMIT 1
+    ";
+
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindParam(':lotid', $lotid, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row) {
+        return $row['bid'];
+    } else {
+        return '0.00';
+    }
+}
+
+
+    
     function getActiveProductInfo($query="") {
         
         if(!empty($query)) { 
         
-            $sql = "SELECT id, title FROM group_products WHERE active = 'y' AND title LIKE :title ORDER BY title ASC LIMIT 5";
+            $sql = "SELECT id, productCode, title FROM group_products WHERE active = 'y' AND title LIKE :title OR productCode LIKE :productCode ORDER BY title ASC LIMIT 5";
             
             $stmt = $this->pdo->prepare( $sql );
-            $stmt->execute( ['title' => '%'.$query.'%']);
+            $stmt->execute( ['title' => '%'.$query.'%', 'productCode' => '%'.$query.'%']);
 
             $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         } else {
         
-            $sql = "SELECT id, title FROM group_products WHERE active = 'y' ORDER BY title ASC LIMIT 5";
+            $sql = "SELECT id, productCode, title FROM group_products WHERE active = 'y' ORDER BY title ASC LIMIT 5";
 
             $stmt = $this->pdo->prepare( $sql );
             $stmt->execute();
@@ -96,6 +125,17 @@ function getAllAuctions($orderBy = 'enddate', $orderDirection = 'ASC') {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $result['title'];
+    }
+    
+    function productCode($id)
+    {
+
+        $sql = "SELECT productCode FROM group_products WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result['productCode'];
     }
     
 	function getAuction( $id ) {

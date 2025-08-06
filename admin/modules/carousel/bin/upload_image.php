@@ -47,9 +47,6 @@ if(!empty($image)) {
     }
 }
 
-
-$asErrors = array();
-
 if(!is_dir($output_dir)) { 
 	$make_dir = mkdir($output_dir);
 	$chmod_new_map = chmod($output_dir, 0777);

@@ -1,5 +1,8 @@
 <?php
-if ($module == 'products' && isset($_GET['action']) == 'edit') { ?>
+// Debug informatie
+echo "<!-- Debug: Module = {$module}, Action = {$action}, ID = {$id} -->";
+
+if ($module == 'products' && $action == 'edit') { ?>
 
 <?php require_once("edit.php"); ?>
 
@@ -16,7 +19,10 @@ if ($module == 'products' && isset($_GET['action']) == 'edit') { ?>
               <div class="col-4">
                 <h5>Naam</h5>
               </div>
-              <div class="col-4">
+              <div class="col-1">
+                <h5>Kavelnr.</h5>
+              </div>              
+            <div class="col-3">
                 <h5>Categorie</h5>
               </div>
               <div class="col-1"><h5>Aan/uit</h5></div>
@@ -32,6 +38,6 @@ if ($module == 'products' && isset($_GET['action']) == 'edit') { ?>
     </div>
   </div>
 </div>
-<? } ?>
+<?php } ?>
 
 <script src="/admin/modules/products/js/menulist.js" type="text/javascript"></script>

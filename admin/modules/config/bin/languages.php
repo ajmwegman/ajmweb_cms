@@ -12,6 +12,8 @@ require_once($path . "/admin/src/database.class.php");
 
 $db = new database($pdo);
 
+//print_r($_POST);
+
 // Define success and error messages
 $success = '<div class="loader spinner-grow" style="width: 1rem; height: 1rem;" role="status">
 			<span class="sr-only"></span>
@@ -19,7 +21,7 @@ $success = '<div class="loader spinner-grow" style="width: 1rem; height: 1rem;" 
 
 $error = '<div class="alert alert-danger" role="alert">Er is iets fout gegaan!</div>';
 
-$site_id = $_SERVER['group_id'];
+$site_id = 1;
 
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

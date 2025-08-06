@@ -1,5 +1,8 @@
 <?php
-if ($module == 'reviews' && isset($_GET['action']) == 'edit') { ?>
+// Debug informatie
+echo "<!-- Debug: Module = {$module}, Action = {$action}, ID = {$id} -->";
+
+if ($module == 'reviews' && $action == 'edit') { ?>
 
 <?php require_once("edit.php"); ?>
 
@@ -36,6 +39,6 @@ if ($module == 'reviews' && isset($_GET['action']) == 'edit') { ?>
     </div>
   </div>
 </div>
-<? } ?>
+<?php } ?>
 
 <script src="/admin/modules/reviews/js/menulist.js"  type="text/javascript"></script>

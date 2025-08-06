@@ -46,8 +46,12 @@ $location = "/product_images/";
     <div class="col-lg-4">
         <?php echo input("text", 'title', $link['title'], "title".$link['id'], 'class="form-control autosave" data-field="title" data-set="'.$link['hash'].'"'); ?>
     </div>
+      
+    <div class="col-lg-1">
+        <?php echo input("text", 'productCode', $link['productCode'], "productCode".$link['id'], 'class="form-control autosave" data-field="productCode" data-set="'.$link['hash'].'"'); ?>
+    </div>
        
-    <div class="col-lg-4">
+    <div class="col-lg-3">
         <?php echo input("text", 'category', $link['category'], "category".$link['id'], 'class="form-control autosave" data-field="category" data-set="'.$link['hash'].'"'); ?>
     </div>
       

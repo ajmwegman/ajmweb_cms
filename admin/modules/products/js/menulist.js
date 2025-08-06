@@ -266,6 +266,55 @@ $("#single_cat_upload").uploadFile({
          });
 	} );
 
+// rotate images
+    
+  // Function to rotate an image
+    function rotateImage(image, angle) {
+        $(image).css({
+            'transform': 'rotate(' + angle + 'deg)',
+            'transition': 'transform 0.5s ease'
+        });
+    }
+
+function sendRotationRequest(angle, imageId) {
+    $.ajax({
+        url: location + "bin/rotation_script.php", // Verander dit naar het pad van je PHP-script
+        type: 'POST',
+        data: {
+            'angle': angle,
+            'imageId': imageId
+        },
+        success: function(response) {
+            console.log('Afbeelding geroteerd: ', response);
+        },
+        error: function(error) {
+            console.log('Error: ', error);
+        }
+    });
+}
+// Rotate left
+$('.rotate-left').click(function() {
+    var image = $(this).closest('.col-md-2').find('img');
+    var currentAngle = parseInt($(image).data('rotation'));
+    var newAngle = currentAngle - 90;
+    $(image).data('rotation', newAngle);
+    rotateImage(image, newAngle);
+
+    var imageId = $(this).data('image-id');
+    sendRotationRequest(-90, imageId); // Stuur altijd -90 graden naar de server
+});
+
+// Rotate right
+$('.rotate-right').click(function() {
+    var image = $(this).closest('.col-md-2').find('img');
+    var currentAngle = parseInt($(image).data('rotation'));
+    var newAngle = currentAngle + 90;
+    $(image).data('rotation', newAngle);
+    rotateImage(image, newAngle);
+
+    var imageId = $(this).data('image-id');
+    sendRotationRequest(90, imageId); // Stuur altijd 90 graden naar de server
+});
 
 	// einde jquery
 });

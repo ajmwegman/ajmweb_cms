@@ -1,8 +1,5 @@
 <?php
 class banner {
-
-        /** @var PDO */
-        private $pdo;
 	
 /*
 id
@@ -14,11 +11,8 @@ enddate
 modified
 active
 */
-        /** @var PDO */
-        private PDO $pdo;
-
-        function __construct($pdo) {
-                $this->pdo = $pdo;
+	function __construct($pdo) {
+		$this->pdo = $pdo;
     }
 
 	function getAllBanners() {
@@ -40,6 +34,9 @@ active
 		} else {
 
 			$sql = "SELECT * FROM group_banners WHERE {$field} = ?";
+			
+			// Debug informatie
+			error_log("Banner query: {$sql} with ID: {$id}");
 
 			$stmt = $this->pdo->prepare( $sql );
 			$stmt->execute([$id]);
@@ -49,6 +46,7 @@ active
 			if(!empty($row)) {
 		        return($row);
 			} else {
+				error_log("No banner found for ID: {$id}");
 				return false;
 			}
 		}

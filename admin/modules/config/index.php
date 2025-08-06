@@ -2,7 +2,7 @@
 $section_title = "Configuratie";
 $config = $menu->getConfig( $group_id );
 
-$accordionItems = array("Website instellingen", "Bedrijfsgevens", "Taal");
+$accordionItems = array("Website instellingen", "Bedrijfsgegevens", "Taal");
 $accordionForms = array("site.php", "company.php", "language.php");
 
 $http_locations = array( "http://www.", "http://", "https://", "https://www." );
@@ -42,6 +42,6 @@ foreach ($accordionItems as $key => $item) {
 }
 ?>
 </div>
-  <? } ?>
+  <?php } ?>
 </div>
 <script src="/admin/modules/config/js/js.js"></script>

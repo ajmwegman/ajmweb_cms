@@ -2,9 +2,19 @@
 require_once("src/content.class.php"); 
 require_once("../admin/src/menulist.class.php"); 
 
-if(!isset($_GET['id'])) { echo "oeps"; } else { $id = $_GET['id']; }
+// Get ID from URL rewriting or GET parameters
+$id = $_GET['id'] ?? 0;
+$id = (int)$id;
 
-if ($module == 'content' && isset($_GET['action']) == 'edit') {
+if(!$id) { 
+    echo '<div class="alert alert-danger">Geen geldig ID opgegeven!</div>';
+    echo '<a href="/admin/content/" class="btn btn-secondary">Terug naar overzicht</a>';
+    exit();
+} else { 
+    echo "<!-- Debug: ID = $id -->";
+}
+
+if ($module == 'content' && (isset($_GET['action']) && $_GET['action'] == 'edit' || isset($_GET['page']) && $_GET['page'] == 'edit')) {
 
 $content = new content($pdo);	
 $menu 	 = new menu($pdo);	
@@ -14,6 +24,7 @@ $MenuNames = $menu->getMenuNames( $group_id );
 
 $result = $content->getContent( $id );
 
+if ($result && is_array($result)) {
   	foreach ( $result as $data => $row ) {	
 		
 		$id 		= $row['id'];
@@ -27,8 +38,13 @@ $result = $content->getContent( $id );
 		$sortnum 	= $row['sortnum'];
 		$status 	= $row['status'];
 
-		$selectbox = selectbox("Kies menu item", 'location', $location, $MenuLocations, $MenuNames, 'class="form-select autosave" data-field="location" data-set="'.$hash.'"');
+		$selectbox = selectbox("Kies menu item", 'location', $location, array_combine($MenuLocations, $MenuNames), 'class="form-select autosave" data-field="location" data-set="'.$hash.'"');
     }
+} else {
+    echo '<div class="alert alert-danger">Content item niet gevonden!</div>';
+    echo '<a href="/admin/content/" class="btn btn-secondary">Terug naar overzicht</a>';
+    exit();
+}
 //echo $title;
 ?>
 

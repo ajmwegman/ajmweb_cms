@@ -1,12 +1,21 @@
 <?php
 require_once("src/auction.class.php"); 
 
-if(!isset($_GET['id'])) { echo "oeps"; } else { $hash = $_GET['id']; }
+// Debug informatie
+echo "<!-- Debug: Hash = {$hash} -->";
+
+if(!isset($_GET['id'])) { 
+    echo '<div class="alert alert-danger">Geen veiling ID opgegeven.</div>';
+    echo '<a href="/admin/auctions/" class="btn btn-secondary">Terug naar overzicht</a>';
+    exit;
+} else { 
+    $hash = $_GET['id']; 
+}
 
 $auction = new auction($pdo);
 $result = $auction->getAuction($hash);
 
-if ($result !== false) {
+if ($result !== false && !empty($result)) {
     // Fetch the first row since there should be only one row with the given ID
     $row = $result[0]; // Assuming that the function returns an array of rows
 
@@ -47,8 +56,8 @@ if ($result !== false) {
 
 <?php } else {
     // Handle the case where no auction with the given ID is found
-    // For example, you can display an error message or redirect to another page
-    echo "Auction not found.";
+    echo '<div class="alert alert-danger">Veiling niet gevonden voor ID: ' . htmlspecialchars($hash) . '</div>';
+    echo '<a href="/admin/auctions/" class="btn btn-secondary">Terug naar overzicht</a>';
     exit;
 } ?>
 

@@ -25,8 +25,8 @@ if ( isset( $_POST[ 'id' ] ) ) {
 	
 	$values = array('title' => $value, 'hash' => $id);
 	
-	$sql = "UPDATE group_config SET {$field}=:{$field} WHERE group_id=:groupid";
-	$go = $db->runQuery($sql, [$field=>$value, 'groupid'=>$id]);
+	$sql = "UPDATE group_config SET {$field}=:fieldvalue WHERE group_id=:groupid";
+	$go = $db->runQuery($sql, ['fieldvalue'=>$value, 'groupid'=>$id]);
 
 	if($go == true) {
 		 echo $success;

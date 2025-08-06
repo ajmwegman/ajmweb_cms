@@ -6,6 +6,7 @@ ini_set( "display_errors", 1 ); //Array ( [order] => Array ( [0] => item3 [1] =>
 
 $path = $_SERVER['DOCUMENT_ROOT'];
 
+print_r($_POST);
 require_once( $path."/system/database.php" );
 require_once( $path."/admin/src/database.class.php" );
 

@@ -95,7 +95,7 @@ $(document).ready(function () {
                 url: location + "bin/update_list.php",
                 data: {
                     id: sid,
-                    values: $("#form").serializeArray(),
+                    values: $("#area_form").serializeArray(),
                 },                
                 success: function(result) {
                 $('#loading').fadeIn("fast").html(result).delay(300).fadeOut("fast");

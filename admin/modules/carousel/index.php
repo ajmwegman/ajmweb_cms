@@ -1,5 +1,8 @@
 <?php
-if ( $module == 'carousel' && isset( $_GET[ 'action' ] ) == 'edit' ) {
+// Debug informatie
+echo "<!-- Debug: Module = {$module}, Action = {$action}, ID = {$id} -->";
+
+if ( $module == 'carousel' && $action == 'edit' ) {
 ?>
 <?php require_once("edit.php"); ?>
 <?php } else { ?>
@@ -42,6 +45,6 @@ if ( $module == 'carousel' && isset( $_GET[ 'action' ] ) == 'edit' ) {
     </div>
   </div>
 </div>
-<? } ?>
+<?php } ?>
 <script src="/admin/modules/carousel/js/menulist.js"  type="text/javascript"></script>
     

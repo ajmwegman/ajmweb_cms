@@ -1,8 +1,5 @@
 <?php
 class content {
-
-        /** @var PDO */
-        private $pdo;
 	
 /*
 id
@@ -26,12 +23,10 @@ status
 	public $seo_url = 0;
 	public $keywords = 0;
 	public $sortnum = 0;
-        public $status = 0;
-        */
-        /** @var PDO */
-        private PDO $pdo;
-        function __construct($pdo) {
-                $this->pdo = $pdo;
+	public $status = 0;
+	*/
+	function __construct($pdo) {
+		$this->pdo = $pdo;
     }
 
 	function getKeywords( $groupid, $keyword ) {
@@ -85,11 +80,13 @@ status
 		} else {
 
 			$sql = "SELECT * FROM group_content WHERE id = ?";
+			echo "<!-- Debug: SQL = $sql, ID = $id -->";
 
 			$stmt = $this->pdo->prepare( $sql );
 			$stmt->execute([$id]);
 
 			$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			echo "<!-- Debug: Row count = " . count($row) . " -->";
 			
 			if(!empty($row)) {
 		    return($row);

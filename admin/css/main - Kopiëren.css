@@ -1,0 +1,261 @@
+/* CSS Document */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.min.css");
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Dosis:300,400,500,,600,700,700i|Lato:300,300i,400,400i,700,700i');
+
+
+body {
+    background-color: #faf8fb;
+    font-family: "Open Sans", sans-serif;
+}
+/* floating messages */ 
+.alert-fixed {
+    position:fixed; 
+    top: 60px; 
+	left: 50%;
+    width: 80%;
+	margin: 0 -40%;
+    z-index:10; 
+    border-radius:5px
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Dosis", sans-serif;
+    margin-bottom: 0;
+}
+
+/* drag drop handler */
+.drag-handler {
+    cursor: grab;
+}
+.drag-handler:active {
+    cursor: grabbing;
+}
+
+/* slider checkbox */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 26px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 6px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(10px);
+  -ms-transform: translateX(10px);
+  transform: translateX(10px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* bootstrap addons */
+.loader {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+/* Summernote repairs */
+.note-modal-footer {
+	height: 50px;
+	padding: 10px;
+	text-align: center;
+}
+
+.note-editor .note-editing-area .note-editable {
+	background-color: #fff;
+}
+.navbar {
+    font-family: "Dosis", sans-serif;
+    font-weight: 300;
+    text-transform: uppercase;
+}
+
+.navbar a, .navbar a:focus {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 10px;
+  font-family: "Dosis", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f394c;
+  white-space: nowrap;
+  transition: 0.3s;
+  text-transform: uppercase;
+}
+
+.navbar-brand img {
+    max-height: 50px;
+}
+
+.card-header {
+    background-color: #ffffff;
+}
+
+.bg-colorful {
+    background: rgb(0,196,204);
+    background: linear-gradient(90deg, rgba(0,196,204,1) 0%, rgba(124,43,232,1) 100%);
+}
+
+/* buttons */
+.pink-button {
+  position: fixed;
+  bottom: 72px;
+  right: 72px;
+  width: 72px;
+  height: 72px;
+  border-radius: 35px;
+  background: linear-gradient(to right, #08bbce, #7c2be8);
+  color: #FFFFFF;
+  font-size: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s, background 0.5s;
+}
+
+.pink-button:hover {
+  background: linear-gradient(to right, #08bbce, #7c2be8);
+  transform: rotate(-90deg);
+}
+
+.modal-header {
+    background: linear-gradient(to right, #08bbce, #7c2be8);
+    color: #fff;
+}
+
+/* Search result drop down */
+/* Add the hover effect */
+.result:hover {
+  background-color: #ffe0e6; /* Light pink */
+  color: #fff;  
+  background: linear-gradient(to right, #08bbce, #7c2be8);
+  cursor: pointer;
+  padding: 5px;  
+  border-radius: 5px; /* Rounded corners */
+}
+
+.result {
+  background-color: #fff; /* Light pink */
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px; /* Rounded corners */
+}
+
+#searchResults {
+  border: 1px solid #ccc;
+  display: none; /* Hide the search results by default */
+  padding: 5px;
+  border-radius: 5px; /* Rounded corners */
+  margin-top: 3px;
+
+  /* Add the transition effect */
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Apply the transformation effect */
+#searchResults.show {
+  opacity: 1;
+  transform: translateY(3px);
+}
+
+/* image container bij producten */
+/* image container bij producten */
+
+/* Verberg de rotate-knoppen standaard */
+#imageContainer .rotate-left, 
+#imageContainer .rotate-right {
+  position: absolute;
+  display: none;
+}
+
+/* Toon de rotate-left knop bij hover */
+#imageContainer .col-md-2:hover .rotate-left {
+  display: block;
+  bottom: 10%;
+  left: 10%; /* Aanpassen gebaseerd op waar je de knop wilt hebben */
+}
+
+/* Toon de rotate-right knop bij hover */
+#imageContainer .col-md-2:hover .rotate-right {
+  display: block;
+  bottom: 10%;
+  right: 30%; /* Aanpassen gebaseerd op waar je de knop wilt hebben */
+}
+
+#imageContainer .col-md-2 {
+  position: relative;
+  width: 16%;
+  height: 190px; /* maximale hoogte */
+  overflow: hidden;
+  border: 1px #e1e1e1 solid;
+    text-align: center;
+    padding: 5px;
+}
+
+#imageContainer .img-fluid {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: cover; /* zorgt ervoor dat de afbeelding de hele div vult */
+}
+
+#imageContainer .btn-ok {
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  display: none;
+}
+
+#imageContainer .col-md-2:hover .btn-ok {
+  display: block;
+}
+

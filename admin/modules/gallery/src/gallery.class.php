@@ -1,8 +1,5 @@
 <?php
 class gallery {
-
-        /** @var PDO */
-        private $pdo;
 	
 /*
 id
@@ -14,16 +11,13 @@ image
 modified
 active
 */
-        /** @var PDO */
-        private PDO $pdo;
-
-        function __construct($pdo) {
-                $this->pdo = $pdo;
+	function __construct($pdo) {
+		$this->pdo = $pdo;
     }
 
 	function getAllImages() {
 
-        $sql = "SELECT * FROM group_gallery ORDER BY sortnum DESC";
+        $sql = "SELECT * FROM group_gallery ORDER BY sort_num DESC";
 
 		$stmt = $this->pdo->prepare( $sql );
 		$stmt->execute();

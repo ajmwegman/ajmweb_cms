@@ -5,23 +5,32 @@ if(!isset($_GET['id'])) { echo "oeps"; } else { $id = $_GET['id']; }
 
 $products = new products($pdo);	
 
+// Debug informatie
+echo "<!-- Debug: ID = {$id} -->";
+
 $result = $products->getProductInfo( $id );
 
- 	foreach ( $result as $data => $row ) {	
-		
-		$id 		   = $row['id'];
-		$productCode   = $row['productCode'];
-		$price         = $row['price'];
-		$hash 		   = $row['hash'];
-		$title	       = $row['title'];
-		$seoTitle	   = $row['seoTitle'];
-        $sort_num      = $row['sort_num'];
-		$image     	   = $row['image'];
-		$description   = $row['description'];
-		$category      = $row['category'];
-		$stock         = $row['stock'];
-		$btw         = $row['btw'];
-    }
+if (!$result || empty($result)) {
+    echo '<div class="alert alert-danger">Product niet gevonden voor ID: ' . htmlspecialchars($id) . '</div>';
+    echo '<a href="/admin/products/" class="btn btn-secondary">Terug naar overzicht</a>';
+    exit;
+}
+
+foreach ( $result as $data => $row ) {	
+
+$id 		   = $row['id'];
+$productCode   = $row['productCode'];
+$price         = $row['price'];
+$hash 		   = $row['hash'];
+$title	       = $row['title'];
+$seoTitle	   = $row['seoTitle'];
+$sort_num      = $row['sort_num'];
+$image     	   = $row['image'];
+$description   = $row['description'];
+$category      = $row['category'];
+$stock         = $row['stock'];
+$btw         = $row['btw'];
+}
 
 $img = $products->getImageName($id );
 ?>

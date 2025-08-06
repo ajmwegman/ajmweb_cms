@@ -1,5 +1,8 @@
 <?php
-if ($module == 'auctions' && isset($_GET['action']) == 'edit') { ?>
+// Debug informatie
+echo "<!-- Debug: Module = {$module}, Action = {$action}, ID = {$id} -->";
+
+if ($module == 'auctions' && $action == 'edit') { ?>
 
 
 <?php require_once("edit.php"); ?>
@@ -13,7 +16,10 @@ if ($module == 'auctions' && isset($_GET['action']) == 'edit') { ?>
     <div class="card shadow">
     <div class="card-header">
         <div class="row">
-  <div class="col-5">
+  <div class="col-1">
+    <h5>Kavelnr.</h5>
+  </div>
+<div class="col-4">
     <h5>Product</h5>
   </div>
   <div class="col-2">
@@ -37,7 +43,7 @@ if ($module == 'auctions' && isset($_GET['action']) == 'edit') { ?>
     </div>
   </div>
 </div>
-<? } ?>
+<?php } ?>
 
 <script src="/admin/modules/auctions/js/menulist.js"  type="text/javascript"></script>
 <script src="/admin/modules/auctions/js/search.js"  type="text/javascript"></script>

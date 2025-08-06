@@ -20,8 +20,8 @@ function active_session( $time = 600 ) {
 */
 class menu {
 	
-        function __construct($pdo) {
-                $this->pdo = $pdo;
+	function __construct($pdo) {
+		$this->pdo = $pdo;
     }
 
 	function getGroups() {
@@ -234,43 +234,5 @@ class menu {
 
             return $locale;			
         }
-    
-        function generateDynamicMenu($modulesPath = 'path/to/modules', $cacheFile = 'menu_cache.html', $cacheDuration = 3600) {
-            // Controleer of er een geldig cache-bestand bestaat en of het binnen de cacheduur valt
-            if (file_exists($cacheFile) && (time() - filemtime($cacheFile) < $cacheDuration)) {
-                // Lees het menu uit de cache
-                return file_get_contents($cacheFile);
-            }
-
-            $menuItems = [];
-            $modulePaths = glob($modulesPath . '/*/config.json'); // Vind alle config.json bestanden in de modules
-
-            foreach ($modulePaths as $path) {
-                $config = json_decode(file_get_contents($path), true);
-
-                // Valideer dat de config de nodige velden bevat
-                if (isset($config['title']) && isset($config['location'])) {
-                    $menuItems[] = $config;
-                }
-            }
-
-            // Sorteer op 'order' als het veld aanwezig is
-            usort($menuItems, function($a, $b) {
-                return ($a['order'] ?? 0) <=> ($b['order'] ?? 0);
-            });
-
-            // Genereer het HTML-menu
-            $menuHtml = '<ul class="dropdown-menu" aria-labelledby="sitesNavbarDropdown">';
-            foreach ($menuItems as $item) {
-                $menuHtml .= '<li><a class="dropdown-item" href="' . htmlspecialchars($item['location']) . '">' . htmlspecialchars($item['title']) . '</a></li>';
-            }
-            $menuHtml .= '</ul>';
-
-            // Sla het gegenereerde menu op in de cache
-            file_put_contents($cacheFile, $menuHtml);
-
-            return $menuHtml;
-        }
-
 }
 ?>

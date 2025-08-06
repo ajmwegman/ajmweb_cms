@@ -11,7 +11,7 @@ require_once( $path."/admin/src/database.class.php" );
 
 $db = new database($pdo);
 
-var_dump($_POST);
+//var_dump($_POST);
 $success = '<div class="loader spinner-grow" style="width: 1rem; height: 1rem;" role="status">
 			<span class="sr-only"></span>
 			</div>';
@@ -25,9 +25,9 @@ if ( isset( $_POST[ 'order' ] ) ) {
     
 	  $new_order = $key + 1; // to prevent 0 
 	
-	  //echo "<br>".$value ."wordt: ".$new_order;
+	  echo "<br>".$value ."wordt: ".$new_order;
 	
-	  $values = array('sort_num' => $new_order);
+	  //$values = array('sort_num' => $new_order);
 	  
 	  $sql = "UPDATE group_product_images SET sort_num=:sort_num WHERE id=:id";
 	  $go = $db->runQuery($sql, ['sort_num'=>$new_order, 'id'=>$value]);

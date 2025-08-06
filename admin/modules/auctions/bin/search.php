@@ -26,6 +26,7 @@ $searchResults = array();
 foreach ($list as $row => $link) {
     $searchResults[] = array(
         'productId' => $link['id'], // Assuming you have an 'id' field for the productId
+        'productCode' => $link['productCode'], // Assuming you have an 'productCode' field for the productId
         'name' => $link['title'], // Assuming you have a 'title' field for the product name
     );
 }

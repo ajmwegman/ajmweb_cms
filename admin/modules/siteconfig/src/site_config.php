@@ -1,16 +1,15 @@
 <?php
 class siteConfig {
 
-  /** @var PDO */
-  private PDO $pdo;
-
   function __construct( $pdo ) {
     $this->pdo = $pdo;
   }
 
   function area_list( $shop_id ) {
-
-    $input = '<div class="row">';
+ $input = '<form id="area_form">';
+    $input .= '<div class="row">';
+    
+   
       
     $sql = "SELECT area_id, name FROM area ORDER BY name";
     $stmt = $this->pdo->prepare( $sql );
@@ -18,7 +17,7 @@ class siteConfig {
     $stmt->execute();
 
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      
+    
     foreach ( $result as $row => $data ) {
         
       $sql2 = "SELECT * FROM area_link WHERE area_id = :area_id AND shop_id = :shop_id";
@@ -45,8 +44,9 @@ class siteConfig {
 
     }
     
+   
     $input .= "</div>"; // row
-    
+     $input .= "</form>"; // row
     return $input;
   }    
 }

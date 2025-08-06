@@ -1,5 +1,8 @@
 <?php
-if ($module == 'banners' && isset($_GET['action']) == 'edit') { ?>
+// Debug informatie
+echo "<!-- Debug: Module = {$module}, Action = {$action}, ID = {$id} -->";
+
+if ($module == 'banners' && $action == 'edit') { ?>
 
 <?php require_once("edit.php"); ?>
 
@@ -39,6 +42,6 @@ if ($module == 'banners' && isset($_GET['action']) == 'edit') { ?>
     </div>
   </div>
 </div>
-<? } ?>
+<?php } ?>
 
 <script src="/admin/modules/banners/js/menulist.js"  type="text/javascript"></script>

@@ -1,5 +1,5 @@
 <?php
-$selectbox = selectbox( "Kies een protocol", 'loc_http', $data[ 'loc_http' ], $http_locations, $http_locations, 'class="form-select autosave" data-field="loc_http" data-set="' . $data[ 'group_id' ] . '"' );
+$selectbox = selectbox( "Kies een protocol", 'loc_http', $data[ 'loc_http' ], $http_locations, 'class="form-select autosave" data-field="loc_http" data-set="' . $data[ 'group_id' ] . '"' );
 ?>
     <div class="row">
       <div class="col-md-4 mt-1"><?php echo $selectbox; ?></div>
@@ -44,7 +44,7 @@ $selectbox = selectbox( "Kies een protocol", 'loc_http', $data[ 'loc_http' ], $h
     <div class="form-group mt-2">
       <label for="menuLabel">Website pointers:</label>
       <?php
-      echo textarea( 'loc_pointers', $data[ 'loc_pointers' ], $extra = 'class="form-control"' );
+      echo textarea( 'loc_pointers', $data[ 'loc_pointers' ], 'class="form-control autosave" data-field="loc_pointers" data-set="'.$data['group_id'].'"' );
       ?>
       <small>Optioneel, als er andere domeinnamen naar dit domein moeten verwijzen.</small> </div>
     <div class="form-group mt-2">Activeren:
