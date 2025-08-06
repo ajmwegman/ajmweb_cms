@@ -701,6 +701,9 @@ echo "<li>Vertaal de gedupliceerde content via de admin interface</li>\n";
 echo "</ol>\n";
 
 echo "<p><strong>Eind tijd:</strong> " . date('Y-m-d H:i:s') . "</p>\n";
-echo "<p><strong>Status:</strong> " . (empty($errors) ? "✅ Volledig succesvol" : "⚠️ Met waarschuwingen") . "</p>\n";
-
+if (empty($errors)) {
+    echo "<p><strong>Status:</strong> ✅ Volledig succesvol</p>\n";
+} else {
+    echo "<p><strong>Status:</strong> ⚠️ Met waarschuwingen</p>\n";
+}
 ?>
