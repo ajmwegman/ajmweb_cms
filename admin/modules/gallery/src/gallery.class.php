@@ -18,15 +18,25 @@ active
     }
 
 	function getAllImages() {
+        try {
+            $sql = "SELECT * FROM group_gallery ORDER BY sortnum DESC";
 
-        $sql = "SELECT * FROM group_gallery ORDER BY sort_num DESC";
+            $stmt = $this->pdo->prepare( $sql );
+            $stmt->execute();
 
-		$stmt = $this->pdo->prepare( $sql );
-		$stmt->execute();
-
-		$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        return $row;	
+            $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $row;
+        } catch (PDOException $e) {
+            // If sortnum column doesn't exist, try without ordering
+            if ($e->getCode() == '42S22') {
+                $sql = "SELECT * FROM group_gallery ORDER BY id DESC";
+                $stmt = $this->pdo->prepare( $sql );
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            throw $e;
+        }
 	}
 	
 	function getImage( $field, $id ) {

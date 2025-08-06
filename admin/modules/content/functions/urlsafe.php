@@ -1,7 +1,7 @@
 <?php
 function urlsafe($string)
 {
-  $string = trim($string);
+  $string = trim($string ?? '');
     
   if ( ctype_digit($string) )
   {

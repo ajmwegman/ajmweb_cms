@@ -1,6 +1,8 @@
 <?php
 class photoslider {
 
+    private $pdo;
+
     function __construct($pdo) {
         $this->pdo = $pdo;
     }
@@ -42,11 +44,19 @@ class photoslider {
     }
 
     function getAllSliders() {
-        $sql = "SELECT id, name FROM group_photoslider_names ORDER BY name ASC";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $rows;
+        try {
+            $sql = "SELECT id, name FROM group_photoslider_names ORDER BY name ASC";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $rows;
+        } catch (PDOException $e) {
+            // If table doesn't exist, return empty array
+            if ($e->getCode() == '42S02') {
+                return [];
+            }
+            throw $e;
+        }
     }
     
         // Functie om de naam van een slider op te halen op basis van ID
@@ -56,16 +66,24 @@ class photoslider {
             return false; // Of geef een geschikte foutmelding terug
         }
 
-        // SQL-query om de naam van de slider op te halen
-        $sql = "SELECT name FROM group_photoslider_names WHERE id = :id LIMIT 1";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
+        try {
+            // SQL-query om de naam van de slider op te halen
+            $sql = "SELECT name FROM group_photoslider_names WHERE id = :id LIMIT 1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute(['id' => $id]);
 
-        // Haal de naam op uit de resultaten
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        // Controleer of een rij is gevonden en geef de naam terug, anders geef false
-        return $row ? $row['name'] : false;
+            // Haal de naam op uit de resultaten
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Controleer of een rij is gevonden en geef de naam terug, anders geef false
+            return $row ? $row['name'] : false;
+        } catch (PDOException $e) {
+            // If table doesn't exist, return default message
+            if ($e->getCode() == '42S02') {
+                return 'Unknown Slider';
+            }
+            throw $e;
+        }
     }
     
     function check_extension($filename, $allowed) {

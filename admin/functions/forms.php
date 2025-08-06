@@ -133,7 +133,7 @@ function selectbox($title, $name, $value = '', $options = array(), $extra = '', 
         }
         
         $input .= '<option value="' . htmlspecialchars($code) . '" ';
-        if (strcasecmp(trim($code), trim($value)) == 0) {
+        if (strcasecmp(trim($code), trim($value ?? '')) == 0) {
             $input .= 'selected="selected"';
         }
         $input .= '>' . htmlspecialchars($optionName) . '</option>';

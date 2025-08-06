@@ -253,18 +253,18 @@
         <!-- Tekstkleur -->
         <div class="col-md-3">
             <label for="footerTextColor">Tekstkleur</label>
-            <?php echo input('color', 'footerTextColor', $data['footerTextColor'], 'footerTextColor', 'class="form-control autosave_config_site" data-field="footerTextColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'footerTextColor', $data['footerTextColor'] ?? '', 'footerTextColor', 'class="form-control autosave_config_site" data-field="footerTextColor" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Font Grootte -->
         <div class="col-md-3">
             <label for="footerFontSize">Font Grootte (em)</label>
-            <?php echo input('number', 'footerFontSize', $data['footerFontSize'], 'footerFontSize', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="5.0" data-field="footerFontSize" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('number', 'footerFontSize', $data['footerFontSize'] ?? '', 'footerFontSize', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="5.0" data-field="footerFontSize" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- H4 Font Dikte -->
         <div class="col-md-3">
-            <?php echo selectbox('H4 Font Dikte', 'footerH4FontWeight', $data['footerH4FontWeight'], ['Normal' => 'normal', 'Bold' => 'bold'], 'class="form-select autosave_config_site" data-field="footerH4FontWeight" data-set="'.$data['id'].'"'); ?>
+            <?php echo selectbox('H4 Font Dikte', 'footerH4FontWeight', $data['footerH4FontWeight'] ?? '', ['Normal' => 'normal', 'Bold' => 'bold'], 'class="form-select autosave_config_site" data-field="footerH4FontWeight" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
@@ -272,25 +272,25 @@
         <!-- Copyright Tekstkleur -->
         <div class="col-md-3">
             <label for="footerCopyrightColor">Copyright Tekstkleur</label>
-            <?php echo input('color', 'footerCopyrightColor', $data['footerCopyrightColor'], 'footerCopyrightColor', 'class="form-control autosave_config_site" data-field="footerCopyrightColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'footerCopyrightColor', $data['footerCopyrightColor'] ?? '', 'footerCopyrightColor', 'class="form-control autosave_config_site" data-field="footerCopyrightColor" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Link Tekstkleur -->
         <div class="col-md-3">
             <label for="footerLinkColor">Link Tekstkleur</label>
-            <?php echo input('color', 'footerLinkColor', $data['footerLinkColor'], 'footerLinkColor', 'class="form-control autosave_config_site" data-field="footerLinkColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'footerLinkColor', $data['footerLinkColor'] ?? '', 'footerLinkColor', 'class="form-control autosave_config_site" data-field="footerLinkColor" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Link Hover Kleur -->
         <div class="col-md-3">
             <label for="footerHoverLinkColor">Link Hover Kleur</label>
-            <?php echo input('color', 'footerHoverLinkColor', $data['footerHoverLinkColor'], 'footerHoverLinkColor', 'class="form-control autosave_config_site" data-field="footerHoverLinkColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'footerHoverLinkColor', $data['footerHoverLinkColor'] ?? '', 'footerHoverLinkColor', 'class="form-control autosave_config_site" data-field="footerHoverLinkColor" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Social Icon Kleur -->
         <div class="col-md-3">
             <label for="footerSocialIconColor">Social Icon Kleur</label>
-            <?php echo input('color', 'footerSocialIconColor', $data['footerSocialIconColor'], 'footerSocialIconColor', 'class="form-control autosave_config_site" data-field="footerSocialIconColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'footerSocialIconColor', $data['footerSocialIconColor'] ?? '', 'footerSocialIconColor', 'class="form-control autosave_config_site" data-field="footerSocialIconColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 </div>
@@ -302,11 +302,11 @@
     <div class="row mt-3">
         <div class="col-md-3">
             <label for="btnPrimaryColor">Primary Button Kleur</label>
-            <?php echo input('color', 'btnPrimaryColor', $data['btnPrimaryColor'], 'btnPrimaryColor', 'class="form-control autosave_config_site" data-field="btnPrimaryColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnPrimaryColor', $data['btnPrimaryColor'] ?? '', 'btnPrimaryColor', 'class="form-control autosave_config_site" data-field="btnPrimaryColor" data-set="'.$data['id'].'"'); ?>
         </div>
         <div class="col-md-3">
             <label for="btnPrimaryTextColor">Primary Text Kleur</label>
-            <?php echo input('color', 'btnPrimaryTextColor', $data['btnPrimaryTextColor'], 'btnPrimaryTextColor', 'class="form-control autosave_config_site" data-field="btnPrimaryTextColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnPrimaryTextColor', $data['btnPrimaryTextColor'] ?? '', 'btnPrimaryTextColor', 'class="form-control autosave_config_site" data-field="btnPrimaryTextColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
@@ -314,11 +314,11 @@
     <div class="row mt-3">
         <div class="col-md-3">
             <label for="btnSecondaryColor">Secondary Button Kleur</label>
-            <?php echo input('color', 'btnSecondaryColor', $data['btnSecondaryColor'], 'btnSecondaryColor', 'class="form-control autosave_config_site" data-field="btnSecondaryColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnSecondaryColor', $data['btnSecondaryColor'] ?? '', 'btnSecondaryColor', 'class="form-control autosave_config_site" data-field="btnSecondaryColor" data-set="'.$data['id'].'"'); ?>
         </div>
         <div class="col-md-3">
             <label for="btnSecondaryTextColor">Secondary Text Kleur</label>
-            <?php echo input('color', 'btnSecondaryTextColor', $data['btnSecondaryTextColor'], 'btnSecondaryTextColor', 'class="form-control autosave_config_site" data-field="btnSecondaryTextColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnSecondaryTextColor', $data['btnSecondaryTextColor'] ?? '', 'btnSecondaryTextColor', 'class="form-control autosave_config_site" data-field="btnSecondaryTextColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
@@ -326,11 +326,11 @@
     <div class="row mt-3">
         <div class="col-md-3">
             <label for="btnSuccessColor">Success Button Kleur</label>
-            <?php echo input('color', 'btnSuccessColor', $data['btnSuccessColor'], 'btnSuccessColor', 'class="form-control autosave_config_site" data-field="btnSuccessColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnSuccessColor', $data['btnSuccessColor'] ?? '', 'btnSuccessColor', 'class="form-control autosave_config_site" data-field="btnSuccessColor" data-set="'.$data['id'].'"'); ?>
         </div>
         <div class="col-md-3">
             <label for="btnSuccessTextColor">Success Text Kleur</label>
-            <?php echo input('color', 'btnSuccessTextColor', $data['btnSuccessTextColor'], 'btnSuccessTextColor', 'class="form-control autosave_config_site" data-field="btnSuccessTextColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnSuccessTextColor', $data['btnSuccessTextColor'] ?? '', 'btnSuccessTextColor', 'class="form-control autosave_config_site" data-field="btnSuccessTextColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
@@ -338,11 +338,11 @@
     <div class="row mt-3">
         <div class="col-md-3">
             <label for="btnDangerColor">Danger Button Kleur</label>
-            <?php echo input('color', 'btnDangerColor', $data['btnDangerColor'], 'btnDangerColor', 'class="form-control autosave_config_site" data-field="btnDangerColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnDangerColor', $data['btnDangerColor'] ?? '', 'btnDangerColor', 'class="form-control autosave_config_site" data-field="btnDangerColor" data-set="'.$data['id'].'"'); ?>
         </div>
         <div class="col-md-3">
             <label for="btnDangerTextColor">Danger Text Kleur</label>
-            <?php echo input('color', 'btnDangerTextColor', $data['btnDangerTextColor'], 'btnDangerTextColor', 'class="form-control autosave_config_site" data-field="btnDangerTextColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnDangerTextColor', $data['btnDangerTextColor'] ?? '', 'btnDangerTextColor', 'class="form-control autosave_config_site" data-field="btnDangerTextColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
@@ -350,11 +350,11 @@
     <div class="row mt-3">
         <div class="col-md-3">
             <label for="btnWarningColor">Warning Button Kleur</label>
-            <?php echo input('color', 'btnWarningColor', $data['btnWarningColor'], 'btnWarningColor', 'class="form-control autosave_config_site" data-field="btnWarningColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnWarningColor', $data['btnWarningColor'] ?? '', 'btnWarningColor', 'class="form-control autosave_config_site" data-field="btnWarningColor" data-set="'.$data['id'].'"'); ?>
         </div>
         <div class="col-md-3">
             <label for="btnWarningTextColor">Warning Text Kleur</label>
-            <?php echo input('color', 'btnWarningTextColor', $data['btnWarningTextColor'], 'btnWarningTextColor', 'class="form-control autosave_config_site" data-field="btnWarningTextColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnWarningTextColor', $data['btnWarningTextColor'] ?? '', 'btnWarningTextColor', 'class="form-control autosave_config_site" data-field="btnWarningTextColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
@@ -362,11 +362,11 @@
     <div class="row mt-3">
         <div class="col-md-3">
             <label for="btnInfoColor">Info Button Kleur</label>
-            <?php echo input('color', 'btnInfoColor', $data['btnInfoColor'], 'btnInfoColor', 'class="form-control autosave_config_site" data-field="btnInfoColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnInfoColor', $data['btnInfoColor'] ?? '', 'btnInfoColor', 'class="form-control autosave_config_site" data-field="btnInfoColor" data-set="'.$data['id'].'"'); ?>
         </div>
         <div class="col-md-3">
             <label for="btnInfoTextColor">Info Text Kleur</label>
-            <?php echo input('color', 'btnInfoTextColor', $data['btnInfoTextColor'], 'btnInfoTextColor', 'class="form-control autosave_config_site" data-field="btnInfoTextColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnInfoTextColor', $data['btnInfoTextColor'] ?? '', 'btnInfoTextColor', 'class="form-control autosave_config_site" data-field="btnInfoTextColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
@@ -374,11 +374,11 @@
     <div class="row mt-3">
         <div class="col-md-3">
             <label for="btnLightColor">Light Button Kleur</label>
-            <?php echo input('color', 'btnLightColor', $data['btnLightColor'], 'btnLightColor', 'class="form-control autosave_config_site" data-field="btnLightColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnLightColor', $data['btnLightColor'] ?? '', 'btnLightColor', 'class="form-control autosave_config_site" data-field="btnLightColor" data-set="'.$data['id'].'"'); ?>
         </div>
         <div class="col-md-3">
             <label for="btnLightTextColor">Light Text Kleur</label>
-            <?php echo input('color', 'btnLightTextColor', $data['btnLightTextColor'], 'btnLightTextColor', 'class="form-control autosave_config_site" data-field="btnLightTextColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnLightTextColor', $data['btnLightTextColor'] ?? '', 'btnLightTextColor', 'class="form-control autosave_config_site" data-field="btnLightTextColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
@@ -386,11 +386,11 @@
     <div class="row mt-3">
         <div class="col-md-3">
             <label for="btnDarkColor">Dark Button Kleur</label>
-            <?php echo input('color', 'btnDarkColor', $data['btnDarkColor'], 'btnDarkColor', 'class="form-control autosave_config_site" data-field="btnDarkColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnDarkColor', $data['btnDarkColor'] ?? '', 'btnDarkColor', 'class="form-control autosave_config_site" data-field="btnDarkColor" data-set="'.$data['id'].'"'); ?>
         </div>
         <div class="col-md-3">
             <label for="btnDarkTextColor">Dark Text Kleur</label>
-            <?php echo input('color', 'btnDarkTextColor', $data['btnDarkTextColor'], 'btnDarkTextColor', 'class="form-control autosave_config_site" data-field="btnDarkTextColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'btnDarkTextColor', $data['btnDarkTextColor'] ?? '', 'btnDarkTextColor', 'class="form-control autosave_config_site" data-field="btnDarkTextColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 </div>
@@ -404,11 +404,11 @@
 <div class="row mt-3">
     <div class="col-md-3">
         <label for="btnOutlinePrimaryColor">Primary Outline Kleur</label>
-        <?php echo input('color', 'btnOutlinePrimaryColor', $data['btnOutlinePrimaryColor'], 'btnOutlinePrimaryColor', 'class="form-control autosave_config_site" data-field="btnOutlinePrimaryColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlinePrimaryColor', $data['btnOutlinePrimaryColor'] ?? '', 'btnOutlinePrimaryColor', 'class="form-control autosave_config_site" data-field="btnOutlinePrimaryColor" data-set="'.$data['id'].'"'); ?>
     </div>
     <div class="col-md-3">
         <label for="btnOutlinePrimaryTextColor">Primary Outline Text Kleur</label>
-        <?php echo input('color', 'btnOutlinePrimaryTextColor', $data['btnOutlinePrimaryTextColor'], 'btnOutlinePrimaryTextColor', 'class="form-control autosave_config_site" data-field="btnOutlinePrimaryTextColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlinePrimaryTextColor', $data['btnOutlinePrimaryTextColor'] ?? '', 'btnOutlinePrimaryTextColor', 'class="form-control autosave_config_site" data-field="btnOutlinePrimaryTextColor" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
 
@@ -416,11 +416,11 @@
 <div class="row mt-3">
     <div class="col-md-3">
         <label for="btnOutlineSecondaryColor">Secondary Outline Kleur</label>
-        <?php echo input('color', 'btnOutlineSecondaryColor', $data['btnOutlineSecondaryColor'], 'btnOutlineSecondaryColor', 'class="form-control autosave_config_site" data-field="btnOutlineSecondaryColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineSecondaryColor', $data['btnOutlineSecondaryColor'] ?? '', 'btnOutlineSecondaryColor', 'class="form-control autosave_config_site" data-field="btnOutlineSecondaryColor" data-set="'.$data['id'].'"'); ?>
     </div>
     <div class="col-md-3">
         <label for="btnOutlineSecondaryTextColor">Secondary Outline Text Kleur</label>
-        <?php echo input('color', 'btnOutlineSecondaryTextColor', $data['btnOutlineSecondaryTextColor'], 'btnOutlineSecondaryTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineSecondaryTextColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineSecondaryTextColor', $data['btnOutlineSecondaryTextColor'] ?? '', 'btnOutlineSecondaryTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineSecondaryTextColor" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
 
@@ -428,11 +428,11 @@
 <div class="row mt-3">
     <div class="col-md-3">
         <label for="btnOutlineSuccessColor">Success Outline Kleur</label>
-        <?php echo input('color', 'btnOutlineSuccessColor', $data['btnOutlineSuccessColor'], 'btnOutlineSuccessColor', 'class="form-control autosave_config_site" data-field="btnOutlineSuccessColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineSuccessColor', $data['btnOutlineSuccessColor'] ?? '', 'btnOutlineSuccessColor', 'class="form-control autosave_config_site" data-field="btnOutlineSuccessColor" data-set="'.$data['id'].'"'); ?>
     </div>
     <div class="col-md-3">
         <label for="btnOutlineSuccessTextColor">Success Outline Text Kleur</label>
-        <?php echo input('color', 'btnOutlineSuccessTextColor', $data['btnOutlineSuccessTextColor'], 'btnOutlineSuccessTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineSuccessTextColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineSuccessTextColor', $data['btnOutlineSuccessTextColor'] ?? '', 'btnOutlineSuccessTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineSuccessTextColor" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
 
@@ -440,11 +440,11 @@
 <div class="row mt-3">
     <div class="col-md-3">
         <label for="btnOutlineDangerColor">Danger Outline Kleur</label>
-        <?php echo input('color', 'btnOutlineDangerColor', $data['btnOutlineDangerColor'], 'btnOutlineDangerColor', 'class="form-control autosave_config_site" data-field="btnOutlineDangerColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineDangerColor', $data['btnOutlineDangerColor'] ?? '', 'btnOutlineDangerColor', 'class="form-control autosave_config_site" data-field="btnOutlineDangerColor" data-set="'.$data['id'].'"'); ?>
     </div>
     <div class="col-md-3">
         <label for="btnOutlineDangerTextColor">Danger Outline Text Kleur</label>
-        <?php echo input('color', 'btnOutlineDangerTextColor', $data['btnOutlineDangerTextColor'], 'btnOutlineDangerTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineDangerTextColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineDangerTextColor', $data['btnOutlineDangerTextColor'] ?? '', 'btnOutlineDangerTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineDangerTextColor" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
 
@@ -452,11 +452,11 @@
 <div class="row mt-3">
     <div class="col-md-3">
         <label for="btnOutlineWarningColor">Warning Outline Kleur</label>
-        <?php echo input('color', 'btnOutlineWarningColor', $data['btnOutlineWarningColor'], 'btnOutlineWarningColor', 'class="form-control autosave_config_site" data-field="btnOutlineWarningColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineWarningColor', $data['btnOutlineWarningColor'] ?? '', 'btnOutlineWarningColor', 'class="form-control autosave_config_site" data-field="btnOutlineWarningColor" data-set="'.$data['id'].'"'); ?>
     </div>
     <div class="col-md-3">
         <label for="btnOutlineWarningTextColor">Warning Outline Text Kleur</label>
-        <?php echo input('color', 'btnOutlineWarningTextColor', $data['btnOutlineWarningTextColor'], 'btnOutlineWarningTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineWarningTextColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineWarningTextColor', $data['btnOutlineWarningTextColor'] ?? '', 'btnOutlineWarningTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineWarningTextColor" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
 
@@ -464,11 +464,11 @@
 <div class="row mt-3">
     <div class="col-md-3">
         <label for="btnOutlineInfoColor">Info Outline Kleur</label>
-        <?php echo input('color', 'btnOutlineInfoColor', $data['btnOutlineInfoColor'], 'btnOutlineInfoColor', 'class="form-control autosave_config_site" data-field="btnOutlineInfoColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineInfoColor', $data['btnOutlineInfoColor'] ?? '', 'btnOutlineInfoColor', 'class="form-control autosave_config_site" data-field="btnOutlineInfoColor" data-set="'.$data['id'].'"'); ?>
     </div>
     <div class="col-md-3">
         <label for="btnOutlineInfoTextColor">Info Outline Text Kleur</label>
-        <?php echo input('color', 'btnOutlineInfoTextColor', $data['btnOutlineInfoTextColor'], 'btnOutlineInfoTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineInfoTextColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineInfoTextColor', $data['btnOutlineInfoTextColor'] ?? '', 'btnOutlineInfoTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineInfoTextColor" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
 
@@ -476,11 +476,11 @@
 <div class="row mt-3">
     <div class="col-md-3">
         <label for="btnOutlineLightColor">Light Outline Kleur</label>
-        <?php echo input('color', 'btnOutlineLightColor', $data['btnOutlineLightColor'], 'btnOutlineLightColor', 'class="form-control autosave_config_site" data-field="btnOutlineLightColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineLightColor', $data['btnOutlineLightColor'] ?? '', 'btnOutlineLightColor', 'class="form-control autosave_config_site" data-field="btnOutlineLightColor" data-set="'.$data['id'].'"'); ?>
     </div>
     <div class="col-md-3">
         <label for="btnOutlineLightTextColor">Light Outline Text Kleur</label>
-        <?php echo input('color', 'btnOutlineLightTextColor', $data['btnOutlineLightTextColor'], 'btnOutlineLightTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineLightTextColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineLightTextColor', $data['btnOutlineLightTextColor'] ?? '', 'btnOutlineLightTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineLightTextColor" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
 
@@ -488,11 +488,11 @@
 <div class="row mt-3">
     <div class="col-md-3">
         <label for="btnOutlineDarkColor">Dark Outline Kleur</label>
-        <?php echo input('color', 'btnOutlineDarkColor', $data['btnOutlineDarkColor'], 'btnOutlineDarkColor', 'class="form-control autosave_config_site" data-field="btnOutlineDarkColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineDarkColor', $data['btnOutlineDarkColor'] ?? '', 'btnOutlineDarkColor', 'class="form-control autosave_config_site" data-field="btnOutlineDarkColor" data-set="'.$data['id'].'"'); ?>
     </div>
     <div class="col-md-3">
         <label for="btnOutlineDarkTextColor">Dark Outline Text Kleur</label>
-        <?php echo input('color', 'btnOutlineDarkTextColor', $data['btnOutlineDarkTextColor'], 'btnOutlineDarkTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineDarkTextColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'btnOutlineDarkTextColor', $data['btnOutlineDarkTextColor'] ?? '', 'btnOutlineDarkTextColor', 'class="form-control autosave_config_site" data-field="btnOutlineDarkTextColor" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
 
