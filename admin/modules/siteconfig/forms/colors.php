@@ -4,24 +4,24 @@
         <!-- Body Tekstgrootte (em) -->
         <div class="col-md-3">
             <label for="bodySize">Tekstgrootte (em)</label>
-            <?php echo input('number', 'bodySize', $data['bodySize'], 'bodySize', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="5.0" data-field="bodySize" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('number', 'bodySize', $data['bodySize'] ?? '', 'bodySize', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="5.0" data-field="bodySize" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Body Kleur -->
         <div class="col-md-3">
             <label for="bodyColor">Tekstkleur</label>
-            <?php echo input('color', 'bodyColor', $data['bodyColor'], 'bodyColor', 'class="form-control autosave_config_site" data-field="bodyColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'bodyColor', $data['bodyColor'] ?? '', 'bodyColor', 'class="form-control autosave_config_site" data-field="bodyColor" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Body Font -->
         <div class="col-md-3">
-            <?php echo selectboxFont('Lettertype', 'bodyFont', $data['bodyFont'], 'class="form-select autosave_config_site" data-field="bodyFont" data-set="'.$data['id'].'"'); ?>
+            <?php echo selectboxFont('Lettertype', 'bodyFont', $data['bodyFont'] ?? '', 'class="form-select autosave_config_site" data-field="bodyFont" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Body Achtergrondkleur -->
         <div class="col-md-3">
             <label for="bodyBgColor">Achtergrondkleur</label>
-            <?php echo input('color', 'bodyBgColor', $data['bodyBgColor'], 'bodyBgColor', 'class="form-control autosave_config_site" data-field="bodyBgColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'bodyBgColor', $data['bodyBgColor'] ?? '', 'bodyBgColor', 'class="form-control autosave_config_site" data-field="bodyBgColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
     <hr>
@@ -49,17 +49,17 @@
                         <h4>H<?php echo $i; ?></h4>
                     </div>
                     <div class="col-md-3">
-                        <?php echo input('number', 'h' . $i . 'Size', $data['h' . $i . 'Size'], 'h' . $i . 'Size', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="5.0" data-field="h' . $i . 'Size" data-set="'.$data['id'].'"'); ?>
+                        <?php echo input('number', 'h' . $i . 'Size', $data['h' . $i . 'Size'] ?? '', 'h' . $i . 'Size', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="5.0" data-field="h' . $i . 'Size" data-set="'.$data['id'].'"'); ?>
                     </div>
 
                     <!-- Header Kleur -->
                     <div class="col-md-3">
-                        <?php echo input('color', 'h' . $i . 'Color', $data['h' . $i . 'Color'], 'h' . $i . 'Color', 'class="form-control autosave_config_site" data-field="h' . $i . 'Color" data-set="'.$data['id'].'"'); ?>
+                        <?php echo input('color', 'h' . $i . 'Color', $data['h' . $i . 'Color'] ?? '', 'h' . $i . 'Color', 'class="form-control autosave_config_site" data-field="h' . $i . 'Color" data-set="'.$data['id'].'"'); ?>
                     </div>
 
                     <!-- Header Font -->
                     <div class="col-md-3">
-                        <?php echo selectboxFont('H' . $i . ' Lettertype', 'h' . $i . 'Font', $data['h' . $i . 'Font'], 'class="form-select autosave_config_site" data-field="h' . $i . 'Font" data-set="'.$data['id'].'"'); ?>
+                        <?php echo selectboxFont('H' . $i . ' Lettertype', 'h' . $i . 'Font', $data['h' . $i . 'Font'] ?? '', 'class="form-select autosave_config_site" data-field="h' . $i . 'Font" data-set="'.$data['id'].'"'); ?>
                     </div>
                 </div>
             </div>
@@ -72,19 +72,19 @@
         <!-- HR Kleur -->
         <div class="col-md-3">
             <label for="hrColor">HR Kleur</label>
-            <?php echo input('color', 'hrColor', $data['hrColor'], 'hrColor', 'class="form-control autosave_config_site" data-field="hrColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'hrColor', $data['hrColor'] ?? '', 'hrColor', 'class="form-control autosave_config_site" data-field="hrColor" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- HR Hoogte -->
         <div class="col-md-3">
             <label for="hrHeight">HR Hoogte (px)</label>
-            <?php echo input('number', 'hrHeight', $data['hrHeight'], 'hrHeight', 'class="form-control autosave_config_site" step="1" min="1" max="20" data-field="hrHeight" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('number', 'hrHeight', $data['hrHeight'] ?? '', 'hrHeight', 'class="form-control autosave_config_site" step="1" min="1" max="20" data-field="hrHeight" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- HR Opacity -->
         <div class="col-md-3">
             <label for="hrOpacity">HR Opacity (0-1)</label>
-            <?php echo input('number', 'hrOpacity', $data['hrOpacity'], 'hrOpacity', 'class="form-control autosave_config_site" step="0.1" min="0" max="1" data-field="hrOpacity" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('number', 'hrOpacity', $data['hrOpacity'] ?? '', 'hrOpacity', 'class="form-control autosave_config_site" step="0.1" min="0" max="1" data-field="hrOpacity" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 </div>
@@ -95,19 +95,19 @@
         <!-- Button Achtergrondkleur -->
         <div class="col-md-3">
             <label for="backToTopBg">Achtergrondkleur</label>
-            <?php echo input('color', 'backToTopBg', $data['backToTopBg'], 'backToTopBg', 'class="form-control autosave_config_site" data-field="backToTopBg" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'backToTopBg', $data['backToTopBg'] ?? '', 'backToTopBg', 'class="form-control autosave_config_site" data-field="backToTopBg" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Button Hover Achtergrondkleur -->
         <div class="col-md-3">
             <label for="backToTopHoverBg">Hover Achtergrondkleur</label>
-            <?php echo input('color', 'backToTopHoverBg', $data['backToTopHoverBg'], 'backToTopHoverBg', 'class="form-control autosave_config_site" data-field="backToTopHoverBg" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'backToTopHoverBg', $data['backToTopHoverBg'] ?? '', 'backToTopHoverBg', 'class="form-control autosave_config_site" data-field="backToTopHoverBg" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Button Icon Kleur -->
         <div class="col-md-3">
             <label for="backToTopIconColor">Icon Kleur</label>
-            <?php echo input('color', 'backToTopIconColor', $data['backToTopIconColor'], 'backToTopIconColor', 'class="form-control autosave_config_site" data-field="backToTopIconColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'backToTopIconColor', $data['backToTopIconColor'] ?? '', 'backToTopIconColor', 'class="form-control autosave_config_site" data-field="backToTopIconColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 </div>
@@ -120,13 +120,13 @@
         <!-- Achtergrondkleur -->
         <div class="col-md-3">
             <label for="headerBgColor">Achtergrondkleur</label>
-            <?php echo input('color', 'headerBgColor', $data['headerBgColor'], 'headerBgColor', 'class="form-control autosave_config_site" data-field="headerBgColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'headerBgColor', $data['headerBgColor'] ?? '', 'headerBgColor', 'class="form-control autosave_config_site" data-field="headerBgColor" data-set="'.$data['id'].'"'); ?>
         </div>
         
         <!-- Borderkleur -->
         <div class="col-md-3">
             <label for="headerBorderColor">Border Kleur</label>
-            <?php echo input('color', 'headerBorderColor', $data['headerBorderColor'], 'headerBorderColor', 'class="form-control autosave_config_site" data-field="headerBorderColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'headerBorderColor', $data['headerBorderColor'] ?? '', 'headerBorderColor', 'class="form-control autosave_config_site" data-field="headerBorderColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
@@ -136,18 +136,18 @@
     <!-- Logo kleur -->
     <div class="col-md-3">
         <label for="headerLogoColor">Logo Kleur</label>
-        <?php echo input('color', 'headerLogoColor', $data['headerLogoColor'], 'headerLogoColor', 'class="form-control autosave_config_site" data-field="headerLogoColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'headerLogoColor', $data['headerLogoColor'] ?? '', 'headerLogoColor', 'class="form-control autosave_config_site" data-field="headerLogoColor" data-set="'.$data['id'].'"'); ?>
     </div>
     
     <!-- Logo font grootte -->
     <div class="col-md-3">
         <label for="headerFontSize">Logo Font Grootte (em)</label>
-        <?php echo input('number', 'headerFontSize', $data['headerFontSize'], 'headerFontSize', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="5.0" data-field="headerFontSize" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('number', 'headerFontSize', $data['headerFontSize'] ?? '', 'headerFontSize', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="5.0" data-field="headerFontSize" data-set="'.$data['id'].'"'); ?>
     </div>
     
     <!-- Logo font familie -->
     <div class="col-md-3">
-        <?php echo selectboxFont('Logo Font Familie', 'headerFontFamily', $data['headerFontFamily'], 'class="form-select autosave_config_site" data-field="headerFontFamily" data-set="'.$data['id'].'"'); ?>
+        <?php echo selectboxFont('Logo Font Familie', 'headerFontFamily', $data['headerFontFamily'] ?? '', 'class="form-select autosave_config_site" data-field="headerFontFamily" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
 
@@ -157,18 +157,18 @@
     <!-- Slogan kleur -->
     <div class="col-md-3">
         <label for="sloganColor">Slogan Kleur</label>
-        <?php echo input('color', 'sloganColor', $data['sloganColor'], 'sloganColor', 'class="form-control autosave_config_site" data-field="sloganColor" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('color', 'sloganColor', $data['sloganColor'] ?? '', 'sloganColor', 'class="form-control autosave_config_site" data-field="sloganColor" data-set="'.$data['id'].'"'); ?>
     </div>
 
     <!-- Slogan font grootte -->
     <div class="col-md-3">
         <label for="sloganFontSize">Slogan Font Grootte (em)</label>
-        <?php echo input('number', 'sloganFontSize', $data['sloganFontSize'], 'sloganFontSize', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="3.0" data-field="sloganFontSize" data-set="'.$data['id'].'"'); ?>
+        <?php echo input('number', 'sloganFontSize', $data['sloganFontSize'] ?? '', 'sloganFontSize', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="3.0" data-field="sloganFontSize" data-set="'.$data['id'].'"'); ?>
     </div>
 
     <!-- Slogan font familie -->
     <div class="col-md-3">
-        <?php echo selectboxFont('Slogan Font Familie', 'sloganFontFamily', $data['sloganFontFamily'], 'class="form-select autosave_config_site" data-field="sloganFontFamily" data-set="'.$data['id'].'"'); ?>
+        <?php echo selectboxFont('Slogan Font Familie', 'sloganFontFamily', $data['sloganFontFamily'] ?? '', 'class="form-select autosave_config_site" data-field="sloganFontFamily" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
 <hr>
@@ -178,38 +178,38 @@
         <!-- Navigatie Achtergrondkleur -->
         <div class="col-md-4">
             <label for="navbarBgColor">Achtergrondkleur</label>
-            <?php echo input('color', 'navbarBgColor', $data['navbarBgColor'], 'navbarBgColor', 'class="form-control autosave_config_site" data-field="navbarBgColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'navbarBgColor', $data['navbarBgColor'] ?? '', 'navbarBgColor', 'class="form-control autosave_config_site" data-field="navbarBgColor" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Navigatie Achtergrond Opaciteit -->
         <div class="col-md-4">
             <label for="navbarBgOpacity">Achtergrond Opaciteit</label>
-            <?php echo input('number', 'navbarBgOpacity', $data['navbarBgOpacity'], 'navbarBgOpacity', 'class="form-control autosave_config_site" step="0.1" min="0" max="1" data-field="navbarBgOpacity" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('number', 'navbarBgOpacity', $data['navbarBgOpacity'] ?? '', 'navbarBgOpacity', 'class="form-control autosave_config_site" step="0.1" min="0" max="1" data-field="navbarBgOpacity" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Lettertype Grootte -->
         <div class="col-md-4">
             <label for="navbarFontSize">Lettertype Grootte (em)</label>
-            <?php echo input('number', 'navbarFontSize', $data['navbarFontSize'], 'navbarFontSize', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="5.0" data-field="navbarFontSize" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('number', 'navbarFontSize', $data['navbarFontSize'] ?? '', 'navbarFontSize', 'class="form-control autosave_config_site" step="0.1" min="0.5" max="5.0" data-field="navbarFontSize" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
     <div class="row mt-3">
         <!-- Lettertype Dikte -->
         <div class="col-md-4">
-            <?php echo selectbox('Lettertype Dikte', 'navbarFontWeight', $data['navbarFontWeight'], ['Normal' => 'normal', 'Bold' => 'bold'], 'class="form-select autosave_config_site" data-field="navbarFontWeight" data-set="'.$data['id'].'"'); ?>
+            <?php echo selectbox('Lettertype Dikte', 'navbarFontWeight', $data['navbarFontWeight'] ?? '', ['Normal' => 'normal', 'Bold' => 'bold'], 'class="form-select autosave_config_site" data-field="navbarFontWeight" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Letterspacing -->
         <div class="col-md-4">
             <label for="navbarLetterSpacing">Letterspacing (px)</label>
-            <?php echo input('number', 'navbarLetterSpacing', $data['navbarLetterSpacing'], 'navbarLetterSpacing', 'class="form-control autosave_config_site" step="0.1" min="0" max="10" data-field="navbarLetterSpacing" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('number', 'navbarLetterSpacing', $data['navbarLetterSpacing'] ?? '', 'navbarLetterSpacing', 'class="form-control autosave_config_site" step="0.1" min="0" max="10" data-field="navbarLetterSpacing" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Regelafstand -->
         <div class="col-md-4">
             <label for="navbarLineHeight">Regelhoogte (em)</label>
-            <?php echo input('number', 'navbarLineHeight', $data['navbarLineHeight'], 'navbarLineHeight', 'class="form-control autosave_config_site" step="0.1" min="1" max="3" data-field="navbarLineHeight" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('number', 'navbarLineHeight', $data['navbarLineHeight'] ?? '', 'navbarLineHeight', 'class="form-control autosave_config_site" step="0.1" min="1" max="3" data-field="navbarLineHeight" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
@@ -217,26 +217,26 @@
         <!-- Tekstkleur -->
         <div class="col-md-4">
             <label for="navbarTextColor">Tekstkleur</label>
-            <?php echo input('color', 'navbarTextColor', $data['navbarTextColor'], 'navbarTextColor', 'class="form-control autosave_config_site" data-field="navbarTextColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'navbarTextColor', $data['navbarTextColor'] ?? '', 'navbarTextColor', 'class="form-control autosave_config_site" data-field="navbarTextColor" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Hover Tekstkleur -->
         <div class="col-md-4">
             <label for="navbarHoverColor">Hover Tekstkleur</label>
-            <?php echo input('color', 'navbarHoverColor', $data['navbarHoverColor'], 'navbarHoverColor', 'class="form-control autosave_config_site" data-field="navbarHoverColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'navbarHoverColor', $data['navbarHoverColor'] ?? '', 'navbarHoverColor', 'class="form-control autosave_config_site" data-field="navbarHoverColor" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Hover Achtergrondkleur -->
         <div class="col-md-4">
             <label for="navbarHoverBgColor">Hover Achtergrondkleur</label>
-            <?php echo input('color', 'navbarHoverBgColor', $data['navbarHoverBgColor'], 'navbarHoverBgColor', 'class="form-control autosave_config_site" data-field="navbarHoverBgColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'navbarHoverBgColor', $data['navbarHoverBgColor'] ?? '', 'navbarHoverBgColor', 'class="form-control autosave_config_site" data-field="navbarHoverBgColor" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 
     <div class="row mt-3">
         <!-- Tekstdecoratie -->
         <div class="col-md-4">
-            <?php echo selectbox('Tekstdecoratie', 'navbarTextDecoration', $data['navbarTextDecoration'], ['None' => 'none', 'Underline' => 'underline'], 'class="form-select autosave_config_site" data-field="navbarTextDecoration" data-set="'.$data['id'].'"'); ?>
+            <?php echo selectbox('Tekstdecoratie', 'navbarTextDecoration', $data['navbarTextDecoration'] ?? '', ['None' => 'none', 'Underline' => 'underline'], 'class="form-select autosave_config_site" data-field="navbarTextDecoration" data-set="'.$data['id'].'"'); ?>
         </div>
     </div>
 </div>
@@ -247,7 +247,7 @@
         <!-- Achtergrondkleur -->
         <div class="col-md-3">
             <label for="footerBgColor">Achtergrondkleur</label>
-            <?php echo input('color', 'footerBgColor', $data['footerBgColor'], 'footerBgColor', 'class="form-control autosave_config_site" data-field="footerBgColor" data-set="'.$data['id'].'"'); ?>
+            <?php echo input('color', 'footerBgColor', $data['footerBgColor'] ?? '', 'footerBgColor', 'class="form-control autosave_config_site" data-field="footerBgColor" data-set="'.$data['id'].'"'); ?>
         </div>
 
         <!-- Tekstkleur -->

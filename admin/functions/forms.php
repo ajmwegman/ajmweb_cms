@@ -79,7 +79,7 @@ function selectboxFont($title, $name, $value='', $extra='', $inline='no') {
 
     foreach ($fontOptions as $fontName) {
         $input .= '<option value="' . htmlspecialchars($fontName) . '" ';
-        $input .= (strcasecmp(trim($fontName), trim($value)) == 0 ? 'selected="selected"' : '');
+        $input .= (strcasecmp(trim($fontName), trim($value ?? '')) == 0 ? 'selected="selected"' : '');
         $input .= '>' . htmlspecialchars($fontName) . '</option>';
     }
 
