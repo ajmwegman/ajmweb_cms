@@ -410,15 +410,15 @@ if (empty($available_languages)) {
         $current_url = strtok($_SERVER['REQUEST_URI'], '?');
         
         // Remove existing lang parameter
-        $current_url = preg_replace(\'/[?&]lang=[^&]*\', \'\', $current_url);
+        $current_url = preg_replace('/[?&]lang=[^&]*/', '', $current_url);
         
-        $separator = (strpos($current_url, \'?\') !== false) ? \'&\' : \'?\';
-        $lang_url = $current_url . $separator . \'lang=\' . $lang[\'locale\'];
+        $separator = (strpos($current_url, '?') !== false) ? '&' : '?';
+        $lang_url = $current_url . $separator . 'lang=' . $lang['locale'];
     ?>
         <a href="<?php echo htmlspecialchars($lang_url); ?>" 
            class="lang-link <?php echo $active_class; ?>" 
-           title="<?php echo htmlspecialchars($lang[\'label\']); ?>">
-            <?php echo strtoupper($lang[\'locale\']); ?>
+           title="<?php echo htmlspecialchars($lang['label']); ?>">
+            <?php echo strtoupper($lang['locale']); ?>
         </a>
     <?php endforeach; ?>
 </div>
@@ -473,45 +473,46 @@ echo "<h2>Stap 6: Admin Language Management</h2>\n";
 
 try {
     // Create enhanced language management for content
-    $adminLanguageScript = '<?php
+    $adminLanguageScript = <<<'PHP'
+<?php
 /**
  * Enhanced Language Management for Admin
  * Add this to your admin content forms
  */
 
 // Get available languages for the site
-function getLanguageSelector($current_lang = \'nl\', $field_name = \'lang_code\') {
+function getLanguageSelector($current_lang = 'nl', $field_name = 'lang_code') {
     global $site, $shop_id;
     
     if (!isset($site) || !isset($shop_id)) {
-        return \'<input type="hidden" name="\' . $field_name . \'" value="nl">\';
+        return '<input type="hidden" name="' . $field_name . '" value="nl">';
     }
     
     $available_languages = $site->getAvailableLanguages($shop_id);
     
     if (empty($available_languages)) {
-        return \'<input type="hidden" name="\' . $field_name . \'" value="nl">\';
+        return '<input type="hidden" name="' . $field_name . '" value="nl">';
     }
     
-    $html = \'<div class="form-group">\';
-    $html .= \'<label for="\' . $field_name . \'">Taal:</label>\';
-    $html .= \'<select name="\' . $field_name . \'" id="\' . $field_name . \'" class="form-control">\';
+    $html = '<div class="form-group">';
+    $html .= '<label for="' . $field_name . '">Taal:</label>';
+    $html .= '<select name="' . $field_name . '" id="' . $field_name . '" class="form-control">';
     
     foreach($available_languages as $lang) {
-        $selected = ($current_lang == $lang[\'locale\']) ? \'selected\' : \'\';
-        $html .= \'<option value="\' . htmlspecialchars($lang[\'locale\']) . \'" \' . $selected . \'>\';
-        $html .= htmlspecialchars($lang[\'label\']) . \' (\' . strtoupper($lang[\'locale\']) . \')\';
-        $html .= \'</option>\';
+        $selected = ($current_lang == $lang['locale']) ? 'selected' : '';
+        $html .= '<option value="' . htmlspecialchars($lang['locale']) . '" ' . $selected . '>';
+        $html .= htmlspecialchars($lang['label']) . ' (' . strtoupper($lang['locale']) . ')';
+        $html .= '</option>';
     }
     
-    $html .= \'</select>\';
-    $html .= \'</div>\';
+    $html .= '</select>';
+    $html .= '</div>';
     
     return $html;
 }
 
 // Function to duplicate content for translation
-function duplicateContentForTranslation($content_id, $target_lang, $table = \'group_content\') {
+function duplicateContentForTranslation($content_id, $target_lang, $table = 'group_content') {
     global $pdo;
     
     try {
@@ -525,16 +526,16 @@ function duplicateContentForTranslation($content_id, $target_lang, $table = \'gr
         }
         
         // Remove ID and set new language
-        unset($original[\'id\']);
-        $original[\'lang_code\'] = $target_lang;
-        $original[\'title\'] = \'[TRANSLATE] \' . $original[\'title\'];
-        $original[\'status\'] = \'n\'; // Set as inactive until translated
+        unset($original['id']);
+        $original['lang_code'] = $target_lang;
+        $original['title'] = '[TRANSLATE] ' . $original['title'];
+        $original['status'] = 'n'; // Set as inactive until translated
         
         // Insert new record
         $fields = array_keys($original);
-        $placeholders = str_repeat(\'?,\', count($fields) - 1) . \'?\';
+        $placeholders = str_repeat('?,', count($fields) - 1) . '?';
         
-        $sql = "INSERT INTO {$table} (" . implode(\',\', $fields) . ") VALUES ({$placeholders})";
+        $sql = "INSERT INTO {$table} (" . implode(',', $fields) . ") VALUES ({$placeholders})";
         $stmt = $pdo->prepare($sql);
         
         return $stmt->execute(array_values($original));
@@ -544,7 +545,8 @@ function duplicateContentForTranslation($content_id, $target_lang, $table = \'gr
         return false;
     }
 }
-?>';
+?>
+PHP;
     
     file_put_contents('admin/functions/language_management.php', $adminLanguageScript);
     $success[] = "✅ Admin language management functies aangemaakt";
@@ -570,7 +572,7 @@ require_once("../src/database.class.php");
 
 $db = new database($pdo);
 
-function migrateContentToLanguages($target_languages = [\'en\']) {
+function migrateContentToLanguages($target_languages = ['en']) {
     global $pdo;
     
     $migrated = [];
@@ -581,29 +583,29 @@ function migrateContentToLanguages($target_languages = [\'en\']) {
         
         // Migrate content
         try {
-            $stmt = $pdo->prepare("SELECT * FROM group_content WHERE lang_code = \'nl\'");
+            $stmt = $pdo->prepare("SELECT * FROM group_content WHERE lang_code = 'nl'");
             $stmt->execute();
             
             while ($content = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 // Check if translation already exists
                 $checkStmt = $pdo->prepare("SELECT id FROM group_content WHERE group_id = ? AND location = ? AND lang_code = ?");
-                $checkStmt->execute([$content[\'group_id\'], $content[\'location\'], $lang]);
+                $checkStmt->execute([$content['group_id'], $content['location'], $lang]);
                 
                 if ($checkStmt->rowCount() == 0) {
                     // Create translation
-                    unset($content[\'id\']);
-                    $content[\'lang_code\'] = $lang;
-                    $content[\'title\'] = \'[TRANSLATE] \' . $content[\'title\'];
-                    $content[\'status\'] = \'n\';
+                    unset($content['id']);
+                    $content['lang_code'] = $lang;
+                    $content['title'] = '[TRANSLATE] ' . $content['title'];
+                    $content['status'] = 'n';
                     
                     $fields = array_keys($content);
-                    $placeholders = str_repeat(\'?,\', count($fields) - 1) . \'?\';
+                    $placeholders = str_repeat('?,', count($fields) - 1) . '?';
                     
-                    $insertSql = "INSERT INTO group_content (" . implode(\',\', $fields) . ") VALUES ({$placeholders})";
+                    $insertSql = "INSERT INTO group_content (" . implode(',', $fields) . ") VALUES ({$placeholders})";
                     $insertStmt = $pdo->prepare($insertSql);
                     $insertStmt->execute(array_values($content));
                     
-                    $migrated[] = "Content: " . $content[\'title\'];
+                    $migrated[] = "Content: " . $content['title'];
                 }
             }
         } catch (Exception $e) {
@@ -612,29 +614,29 @@ function migrateContentToLanguages($target_languages = [\'en\']) {
         
         // Migrate menu items
         try {
-            $stmt = $pdo->prepare("SELECT * FROM group_menu WHERE lang_code = \'nl\'");
+            $stmt = $pdo->prepare("SELECT * FROM group_menu WHERE lang_code = 'nl'");
             $stmt->execute();
             
             while ($menu = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 // Check if translation already exists
                 $checkStmt = $pdo->prepare("SELECT id FROM group_menu WHERE group_id = ? AND location = ? AND lang_code = ?");
-                $checkStmt->execute([$menu[\'group_id\'], $menu[\'location\'], $lang]);
+                $checkStmt->execute([$menu['group_id'], $menu['location'], $lang]);
                 
                 if ($checkStmt->rowCount() == 0) {
                     // Create translation
-                    unset($menu[\'id\']);
-                    $menu[\'lang_code\'] = $lang;
-                    $menu[\'title\'] = \'[TRANSLATE] \' . $menu[\'title\'];
-                    $menu[\'status\'] = \'n\';
+                    unset($menu['id']);
+                    $menu['lang_code'] = $lang;
+                    $menu['title'] = '[TRANSLATE] ' . $menu['title'];
+                    $menu['status'] = 'n';
                     
                     $fields = array_keys($menu);
-                    $placeholders = str_repeat(\'?,\', count($fields) - 1) . \'?\';
+                    $placeholders = str_repeat('?,', count($fields) - 1) . '?';
                     
-                    $insertSql = "INSERT INTO group_menu (" . implode(\',\', $fields) . ") VALUES ({$placeholders})";
+                    $insertSql = "INSERT INTO group_menu (" . implode(',', $fields) . ") VALUES ({$placeholders})";
                     $insertStmt = $pdo->prepare($insertSql);
                     $insertStmt->execute(array_values($menu));
                     
-                    $migrated[] = "Menu: " . $menu[\'title\'];
+                    $migrated[] = "Menu: " . $menu['title'];
                 }
             }
         } catch (Exception $e) {
@@ -642,11 +644,11 @@ function migrateContentToLanguages($target_languages = [\'en\']) {
         }
     }
     
-    return [\'migrated\' => $migrated, \'errors\' => $errors];
+    return ['migrated' => $migrated, 'errors' => $errors];
 }
 
 // Uncomment the line below and specify target languages when ready to migrate
-// $result = migrateContentToLanguages([\'en\', \'de\']);
+// $result = migrateContentToLanguages(['en', 'de']);
 // print_r($result);
 ?>';
     
