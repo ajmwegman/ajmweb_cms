@@ -12,18 +12,18 @@ class Analytics {
         return $stmt->fetch();
     }
     
-    public function getEnhancedStats() {
-        $basicStats = $this->getStats();
+    public function getEnhancedStats($startDate = null, $endDate = null) {
+        $basicStats = $this->getStats($startDate, $endDate);
         
         $enhancedStats = array_merge($basicStats, [
-            'uniqueVisitors' => $this->getUniqueVisitors(),
-            'bounceRate' => $this->getBounceRate(),
-            'avgPagesPerSession' => $this->getAvgPagesPerSession(),
-            'topReferrers' => $this->getTopReferrers(),
-            'deviceBreakdown' => $this->getDeviceBreakdown(),
-            'browserBreakdown' => $this->getBrowserBreakdown(),
-            'topPages' => $this->getTopPages(),
-            'conversionRate' => $this->getConversionRate()
+            'uniqueVisitors' => $this->getUniqueVisitors($startDate, $endDate),
+            'bounceRate' => $this->getBounceRate($startDate, $endDate),
+            'avgPagesPerSession' => $this->getAvgPagesPerSession($startDate, $endDate),
+            'topReferrers' => $this->getTopReferrers(5, $startDate, $endDate),
+            'deviceBreakdown' => $this->getDeviceBreakdown($startDate, $endDate),
+            'browserBreakdown' => $this->getBrowserBreakdown($startDate, $endDate),
+            'topPages' => $this->getTopPages(10, $startDate, $endDate),
+            'conversionRate' => $this->getConversionRate($startDate, $endDate)
         ]);
         
         return $enhancedStats;
