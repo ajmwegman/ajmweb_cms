@@ -1,6 +1,6 @@
 <?php
 // Verbinding maken met de database (vereist een db-verbinding)
-include("../system/database.php");
+include("../../system/database.php");
 
 require_once("../src/analytics.class.php");
 

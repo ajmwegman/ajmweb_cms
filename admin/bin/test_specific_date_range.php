@@ -1,6 +1,6 @@
 <?php
-include( "../system/database.php" );
-require_once( "../src/analytics.class.php" );
+include("../../system/database.php");
+require_once("../src/analytics.class.php");
 
 echo "<h2>Test Date Range: 01-08-2025 to 07-08-2025</h2>";
 

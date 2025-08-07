@@ -1,6 +1,6 @@
 <?php
-include( "../system/database.php" );
-require_once( "../src/analytics.class.php" );
+include("../../system/database.php");
+require_once("../src/analytics.class.php");
 
 header('Content-Type: application/json');
 

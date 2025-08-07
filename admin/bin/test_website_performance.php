@@ -1,5 +1,5 @@
 <?php
-include("../system/database.php");
+include("../../system/database.php");
 require_once("../src/analytics.class.php");
 
 echo "<h2>Test Website Performance Chart</h2>";
