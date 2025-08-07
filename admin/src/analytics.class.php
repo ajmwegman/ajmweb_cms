@@ -90,12 +90,14 @@ class Analytics {
 
     public function getTopReferrers($limit = 5, $startDate = null, $endDate = null) {
         $whereClause = "WHERE referer_url != 'unknown'";
-        $params = [$limit];
+        $params = [];
         
         if ($startDate && $endDate) {
             $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
-            $params = [$startDate, $endDate, $limit];
+            $params = [$startDate, $endDate];
         }
+        
+        $params[] = $limit; // Add limit parameter at the end
         
         $stmt = $this->pdo->prepare("
             SELECT referer_url, COUNT(*) as count 
@@ -252,25 +254,36 @@ class Analytics {
     public function getTopPages($limit = 10, $startDate = null, $endDate = null) {
         try {
             $whereClause = "WHERE page_url IS NOT NULL AND page_url != ''";
-            $params = [$limit];
+            $params = [];
             
             if ($startDate && $endDate) {
                 $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
-                $params = [$startDate, $endDate, $limit];
+                $params = [$startDate, $endDate];
             }
+            
+            // Build subquery for percentage calculation
+            $subqueryWhere = "WHERE page_url IS NOT NULL";
+            $allParams = $params; // Start with main query params
+            
+            if ($startDate && $endDate) {
+                $subqueryWhere .= " AND DATE(visit_time) BETWEEN ? AND ?";
+                $allParams = array_merge($allParams, [$startDate, $endDate]); // Add subquery params
+            }
+            
+            $allParams[] = $limit; // Add limit parameter at the end
             
             $stmt = $this->pdo->prepare("
                 SELECT 
                     page_url, 
                     COUNT(*) as count,
-                    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics WHERE page_url IS NOT NULL " . ($startDate && $endDate ? "AND DATE(visit_time) BETWEEN ? AND ?" : "") . ")), 2) as percentage
+                    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics " . $subqueryWhere . ")), 2) as percentage
                 FROM analytics 
                 " . $whereClause . "
                 GROUP BY page_url 
                 ORDER BY count DESC 
                 LIMIT ?
             ");
-            $stmt->execute($params);
+            $stmt->execute($allParams);
             return $stmt->fetchAll();
         } catch (PDOException $e) {
             return [];
@@ -286,14 +299,23 @@ class Analytics {
             $params = [$startDate, $endDate];
         }
         
+        // Build the query with proper parameter handling
+        $subqueryWhere = "";
+        $allParams = $params; // Start with main query params
+        
+        if ($startDate && $endDate) {
+            $subqueryWhere = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+            $allParams = array_merge($allParams, [$startDate, $endDate]); // Add subquery params
+        }
+        
         $stmt = $this->pdo->prepare("
             SELECT 
                 ROUND((COUNT(DISTINCT session_id) * 100.0 / 
-                (SELECT COUNT(DISTINCT session_id) FROM analytics " . ($startDate && $endDate ? "WHERE DATE(visit_time) BETWEEN ? AND ?" : "") . ")), 2) as conversion_rate
+                (SELECT COUNT(DISTINCT session_id) FROM analytics " . $subqueryWhere . ")), 2) as conversion_rate
             FROM analytics 
             " . $whereClause
         );
-        $stmt->execute($params);
+        $stmt->execute($allParams);
         return $stmt->fetch()['conversion_rate'];
     }
     
