@@ -1,10 +1,11 @@
 <?php
-include( "../../system/database.php" );
-require_once( "../src/database.class.php" );
-require_once( "../src/login.class.php" );
+// These files are already included by config.php, so we don't need to include them again
+// include( "../../system/database.php" );
+// require_once( "../src/database.class.php" );
+// require_once( "../src/login.class.php" );
 
-$db = new database( $pdo );
-$login = new login( $pdo );
+// $db = new database( $pdo );
+// $login = new login( $pdo );
 
 // Remember me functionality
 if(isset($_COOKIE['remember_me']) && (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== 'yes')) {
