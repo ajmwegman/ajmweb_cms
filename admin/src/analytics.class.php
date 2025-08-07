@@ -70,25 +70,42 @@ class Analytics {
         return $stmt->fetch()['bounce_rate'];
     }
 
-    public function getAvgPagesPerSession() {
-        $stmt = $this->pdo->query("
+    public function getAvgPagesPerSession($startDate = null, $endDate = null) {
+        $whereClause = "WHERE page_views > 0";
+        $params = [];
+        
+        if ($startDate && $endDate) {
+            $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
+            $params = [$startDate, $endDate];
+        }
+        
+        $stmt = $this->pdo->prepare("
             SELECT ROUND(AVG(page_views), 2) as avg_pages 
             FROM analytics 
-            WHERE page_views > 0
-        ");
+            " . $whereClause
+        );
+        $stmt->execute($params);
         return $stmt->fetch()['avg_pages'];
     }
 
-    public function getTopReferrers($limit = 5) {
+    public function getTopReferrers($limit = 5, $startDate = null, $endDate = null) {
+        $whereClause = "WHERE referer_url != 'unknown'";
+        $params = [$limit];
+        
+        if ($startDate && $endDate) {
+            $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
+            $params = [$startDate, $endDate, $limit];
+        }
+        
         $stmt = $this->pdo->prepare("
             SELECT referer_url, COUNT(*) as count 
             FROM analytics 
-            WHERE referer_url != 'unknown' 
+            " . $whereClause . "
             GROUP BY referer_url 
             ORDER BY count DESC 
             LIMIT ?
         ");
-        $stmt->execute([$limit]);
+        $stmt->execute($params);
         return $stmt->fetchAll();
     }
 
