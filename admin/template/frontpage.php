@@ -187,6 +187,40 @@ $stats = $analytics->getEnhancedStats();
   .date-input:focus + .date-slider-track {
     transform: scaleX(1);
   }
+  
+  /* Table styling for fixed height */
+  .top-pages-table {
+    width: 100%;
+  }
+  
+  .top-pages-table thead th {
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+  }
+  
+  .top-pages-table tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .table-responsive {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+  }
+  
+  /* Ensure proper z-index for cards */
+  .card {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Fix table container */
+  .table-container {
+    position: relative;
+    height: 350px;
+    overflow: hidden;
+  }
 </style>
 
 <div class="container mt-5">
@@ -368,21 +402,23 @@ $stats = $analytics->getEnhancedStats();
           <h5><i class="bi bi-list-ol"></i> Top 10 Populairste Pagina's</h5>
         </div>
         <div class="card-body">
-          <div class="table-responsive" style="height: 350px; overflow-y: auto;">
-            <table class="table table-hover top-pages-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Pagina</th>
-                  <th>Bezoeken</th>
-                  <th>Percentage</th>
-                  <th>Trend</th>
-                </tr>
-              </thead>
-              <tbody id="topPagesTable">
-                <!-- Top pages worden hier geladen -->
-              </tbody>
-            </table>
+          <div class="table-container">
+            <div class="table-responsive" style="height: 350px; overflow-y: auto; max-height: 350px;">
+              <table class="table table-hover top-pages-table" style="margin-bottom: 0;">
+                <thead style="position: sticky; top: 0; background: white; z-index: 1;">
+                  <tr>
+                    <th>#</th>
+                    <th>Pagina</th>
+                    <th>Bezoeken</th>
+                    <th>Percentage</th>
+                    <th>Trend</th>
+                  </tr>
+                </thead>
+                <tbody id="topPagesTable">
+                  <!-- Top pages worden hier geladen -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
