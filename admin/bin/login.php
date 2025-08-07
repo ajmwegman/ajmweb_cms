@@ -49,8 +49,13 @@ if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' ) {
         $_SESSION['loggedin'] = 'yes';
         $_SESSION['sess_hash'] = $userinfo['hash'];
          
-        if(isset($_POST['remember']) ) {
-             setcookie("remember", $_SESSION['sess_hash'], time() + (86400 * 30), "/"); // 86400 = 1 day
+        if(isset($_POST['remember']) && $_POST['remember'] == 'on') {
+             // Set a secure remember me cookie
+             $cookie_value = $userinfo['hash'] . '_' . time();
+             setcookie("remember_me", $cookie_value, time() + (86400 * 30), "/", "", true, true); // 30 days, secure, httpOnly
+             
+             // Also store in database for additional security (optional)
+             // $login->storeRememberToken($userinfo['id'], $cookie_value);
         }
         ?>
         <script>

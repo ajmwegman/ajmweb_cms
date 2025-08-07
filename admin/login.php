@@ -1,6 +1,19 @@
 <?php
 require_once( "template/config.php" );
 require_once( "template/head.php" );
+
+// Auto-login check for remember me functionality
+session_start();
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== 'yes') {
+    if (isset($_COOKIE['remember_me'])) {
+        include( "bin/login_check.php" );
+        // If auto-login successful, redirect to admin
+        if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === 'yes') {
+            header('Location: /admin/index.php');
+            exit;
+        }
+    }
+}
 ?>
 <body>
 
@@ -55,6 +68,53 @@ require_once( "template/head.php" );
 </form>
 <script src="/admin/js/jquery.form.js"></script> 
 <script src="/admin/js/js.js"></script> 
+
+<script>
+// Remember Me functionality with localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    const rememberCheckbox = document.getElementById('remember');
+    const usernameInput = document.getElementById('username');
+    
+    // Load saved data from localStorage
+    const savedRemember = localStorage.getItem('rememberMe');
+    const savedUsername = localStorage.getItem('savedUsername');
+    
+    if (savedRemember === 'true') {
+        rememberCheckbox.checked = true;
+    }
+    
+    if (savedUsername) {
+        usernameInput.value = savedUsername;
+    }
+    
+    // Save data when form is submitted
+    document.getElementById('form').addEventListener('submit', function() {
+        if (rememberCheckbox.checked) {
+            localStorage.setItem('rememberMe', 'true');
+            localStorage.setItem('savedUsername', usernameInput.value);
+        } else {
+            localStorage.removeItem('rememberMe');
+            localStorage.removeItem('savedUsername');
+        }
+    });
+    
+    // Update localStorage when checkbox changes
+    rememberCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            localStorage.setItem('rememberMe', 'true');
+        } else {
+            localStorage.removeItem('rememberMe');
+        }
+    });
+    
+    // Update saved username when input changes
+    usernameInput.addEventListener('input', function() {
+        if (rememberCheckbox.checked) {
+            localStorage.setItem('savedUsername', this.value);
+        }
+    });
+});
+</script>
 
 <?php require_once("template/footer.php"); ?>
 
