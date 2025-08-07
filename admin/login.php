@@ -3,7 +3,7 @@ require_once( "template/config.php" );
 require_once( "template/head.php" );
 
 // Auto-login check for remember me functionality
-session_start();
+// session_start() is already called in config.php
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== 'yes') {
     if (isset($_COOKIE['remember_me'])) {
         include( "bin/login_check.php" );
