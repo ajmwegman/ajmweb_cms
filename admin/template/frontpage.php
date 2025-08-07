@@ -291,9 +291,9 @@ $stats = $analytics->getEnhancedStats();
         <div class="card-header">
           <h5><i class="bi bi-graph-up"></i> Website Performance</h5>
         </div>
-        <div class="card-body" style="height: 350px;">
-          <div class="visitorChart">
-            <canvas id="visitorChart" style="height: 350px;"></canvas>
+        <div class="card-body" style="height: 350px; overflow: hidden;">
+          <div class="visitorChart" style="height: 100%; position: relative;">
+            <canvas id="visitorChart" style="width: 100% !important; height: 100% !important;"></canvas>
           </div>
         </div>
       </div>
@@ -547,6 +547,7 @@ $stats = $analytics->getEnhancedStats();
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           interaction: {
             mode: 'index',
             intersect: false,
@@ -631,6 +632,8 @@ $stats = $analytics->getEnhancedStats();
           }]
         },
         options: {
+          responsive: true,
+          maintainAspectRatio: false,
           animation: {
             duration: 2000,
             easing: 'easeInOutQuart',
