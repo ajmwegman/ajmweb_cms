@@ -7,8 +7,17 @@ class Analytics {
         $this->pdo = $pdo;
     }
 
-    public function getStats() {
-        $stmt = $this->pdo->query("SELECT COUNT(*) as totalVisitors, SUM(page_views) as totalPageViews, AVG(session_duration) as averageDuration, SUM(bounced) as totalBounces FROM analytics");
+    public function getStats($startDate = null, $endDate = null) {
+        $whereClause = "";
+        $params = [];
+        
+        if ($startDate && $endDate) {
+            $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+            $params = [$startDate, $endDate];
+        }
+        
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) as totalVisitors, SUM(page_views) as totalPageViews, AVG(session_duration) as averageDuration, SUM(bounced) as totalBounces FROM analytics " . $whereClause);
+        $stmt->execute($params);
         return $stmt->fetch();
     }
     
@@ -29,17 +38,35 @@ class Analytics {
         return $enhancedStats;
     }
     
-    public function getUniqueVisitors() {
-        $stmt = $this->pdo->query("SELECT COUNT(DISTINCT ip_address) as unique_visitors FROM analytics");
+    public function getUniqueVisitors($startDate = null, $endDate = null) {
+        $whereClause = "";
+        $params = [];
+        
+        if ($startDate && $endDate) {
+            $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+            $params = [$startDate, $endDate];
+        }
+        
+        $stmt = $this->pdo->prepare("SELECT COUNT(DISTINCT ip_address) as unique_visitors FROM analytics " . $whereClause);
+        $stmt->execute($params);
         return $stmt->fetch()['unique_visitors'];
     }
 
-    public function getBounceRate() {
-        $stmt = $this->pdo->query("
+    public function getBounceRate($startDate = null, $endDate = null) {
+        $whereClause = "";
+        $params = [];
+        
+        if ($startDate && $endDate) {
+            $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+            $params = [$startDate, $endDate];
+        }
+        
+        $stmt = $this->pdo->prepare("
             SELECT 
                 ROUND((SUM(bounced) * 100.0 / COUNT(*)), 2) as bounce_rate 
-            FROM analytics
-        ");
+            FROM analytics " . $whereClause
+        );
+        $stmt->execute($params);
         return $stmt->fetch()['bounce_rate'];
     }
 
