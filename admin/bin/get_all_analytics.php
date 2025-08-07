@@ -1,12 +1,11 @@
 <?php
-require_once '../src/analytics.class.php';
-require_once '../src/database.class.php';
+include( "../system/database.php" );
+require_once( "../src/analytics.class.php" );
 
 header('Content-Type: application/json');
 
 try {
-    $database = new Database();
-    $analytics = new Analytics($database->getConnection());
+    $analytics = new Analytics($pdo);
     
     // Get date range from request
     $input = json_decode(file_get_contents('php://input'), true);
