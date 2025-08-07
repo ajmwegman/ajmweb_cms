@@ -66,40 +66,143 @@ class Analytics {
     }
 
     public function getDeviceBreakdown() {
-        $stmt = $this->pdo->query("
-            SELECT 
-                CASE WHEN is_mobile = 1 THEN 'Mobile' ELSE 'Desktop' END as device,
-                COUNT(*) as count,
-                ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics)), 2) as percentage
-            FROM analytics 
-            GROUP BY is_mobile
-        ");
-        return $stmt->fetchAll();
+        try {
+            // Eerst controleren of er data is
+            $checkStmt = $this->pdo->query("SELECT COUNT(*) as total FROM analytics");
+            $totalRecords = $checkStmt->fetch()['total'];
+            
+            if ($totalRecords == 0) {
+                // Geen data, return dummy data
+                return [
+                    ['device' => 'Desktop', 'count' => 0, 'percentage' => 0],
+                    ['device' => 'Mobile', 'count' => 0, 'percentage' => 0],
+                    ['device' => 'Tablet', 'count' => 0, 'percentage' => 0]
+                ];
+            }
+            
+            // Verbeterde device detection met user agent parsing
+            $stmt = $this->pdo->query("
+                SELECT 
+                    CASE 
+                        WHEN is_mobile = 1 AND (
+                            user_agent LIKE '%iPad%' OR 
+                            user_agent LIKE '%Android%' AND user_agent LIKE '%Tablet%' OR
+                            user_agent LIKE '%PlayBook%' OR
+                            user_agent LIKE '%Silk%' OR
+                            user_agent LIKE '%Kindle%'
+                        ) THEN 'Tablet'
+                        WHEN is_mobile = 1 THEN 'Mobile'
+                        ELSE 'Desktop'
+                    END as device,
+                    COUNT(*) as count,
+                    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics)), 2) as percentage
+                FROM analytics 
+                GROUP BY device
+                ORDER BY count DESC
+            ");
+            
+            $result = $stmt->fetchAll();
+            
+            // Als er geen resultaten zijn, voeg dummy data toe
+            if (empty($result)) {
+                return [
+                    ['device' => 'Desktop', 'count' => 0, 'percentage' => 0],
+                    ['device' => 'Mobile', 'count' => 0, 'percentage' => 0],
+                    ['device' => 'Tablet', 'count' => 0, 'percentage' => 0]
+                ];
+            }
+            
+            // Zorg ervoor dat alle device types aanwezig zijn
+            $devices = ['Desktop', 'Mobile', 'Tablet'];
+            $existingDevices = array_column($result, 'device');
+            
+            foreach ($devices as $device) {
+                if (!in_array($device, $existingDevices)) {
+                    $result[] = ['device' => $device, 'count' => 0, 'percentage' => 0];
+                }
+            }
+            
+            // Sorteer op count (hoogste eerst)
+            usort($result, function($a, $b) {
+                return $b['count'] - $a['count'];
+            });
+            
+            return $result;
+        } catch (PDOException $e) {
+            // Bij fout, return dummy data
+            return [
+                ['device' => 'Desktop', 'count' => 0, 'percentage' => 0],
+                ['device' => 'Mobile', 'count' => 0, 'percentage' => 0],
+                ['device' => 'Tablet', 'count' => 0, 'percentage' => 0]
+            ];
+        }
     }
 
     public function getBrowserBreakdown() {
-        $stmt = $this->pdo->query("
-            SELECT browser, COUNT(*) as count,
-            ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics)), 2) as percentage
-            FROM analytics 
-            WHERE browser != 'unknown'
-            GROUP BY browser 
-            ORDER BY count DESC
-        ");
-        return $stmt->fetchAll();
+        try {
+            // Eerst controleren of er data is
+            $checkStmt = $this->pdo->query("SELECT COUNT(*) as total FROM analytics");
+            $totalRecords = $checkStmt->fetch()['total'];
+            
+            if ($totalRecords == 0) {
+                // Geen data, return dummy data
+                return [
+                    ['browser' => 'Chrome', 'count' => 0, 'percentage' => 0],
+                    ['browser' => 'Firefox', 'count' => 0, 'percentage' => 0],
+                    ['browser' => 'Safari', 'count' => 0, 'percentage' => 0]
+                ];
+            }
+            
+            $stmt = $this->pdo->query("
+                SELECT browser, COUNT(*) as count,
+                ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics)), 2) as percentage
+                FROM analytics 
+                WHERE browser != 'unknown'
+                GROUP BY browser 
+                ORDER BY count DESC
+                LIMIT 5
+            ");
+            
+            $result = $stmt->fetchAll();
+            
+            // Als er geen resultaten zijn, voeg dummy data toe
+            if (empty($result)) {
+                return [
+                    ['browser' => 'Chrome', 'count' => 0, 'percentage' => 0],
+                    ['browser' => 'Firefox', 'count' => 0, 'percentage' => 0],
+                    ['browser' => 'Safari', 'count' => 0, 'percentage' => 0]
+                ];
+            }
+            
+            return $result;
+        } catch (PDOException $e) {
+            // Bij fout, return dummy data
+            return [
+                ['browser' => 'Chrome', 'count' => 0, 'percentage' => 0],
+                ['browser' => 'Firefox', 'count' => 0, 'percentage' => 0],
+                ['browser' => 'Safari', 'count' => 0, 'percentage' => 0]
+            ];
+        }
     }
 
-    public function getTopPages($limit = 5) {
-        $stmt = $this->pdo->prepare("
-            SELECT page_url, COUNT(*) as count 
-            FROM analytics 
-            WHERE page_url IS NOT NULL
-            GROUP BY page_url 
-            ORDER BY count DESC 
-            LIMIT ?
-        ");
-        $stmt->execute([$limit]);
-        return $stmt->fetchAll();
+    public function getTopPages($limit = 10) {
+        try {
+            $stmt = $this->pdo->prepare("
+                SELECT 
+                    page_url, 
+                    COUNT(*) as count,
+                    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics WHERE page_url IS NOT NULL)), 2) as percentage
+                FROM analytics 
+                WHERE page_url IS NOT NULL AND page_url != ''
+                GROUP BY page_url 
+                ORDER BY count DESC 
+                LIMIT ?
+            ");
+            $stmt->execute([$limit]);
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            return [];
+        }
     }
 
     public function getConversionRate() {

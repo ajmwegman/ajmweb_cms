@@ -329,4 +329,101 @@ input:checked + .slider:before {
   }
 }
 
+/* Top Pages Table Styling */
+.top-pages-table {
+  font-size: 0.9rem;
+}
+
+.top-pages-table .badge {
+  font-size: 0.75rem;
+}
+
+.top-pages-table .text-truncate {
+  max-width: 200px;
+}
+
+.top-pages-table tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+.top-pages-table .rank-badge {
+  min-width: 30px;
+  text-align: center;
+}
+
+.top-pages-table .page-url {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .top-pages-table .page-url {
+    max-width: 150px;
+  }
+  
+  .top-pages-table {
+    font-size: 0.8rem;
+  }
+}
+
+/* Device Stats Styling */
+.device-stat-item {
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.device-stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.device-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.device-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.device-count {
+  font-size: 1.2rem;
+  margin: 4px 0;
+}
+
+.device-percentage {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* Device Chart Improvements */
+#deviceChart {
+  max-height: 300px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .device-stat-item {
+    padding: 8px;
+  }
+  
+  .device-count {
+    font-size: 1rem;
+  }
+  
+  .device-name {
+    font-size: 0.7rem;
+  }
+}
+
 

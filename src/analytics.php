@@ -53,8 +53,19 @@ class AdvancedAnalytics {
         return;  // Verlaat de functie vroegtijdig
     }
     
-    // Mobiele detectie
-    $isMobile = (bool) preg_match('/Mobile|Android|iPhone|iPad/', $userAgent);
+    // Verbeterde device detectie
+    $isMobile = false;
+    $isTablet = false;
+    
+    // Tablet detectie
+    if (preg_match('/iPad|Android.*Tablet|PlayBook|Silk|Kindle/', $userAgent)) {
+        $isTablet = true;
+        $isMobile = true; // Tablets worden ook als mobile gezien
+    }
+    // Mobile detectie (exclusief tablets)
+    elseif (preg_match('/Mobile|Android|iPhone|BlackBerry|Windows Phone/', $userAgent)) {
+        $isMobile = true;
+    }
     
     // Huidige pagina URL
     $pageUrl = $_SERVER['REQUEST_URI'];
