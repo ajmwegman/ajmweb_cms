@@ -257,7 +257,7 @@ $stats = $analytics->getEnhancedStats();
         <div class="card-header">
           <h5><i class="bi bi-graph-up"></i> Website Performance</h5>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="height: 350px;">
           <div class="visitorChart">
             <canvas id="visitorChart" style="height: 350px;"></canvas>
           </div>
