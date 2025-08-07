@@ -52,19 +52,23 @@ class AdvancedAnalytics {
     if ($browser === 'unknown' && $referer === 'unknown') {
         return;  // Verlaat de functie vroegtijdig
     }
+    
     // Mobiele detectie
     $isMobile = (bool) preg_match('/Mobile|Android|iPhone|iPad/', $userAgent);
+    
+    // Huidige pagina URL
+    $pageUrl = $_SERVER['REQUEST_URI'];
     
     $stmt = $this->pdo->prepare("SELECT * FROM analytics WHERE ip_address = ? AND user_agent = ?");
     $stmt->execute([$ipAddress, $userAgent]);
     $row = $stmt->fetch();
     
     if ($row) {
-        $stmt = $this->pdo->prepare("UPDATE analytics SET page_views = page_views + 1, bounced = FALSE WHERE ip_address = ?");
-        $stmt->execute([$ipAddress]);
+        $stmt = $this->pdo->prepare("UPDATE analytics SET page_views = page_views + 1, bounced = FALSE, page_url = ? WHERE ip_address = ?");
+        $stmt->execute([$pageUrl, $ipAddress]);
     } else {
-        $stmt = $this->pdo->prepare("INSERT INTO analytics (session_id, ip_address, user_agent, country_code, referer_url, browser, is_mobile, session_start) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
-        $stmt->execute([$sessionId, $ipAddress, $userAgent, $countryCode, $referer, $browser, $isMobile]);
+        $stmt = $this->pdo->prepare("INSERT INTO analytics (session_id, ip_address, user_agent, country_code, referer_url, browser, is_mobile, session_start, visit_time, page_url) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?)");
+        $stmt->execute([$sessionId, $ipAddress, $userAgent, $countryCode, $referer, $browser, $isMobile, $pageUrl]);
     }
 }
 
