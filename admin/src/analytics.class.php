@@ -109,10 +109,19 @@ class Analytics {
         return $stmt->fetchAll();
     }
 
-    public function getDeviceBreakdown() {
+    public function getDeviceBreakdown($startDate = null, $endDate = null) {
         try {
+            $whereClause = "";
+            $params = [];
+            
+            if ($startDate && $endDate) {
+                $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+                $params = [$startDate, $endDate];
+            }
+            
             // Eerst controleren of er data is
-            $checkStmt = $this->pdo->query("SELECT COUNT(*) as total FROM analytics");
+            $checkStmt = $this->pdo->prepare("SELECT COUNT(*) as total FROM analytics " . $whereClause);
+            $checkStmt->execute($params);
             $totalRecords = $checkStmt->fetch()['total'];
             
             if ($totalRecords == 0) {
@@ -125,7 +134,7 @@ class Analytics {
             }
             
             // Verbeterde device detection met user agent parsing
-            $stmt = $this->pdo->query("
+            $stmt = $this->pdo->prepare("
                 SELECT 
                     CASE 
                         WHEN is_mobile = 1 AND (
@@ -139,11 +148,12 @@ class Analytics {
                         ELSE 'Desktop'
                     END as device,
                     COUNT(*) as count,
-                    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics)), 2) as percentage
-                FROM analytics 
+                    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics " . $whereClause . ")), 2) as percentage
+                FROM analytics " . $whereClause . "
                 GROUP BY device
                 ORDER BY count DESC
             ");
+            $stmt->execute($params);
             
             $result = $stmt->fetchAll();
             
@@ -182,10 +192,19 @@ class Analytics {
         }
     }
 
-    public function getBrowserBreakdown() {
+    public function getBrowserBreakdown($startDate = null, $endDate = null) {
         try {
+            $whereClause = "WHERE browser != 'unknown'";
+            $params = [];
+            
+            if ($startDate && $endDate) {
+                $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
+                $params = [$startDate, $endDate];
+            }
+            
             // Eerst controleren of er data is
-            $checkStmt = $this->pdo->query("SELECT COUNT(*) as total FROM analytics");
+            $checkStmt = $this->pdo->prepare("SELECT COUNT(*) as total FROM analytics " . ($startDate && $endDate ? "WHERE DATE(visit_time) BETWEEN ? AND ?" : ""));
+            $checkStmt->execute($startDate && $endDate ? [$startDate, $endDate] : []);
             $totalRecords = $checkStmt->fetch()['total'];
             
             if ($totalRecords == 0) {
@@ -197,15 +216,16 @@ class Analytics {
                 ];
             }
             
-            $stmt = $this->pdo->query("
+            $stmt = $this->pdo->prepare("
                 SELECT browser, COUNT(*) as count,
-                ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics)), 2) as percentage
+                ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics " . ($startDate && $endDate ? "WHERE DATE(visit_time) BETWEEN ? AND ?" : "") . ")), 2) as percentage
                 FROM analytics 
-                WHERE browser != 'unknown'
+                " . $whereClause . "
                 GROUP BY browser 
                 ORDER BY count DESC
                 LIMIT 5
             ");
+            $stmt->execute($params);
             
             $result = $stmt->fetchAll();
             
@@ -229,34 +249,51 @@ class Analytics {
         }
     }
 
-    public function getTopPages($limit = 10) {
+    public function getTopPages($limit = 10, $startDate = null, $endDate = null) {
         try {
+            $whereClause = "WHERE page_url IS NOT NULL AND page_url != ''";
+            $params = [$limit];
+            
+            if ($startDate && $endDate) {
+                $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
+                $params = [$startDate, $endDate, $limit];
+            }
+            
             $stmt = $this->pdo->prepare("
                 SELECT 
                     page_url, 
                     COUNT(*) as count,
-                    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics WHERE page_url IS NOT NULL)), 2) as percentage
+                    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics WHERE page_url IS NOT NULL " . ($startDate && $endDate ? "AND DATE(visit_time) BETWEEN ? AND ?" : "") . ")), 2) as percentage
                 FROM analytics 
-                WHERE page_url IS NOT NULL AND page_url != ''
+                " . $whereClause . "
                 GROUP BY page_url 
                 ORDER BY count DESC 
                 LIMIT ?
             ");
-            $stmt->execute([$limit]);
+            $stmt->execute($params);
             return $stmt->fetchAll();
         } catch (PDOException $e) {
             return [];
         }
     }
 
-    public function getConversionRate() {
-        $stmt = $this->pdo->query("
+    public function getConversionRate($startDate = null, $endDate = null) {
+        $whereClause = "WHERE session_duration > 300";
+        $params = [];
+        
+        if ($startDate && $endDate) {
+            $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
+            $params = [$startDate, $endDate];
+        }
+        
+        $stmt = $this->pdo->prepare("
             SELECT 
                 ROUND((COUNT(DISTINCT session_id) * 100.0 / 
-                (SELECT COUNT(DISTINCT session_id) FROM analytics)), 2) as conversion_rate
+                (SELECT COUNT(DISTINCT session_id) FROM analytics " . ($startDate && $endDate ? "WHERE DATE(visit_time) BETWEEN ? AND ?" : "") . ")), 2) as conversion_rate
             FROM analytics 
-            WHERE session_duration > 300
-        ");
+            " . $whereClause
+        );
+        $stmt->execute($params);
         return $stmt->fetch()['conversion_rate'];
     }
     
