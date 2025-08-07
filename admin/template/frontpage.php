@@ -2,6 +2,193 @@
 $stats = $analytics->getEnhancedStats(); 
 ?>
 
+<style>
+  /* Date Range Styling - Slider-like Design */
+  .date-range-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .date-input-group {
+    position: relative;
+  }
+  
+  .date-input-group .form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .date-input-group .form-label i {
+    color: #007bff;
+    font-size: 1.1rem;
+  }
+  
+  .input-wrapper {
+    position: relative;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    padding: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .input-wrapper:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+  }
+  
+  .input-wrapper:focus-within {
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+  }
+  
+  .date-input {
+    border: none;
+    background: white;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #495057;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+  
+  .date-input:focus {
+    outline: none;
+    box-shadow: none;
+    background: #f8f9ff;
+  }
+  
+  .date-slider-track {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+    border-radius: 0 0 10px 10px;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .input-wrapper:focus-within .date-slider-track {
+    transform: scaleX(1);
+  }
+  
+  /* Date Range Info Styling */
+  .date-range-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+  }
+  
+  .range-display {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .range-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    font-weight: 500;
+  }
+  
+  .range-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #007bff;
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    display: inline-block;
+  }
+  
+  .range-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .range-actions .btn {
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .range-actions .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .range-actions .btn i {
+    margin-right: 0.25rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .date-range-container {
+      gap: 0.75rem;
+    }
+    
+    .date-range-info {
+      margin-top: 1rem;
+    }
+    
+    .range-actions {
+      justify-content: center;
+    }
+    
+    .range-actions .btn {
+      flex: 1;
+      min-width: 120px;
+    }
+  }
+  
+  /* Animation for date inputs */
+  .date-input {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Hover effects for better interactivity */
+  .date-input-group:hover .input-wrapper {
+    transform: translateY(-2px);
+  }
+  
+  .date-input-group:hover .date-slider-track {
+    transform: scaleX(0.8);
+  }
+  
+  /* Focus states */
+  .date-input:focus + .date-slider-track {
+    transform: scaleX(1);
+  }
+</style>
+
 <div class="container mt-5">
   <!-- Website Performance Chart - Top with col-12 -->
   <div class="row mb-4">
@@ -12,13 +199,50 @@ $stats = $analytics->getEnhancedStats();
         </div>
         <div class="card-body">
           <div class="row mb-3">
-            <div class="col-md-3">
-              <label for="startDate" class="form-label">Begin Datum:</label>
-              <input type="date" id="startDate" name="startDate" class="form-control" value="<?php echo date('Y-m-01'); ?>" onchange="updateAllAnalytics()">
+            <div class="col-md-6">
+              <div class="date-range-container">
+                <div class="date-input-group">
+                  <label for="startDate" class="form-label">
+                    <i class="bi bi-calendar-event"></i> Begin Datum
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="date" id="startDate" name="startDate" class="form-control date-input" value="<?php echo date('Y-m-01'); ?>" onchange="updateAllAnalytics()">
+                    <div class="date-slider-track"></div>
+                  </div>
+                </div>
+                
+                <div class="date-input-group">
+                  <label for="endDate" class="form-label">
+                    <i class="bi bi-calendar-check"></i> Eind Datum
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="date" id="endDate" name="endDate" class="form-control date-input" value="<?php echo date('Y-m-d'); ?>" onchange="updateAllAnalytics()">
+                    <div class="date-slider-track"></div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="col-md-3">
-              <label for="endDate" class="form-label">Eind Datum:</label>
-              <input type="date" id="endDate" name="endDate" class="form-control" value="<?php echo date('Y-m-d'); ?>" onchange="updateAllAnalytics()">
+            
+            <div class="col-md-6">
+              <div class="date-range-info">
+                <div class="range-display">
+                  <span class="range-label">Geselecteerde periode:</span>
+                  <span class="range-value" id="dateRangeDisplay">
+                    <?php echo date('d-m-Y'); ?> tot <?php echo date('d-m-Y'); ?>
+                  </span>
+                </div>
+                <div class="range-actions">
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('today')">
+                    <i class="bi bi-calendar-day"></i> Vandaag
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('week')">
+                    <i class="bi bi-calendar-week"></i> Deze week
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('month')">
+                    <i class="bi bi-calendar-month"></i> Deze maand
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="visitorChart">
@@ -162,10 +386,18 @@ $stats = $analytics->getEnhancedStats();
 </div>
 
 <!-- Voeg PureCounter toe -->
-<script src="/themes/onepage/assets/vendor/purecounter/purecounter.js"></script>
+<script src="/assets/vendor/purecounter/purecounter.js"></script>
 <script>
   // Initialize PureCounter
-  new PureCounter();
+  try {
+    if (typeof PureCounter !== 'undefined') {
+      new PureCounter();
+    } else {
+      console.warn('PureCounter library not loaded on page load');
+    }
+  } catch (error) {
+    console.warn('PureCounter initialization failed on page load:', error);
+  }
   
   // Initialize all analytics components when page loads
   document.addEventListener('DOMContentLoaded', function() {
@@ -678,54 +910,83 @@ $stats = $analytics->getEnhancedStats();
 
   // Update stat cards met nieuwe data
   function updateStatCards(stats) {
-    // Update totaal bezoekers
-    const totalVisitorsElement = document.querySelector('[data-purecounter-end]');
-    if (totalVisitorsElement) {
-      totalVisitorsElement.setAttribute('data-purecounter-end', stats.totalVisitors || 0);
-      totalVisitorsElement.textContent = '0';
+    try {
+      // Update totaal bezoekers
+      const totalVisitorsElement = document.querySelector('[data-purecounter-end]');
+      if (totalVisitorsElement) {
+        totalVisitorsElement.setAttribute('data-purecounter-end', stats.totalVisitors || 0);
+        totalVisitorsElement.textContent = '0';
+      }
+      
+      // Update unique visitors
+      const uniqueVisitorsElement = document.querySelector('.stats-subtitle');
+      if (uniqueVisitorsElement) {
+        uniqueVisitorsElement.textContent = 'Unieke: ' + (stats.uniqueVisitors || 0);
+      }
+      
+      // Update page views
+      const pageViewsElement = document.querySelectorAll('[data-purecounter-end]')[1];
+      if (pageViewsElement) {
+        pageViewsElement.setAttribute('data-purecounter-end', stats.totalPageViews || 0);
+        pageViewsElement.textContent = '0';
+      }
+      
+      // Update avg pages per session
+      const avgPagesElement = document.querySelectorAll('.stats-subtitle')[1];
+      if (avgPagesElement) {
+        avgPagesElement.textContent = 'Gem. ' + (stats.avgPagesPerSession || 0) + ' per sessie';
+      }
+      
+      // Update session duration
+      const durationElement = document.querySelectorAll('[data-purecounter-end]')[2];
+      if (durationElement) {
+        durationElement.setAttribute('data-purecounter-end', Math.round(stats.averageDuration || 0));
+        durationElement.textContent = '0';
+      }
+      
+      // Update bounce rate
+      const bounceRateElement = document.querySelectorAll('[data-purecounter-end]')[3];
+      if (bounceRateElement) {
+        bounceRateElement.setAttribute('data-purecounter-end', stats.bounceRate || 0);
+        bounceRateElement.textContent = '0';
+      }
+      
+      // Update bounce count
+      const bounceCountElement = document.querySelectorAll('.stats-subtitle')[3];
+      if (bounceCountElement) {
+        bounceCountElement.textContent = (stats.totalBounces || 0) + ' bounces';
+      }
+      
+      // Reinitialize PureCounter with error handling
+      if (typeof PureCounter !== 'undefined') {
+        try {
+          new PureCounter();
+        } catch (pureCounterError) {
+          console.warn('PureCounter initialization failed:', pureCounterError);
+          // Fallback: manually update the counter values
+          updateCounterValues();
+        }
+      } else {
+        console.warn('PureCounter library not loaded, using fallback counter update');
+        // Fallback: manually update the counter values
+        updateCounterValues();
+      }
+    } catch (error) {
+      console.error('Error updating stat cards:', error);
+      // Fallback: manually update the counter values
+      updateCounterValues();
     }
-    
-    // Update unique visitors
-    const uniqueVisitorsElement = document.querySelector('.stats-subtitle');
-    if (uniqueVisitorsElement) {
-      uniqueVisitorsElement.textContent = 'Unieke: ' + (stats.uniqueVisitors || 0);
-    }
-    
-    // Update page views
-    const pageViewsElement = document.querySelectorAll('[data-purecounter-end]')[1];
-    if (pageViewsElement) {
-      pageViewsElement.setAttribute('data-purecounter-end', stats.totalPageViews || 0);
-      pageViewsElement.textContent = '0';
-    }
-    
-    // Update avg pages per session
-    const avgPagesElement = document.querySelectorAll('.stats-subtitle')[1];
-    if (avgPagesElement) {
-      avgPagesElement.textContent = 'Gem. ' + (stats.avgPagesPerSession || 0) + ' per sessie';
-    }
-    
-    // Update session duration
-    const durationElement = document.querySelectorAll('[data-purecounter-end]')[2];
-    if (durationElement) {
-      durationElement.setAttribute('data-purecounter-end', Math.round(stats.averageDuration || 0));
-      durationElement.textContent = '0';
-    }
-    
-    // Update bounce rate
-    const bounceRateElement = document.querySelectorAll('[data-purecounter-end]')[3];
-    if (bounceRateElement) {
-      bounceRateElement.setAttribute('data-purecounter-end', stats.bounceRate || 0);
-      bounceRateElement.textContent = '0';
-    }
-    
-    // Update bounce count
-    const bounceCountElement = document.querySelectorAll('.stats-subtitle')[3];
-    if (bounceCountElement) {
-      bounceCountElement.textContent = (stats.totalBounces || 0) + ' bounces';
-    }
-    
-    // Reinitialize PureCounter
-    new PureCounter();
+  }
+  
+  // Fallback function to manually update counter values
+  function updateCounterValues() {
+    const counterElements = document.querySelectorAll('[data-purecounter-end]');
+    counterElements.forEach(element => {
+      const endValue = element.getAttribute('data-purecounter-end');
+      if (endValue) {
+        element.textContent = endValue;
+      }
+    });
   }
 
   // Update device chart met nieuwe data
@@ -993,4 +1254,55 @@ $stats = $analytics->getEnhancedStats();
   function updateChart() {
     updateAllAnalytics();
   }
+   
+   // Quick date range functions
+   function setQuickRange(range) {
+     const today = new Date();
+     let startDate, endDate;
+     
+     switch(range) {
+       case 'today':
+         startDate = today.toISOString().split('T')[0];
+         endDate = today.toISOString().split('T')[0];
+         break;
+       case 'week':
+         const startOfWeek = new Date(today);
+         startOfWeek.setDate(today.getDate() - today.getDay());
+         startDate = startOfWeek.toISOString().split('T')[0];
+         endDate = today.toISOString().split('T')[0];
+         break;
+       case 'month':
+         startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+         endDate = today.toISOString().split('T')[0];
+         break;
+       default:
+         return;
+     }
+     
+     document.getElementById('startDate').value = startDate;
+     document.getElementById('endDate').value = endDate;
+     updateDateRangeDisplay();
+     updateAllAnalytics();
+   }
+   
+   // Update date range display
+   function updateDateRangeDisplay() {
+     const startDate = document.getElementById('startDate').value;
+     const endDate = document.getElementById('endDate').value;
+     
+     if (startDate && endDate) {
+       const startFormatted = new Date(startDate).toLocaleDateString('nl-NL');
+       const endFormatted = new Date(endDate).toLocaleDateString('nl-NL');
+       document.getElementById('dateRangeDisplay').textContent = `${startFormatted} tot ${endFormatted}`;
+     }
+   }
+   
+   // Initialize date range display on page load
+   document.addEventListener('DOMContentLoaded', function() {
+     updateDateRangeDisplay();
+   });
+   
+   // Update display when dates change
+   document.getElementById('startDate').addEventListener('change', updateDateRangeDisplay);
+   document.getElementById('endDate').addEventListener('change', updateDateRangeDisplay);
 </script>
