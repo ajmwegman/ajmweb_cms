@@ -190,15 +190,15 @@ $stats = $analytics->getEnhancedStats();
 </style>
 
 <div class="container mt-5">
-  <!-- Website Performance Chart - Top with col-12 -->
+  <!-- Date Range Control Card - Top -->
   <div class="row mb-4">
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h5><i class="bi bi-graph-up"></i> Website Performance</h5>
+          <h5><i class="bi bi-calendar-range"></i> Datum Selectie</h5>
         </div>
         <div class="card-body">
-          <div class="row mb-3">
+          <div class="row">
             <div class="col-md-6">
               <div class="date-range-container">
                 <div class="date-input-group">
@@ -245,8 +245,21 @@ $stats = $analytics->getEnhancedStats();
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Website Performance Chart - Top with col-12 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="bi bi-graph-up"></i> Website Performance</h5>
+        </div>
+        <div class="card-body">
           <div class="visitorChart">
-            <canvas id="visitorChart" style="height: 400px;"></canvas>
+            <canvas id="visitorChart" style="height: 350px;"></canvas>
           </div>
         </div>
       </div>
@@ -355,7 +368,7 @@ $stats = $analytics->getEnhancedStats();
           <h5><i class="bi bi-list-ol"></i> Top 10 Populairste Pagina's</h5>
         </div>
         <div class="card-body">
-          <div class="table-responsive">
+          <div class="table-responsive" style="height: 350px; overflow-y: auto;">
             <table class="table table-hover top-pages-table">
               <thead>
                 <tr>
@@ -1210,7 +1223,7 @@ $stats = $analytics->getEnhancedStats();
 
       var newCanvas = document.createElement('canvas');
       newCanvas.id = 'visitorChart';
-      newCanvas.style.height = '400px';
+      newCanvas.style.height = '350px';
       document.querySelector('.visitorChart').appendChild(newCanvas);
 
       generateEnhancedChart(startDate, endDate);
