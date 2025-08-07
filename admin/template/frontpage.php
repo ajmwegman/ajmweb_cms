@@ -167,6 +167,27 @@ $stats = $analytics->getEnhancedStats();
   // Initialize PureCounter
   new PureCounter();
   
+  // Initialize all analytics components when page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page loaded, initializing analytics...');
+    
+    // Get current date range from inputs
+    var startDate = document.getElementById('startDate').value;
+    var endDate = document.getElementById('endDate').value;
+    
+    if (startDate && endDate) {
+      console.log('Initializing with date range:', startDate, 'to', endDate);
+      
+      // Initialize device and browser charts
+      generateDeviceChart();
+      generateBrowserChart();
+      generateTopPagesTable();
+      
+      // Initialize performance chart
+      generateEnhancedChart(startDate, endDate);
+    }
+  });
+  
   // Enhanced chart met meerdere datasets
   function generateEnhancedChart(startDate, endDate) {
     console.log('Loading enhanced chart data for:', startDate, 'to', endDate);
@@ -180,6 +201,9 @@ $stats = $analytics->getEnhancedStats();
     })
     .then(response => {
       console.log('Response status:', response.status);
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.status);
+      }
       return response.json();
     })
     .then(data => {
@@ -191,10 +215,24 @@ $stats = $analytics->getEnhancedStats();
         return;
       }
       
+      // Check if we have data
       if (!data.dates || !data.visitors || !data.pageViews || !data.bounces) {
         console.error('Invalid data structure:', data);
         generateFallbackChart(startDate, endDate);
         return;
+      }
+      
+      // Check if we have any data points
+      if (data.dates.length === 0) {
+        console.log('No data available for the selected date range');
+        showNoDataMessage();
+        return;
+      }
+      
+      // Destroy existing chart if it exists
+      const existingChart = Chart.getChart('visitorChart');
+      if (existingChart) {
+        existingChart.destroy();
       }
       
       const ctx = document.getElementById('visitorChart').getContext('2d');
@@ -271,6 +309,9 @@ $stats = $analytics->getEnhancedStats();
     })
     .then(response => {
       console.log('Fallback response status:', response.status);
+      if (!response.ok) {
+        throw new Error('Fallback network response was not ok: ' + response.status);
+      }
       return response.json();
     })
     .then(data => {
@@ -278,7 +319,21 @@ $stats = $analytics->getEnhancedStats();
       
       if (data.error) {
         console.error('Fallback server error:', data.error);
+        showNoDataMessage();
         return;
+      }
+      
+      // Check if we have data
+      if (!data.dates || !data.counts || data.dates.length === 0) {
+        console.log('No fallback data available');
+        showNoDataMessage();
+        return;
+      }
+      
+      // Destroy existing chart if it exists
+      const existingChart = Chart.getChart('visitorChart');
+      if (existingChart) {
+        existingChart.destroy();
       }
       
       const ctx = document.getElementById('visitorChart').getContext('2d');
@@ -318,6 +373,7 @@ $stats = $analytics->getEnhancedStats();
     })
     .catch(error => {
       console.error('Error loading fallback chart data:', error);
+      showNoDataMessage();
     });
   }
   
@@ -553,6 +609,21 @@ $stats = $analytics->getEnhancedStats();
       var startDate = document.getElementById('startDate').value;
       var endDate = document.getElementById('endDate').value;
 
+      // Valideer datums
+      if (!startDate || !endDate) {
+        console.error('Start en eind datum zijn verplicht');
+        return;
+      }
+
+      // Controleer of start datum voor eind datum is
+      if (startDate > endDate) {
+        console.error('Start datum moet voor eind datum zijn');
+        alert('Start datum moet voor eind datum zijn');
+        return;
+      }
+
+      console.log('Updating analytics for date range:', startDate, 'to', endDate);
+
       // Toon loading state
       showLoadingState();
 
@@ -564,7 +635,12 @@ $stats = $analytics->getEnhancedStats();
           'Content-Type': 'application/json'
         }
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.status);
+        }
+        return response.json();
+      })
       .then(data => {
         console.log('All analytics data received:', data);
         
@@ -579,17 +655,23 @@ $stats = $analytics->getEnhancedStats();
           
           // Update main performance chart
           updatePerformanceChart(startDate, endDate);
+          
+          console.log('All analytics components updated successfully');
         } else {
           console.error('Error fetching analytics data:', data.error);
-          hideLoadingState();
+          alert('Fout bij ophalen van analytics data: ' + (data.error || 'Onbekende fout'));
         }
       })
       .catch(error => {
         console.error('Error updating analytics:', error);
+        alert('Fout bij bijwerken van analytics: ' + error.message);
+      })
+      .finally(() => {
         hideLoadingState();
       });
     } catch (error) {
       console.error('Error in updateAllAnalytics:', error);
+      alert('Fout in updateAllAnalytics: ' + error.message);
       hideLoadingState();
     }
   }
@@ -889,6 +971,21 @@ $stats = $analytics->getEnhancedStats();
     const loadingDiv = document.getElementById('loadingIndicator');
     if (loadingDiv) {
       loadingDiv.style.display = 'none';
+    }
+  }
+
+  // Function to show no data message
+  function showNoDataMessage() {
+    const canvas = document.getElementById('visitorChart');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw no data message
+      ctx.fillStyle = '#666';
+      ctx.font = '16px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('Geen data beschikbaar voor de geselecteerde periode', canvas.width / 2, canvas.height / 2);
     }
   }
 
