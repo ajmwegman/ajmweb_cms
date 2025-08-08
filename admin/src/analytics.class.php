@@ -39,17 +39,18 @@ class Analytics {
     
     public function getAllSites() {
         try {
-            // Check if sites table exists
-            $stmt = $this->pdo->prepare("SHOW TABLES LIKE 'sites'");
+            // Check if config table exists (same source used by navbar)
+            $stmt = $this->pdo->prepare("SHOW TABLES LIKE 'config'");
             $stmt->execute();
-            
+
             if ($stmt->rowCount() == 0) {
                 return [['id' => 1, 'domain' => 'default', 'name' => 'Default Site']];
             }
-            
-            $stmt = $this->pdo->prepare("SELECT id, domain, name, description, status FROM sites WHERE status = 'active' ORDER BY name");
+
+            // Use config table to match site dropdown in navigation
+            $stmt = $this->pdo->prepare("SELECT id, loc_website AS domain, web_naam AS name FROM config ORDER BY web_naam");
             $stmt->execute();
-            return $stmt->fetchAll();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             error_log("Error getting all sites: " . $e->getMessage());
             return [['id' => 1, 'domain' => 'default', 'name' => 'Default Site']];

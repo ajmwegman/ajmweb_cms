@@ -227,101 +227,70 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
 </style>
 
 <div class="container mt-5">
-  <!-- Site Selector Card - Top -->
+  <!-- Filters Card: Site & Datum Selectie -->
   <div class="row mb-4">
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h5><i class="bi bi-globe"></i> Site Selectie</h5>
+          <h5><i class="bi bi-sliders"></i> Site & Datum Selectie</h5>
         </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="siteSelector" class="form-label">
-                  <i class="bi bi-building"></i> Selecteer Website
-                </label>
-                <select id="siteSelector" name="site_id" class="form-control" onchange="changeSite()">
-                  <?php foreach ($sites as $site): ?>
-                    <option value="<?php echo $site['id']; ?>" <?php echo ($site['id'] == $currentSiteId) ? 'selected' : ''; ?>>
-                      <?php echo htmlspecialchars($site['name']); ?> (<?php echo htmlspecialchars($site['domain']); ?>)
-                    </option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
+          <div class="row g-3 align-items-end">
+            <div class="col-lg-4 col-md-6">
+              <label for="siteSelector" class="form-label">
+                <i class="bi bi-building"></i> Selecteer Website
+              </label>
+              <select id="siteSelector" name="site_id" class="form-select" onchange="changeSite()">
+                <?php foreach ($sites as $site): ?>
+                  <option value="<?php echo $site['id']; ?>" <?php echo ($site['id'] == $currentSiteId) ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($site['name']); ?> (<?php echo htmlspecialchars($site['domain']); ?>)
+                  </option>
+                <?php endforeach; ?>
+              </select>
             </div>
-            <div class="col-md-6">
-              <div class="site-info">
-                <div class="info-display">
-                  <span class="info-label">Huidige site:</span>
-                  <span class="info-value" id="currentSiteDisplay">
-                    <?php 
-                    $currentSite = array_filter($sites, function($site) use ($currentSiteId) { return $site['id'] == $currentSiteId; });
-                    $currentSite = reset($currentSite);
-                    echo htmlspecialchars($currentSite['name'] ?? 'Onbekend'); 
-                    ?>
-                  </span>
-                </div>
-              </div>
+            <div class="col-lg-4 col-md-3">
+              <label for="startDate" class="form-label">
+                <i class="bi bi-calendar-event"></i> Begin Datum
+              </label>
+              <input type="date" id="startDate" name="startDate" class="form-control" value="<?php echo date('Y-m-01'); ?>" onchange="updateAllAnalytics()">
+            </div>
+            <div class="col-lg-4 col-md-3">
+              <label for="endDate" class="form-label">
+                <i class="bi bi-calendar-check"></i> Eind Datum
+              </label>
+              <input type="date" id="endDate" name="endDate" class="form-control" value="<?php echo date('Y-m-d'); ?>" onchange="updateAllAnalytics()">
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Date Range Control Card - Top -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h5><i class="bi bi-calendar-range"></i> Datum Selectie</h5>
-        </div>
-        <div class="card-body">
-          <div class="row">
+          <div class="row mt-3">
             <div class="col-md-6">
-              <div class="date-range-container">
-                <div class="date-input-group">
-                  <label for="startDate" class="form-label">
-                    <i class="bi bi-calendar-event"></i> Begin Datum
-                  </label>
-                  <div class="input-wrapper">
-                    <input type="date" id="startDate" name="startDate" class="form-control date-input" value="<?php echo date('Y-m-01'); ?>" onchange="updateAllAnalytics()">
-                    <div class="date-slider-track"></div>
-                  </div>
-                </div>
-                
-                <div class="date-input-group">
-                  <label for="endDate" class="form-label">
-                    <i class="bi bi-calendar-check"></i> Eind Datum
-                  </label>
-                  <div class="input-wrapper">
-                    <input type="date" id="endDate" name="endDate" class="form-control date-input" value="<?php echo date('Y-m-d'); ?>" onchange="updateAllAnalytics()">
-                    <div class="date-slider-track"></div>
-                  </div>
-                </div>
+              <div class="info-display">
+                <span class="info-label">Huidige site:</span>
+                <span class="info-value" id="currentSiteDisplay">
+                  <?php
+                  $currentSite = array_filter($sites, function($site) use ($currentSiteId) { return $site['id'] == $currentSiteId; });
+                  $currentSite = reset($currentSite);
+                  echo htmlspecialchars($currentSite['name'] ?? 'Onbekend');
+                  ?>
+                </span>
               </div>
             </div>
-            
-            <div class="col-md-6">
-              <div class="date-range-info">
-                <div class="range-display">
-                  <span class="range-label">Geselecteerde periode:</span>
-                  <span class="range-value" id="dateRangeDisplay">
-                    <?php echo date('d-m-Y'); ?> tot <?php echo date('d-m-Y'); ?>
-                  </span>
-                </div>
-                <div class="range-actions">
-                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('today')">
-                    <i class="bi bi-calendar-day"></i> Vandaag
-                  </button>
-                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('week')">
-                    <i class="bi bi-calendar-week"></i> Deze week
-                  </button>
-                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('month')">
-                    <i class="bi bi-calendar-month"></i> Deze maand
-                  </button>
-                </div>
+            <div class="col-md-6 text-md-end">
+              <div class="range-actions mb-2">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('today')">
+                  <i class="bi bi-calendar-day"></i> Vandaag
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('week')">
+                  <i class="bi bi-calendar-week"></i> Deze week
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('month')">
+                  <i class="bi bi-calendar-month"></i> Deze maand
+                </button>
+              </div>
+              <div class="range-display">
+                <span class="range-label">Geselecteerde periode:</span>
+                <span class="range-value" id="dateRangeDisplay">
+                  <?php echo date('d-m-Y'); ?> tot <?php echo date('d-m-Y'); ?>
+                </span>
               </div>
             </div>
           </div>
