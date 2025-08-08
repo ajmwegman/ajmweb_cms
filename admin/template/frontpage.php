@@ -764,7 +764,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   function generateEnhancedChart(startDate, endDate) {
     console.log('Loading enhanced chart data for:', startDate, 'to', endDate);
     
-    fetch('/admin/bin/get_enhanced_analytics.php', {
+    fetch('bin/get_enhanced_analytics.php', {
       method: 'POST',
       body: JSON.stringify({ startDate: startDate, endDate: endDate }),
       headers: {
@@ -873,7 +873,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   function generateFallbackChart(startDate, endDate) {
     console.log('Loading fallback chart data for:', startDate, 'to', endDate);
     
-    fetch('/admin/bin/get_analytics.php', {
+    fetch('bin/get_analytics.php', {
       method: 'POST',
       body: JSON.stringify({ startDate: startDate, endDate: endDate }),
       headers: {
@@ -1385,7 +1385,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
 
       // Haal alle analytics data op voor de geselecteerde datum range en site
       var siteId = document.getElementById('siteSelector').value;
-      fetch('/admin/bin/get_all_analytics.php', {
+      fetch('bin/get_all_analytics.php', {
         method: 'POST',
         body: JSON.stringify({ startDate: startDate, endDate: endDate, siteId: siteId }),
         headers: {
