@@ -726,20 +726,27 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded, initializing analytics...');
     
-    // Get current date range from inputs
-    var startDate = document.getElementById('startDate').value;
-    var endDate = document.getElementById('endDate').value;
-    
-    if (startDate && endDate) {
-      console.log('Initializing with date range:', startDate, 'to', endDate);
+    try {
+      // Initialize date range display first
+      updateDateRangeDisplay();
       
-      // Initialize device and browser charts
-      generateDeviceChart();
-      generateBrowserChart();
-      generateTopPagesTable();
+      // Get current date range from inputs
+      var startDate = document.getElementById('startDate').value;
+      var endDate = document.getElementById('endDate').value;
       
-      // Initialize performance chart
-      generateEnhancedChart(startDate, endDate);
+      if (startDate && endDate) {
+        console.log('Initializing with date range:', startDate, 'to', endDate);
+        
+        // Initialize device and browser charts
+        generateDeviceChart();
+        generateBrowserChart();
+        generateTopPagesTable();
+        
+        // Initialize performance chart
+        generateEnhancedChart(startDate, endDate);
+      }
+    } catch (error) {
+      console.error('Error initializing analytics:', error);
     }
   });
   
@@ -1203,19 +1210,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     }
   }
   
-  // Initialize charts
-  window.addEventListener('DOMContentLoaded', function() {
-    try {
-      generateDeviceChart();
-      generateBrowserChart();
-      generateTopPagesTable();
-      var startDate = document.getElementById('startDate').value;
-      var endDate = document.getElementById('endDate').value;
-      generateEnhancedChart(startDate, endDate);
-    } catch (error) {
-      console.error('Error initializing charts:', error);
-    }
-  });
+
   
   // Functie om van site te wisselen
   function changeSite() {
@@ -1749,10 +1744,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
      }
    }
    
-   // Initialize date range display on page load
-   document.addEventListener('DOMContentLoaded', function() {
-     updateDateRangeDisplay();
-   });
+
    
    // Update display when dates change
    document.getElementById('startDate').addEventListener('change', updateDateRangeDisplay);
