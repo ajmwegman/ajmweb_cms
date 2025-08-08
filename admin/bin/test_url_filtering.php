@@ -46,7 +46,7 @@ try {
         LIMIT 10
     ");
     $stmt->execute();
-    $suspiciousUrls = $stmt->fetchAll();
+    $suspiciousUrls = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     if (empty($suspiciousUrls)) {
         echo "<p style='color: green;'>✓ No suspicious URLs found in database.</p>";
@@ -69,7 +69,7 @@ try {
     // Show total records count
     $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM analytics");
     $stmt->execute();
-    $totalRecords = $stmt->fetch()['total'];
+    $totalRecords = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
     echo "<h3>Database Summary:</h3>";
     echo "<p>Total analytics records: " . $totalRecords . "</p>";
