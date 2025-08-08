@@ -8,84 +8,135 @@ class Analytics {
     }
 
     public function getStats($startDate = null, $endDate = null) {
-        $whereClause = "";
-        $params = [];
-        
-        if ($startDate && $endDate) {
-            $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
-            $params = [$startDate, $endDate];
+        try {
+            $whereClause = "";
+            $params = [];
+            
+            if ($startDate && $endDate) {
+                $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+                $params = [$startDate, $endDate];
+            }
+            
+            $stmt = $this->pdo->prepare("SELECT COUNT(*) as totalVisitors, SUM(page_views) as totalPageViews, AVG(session_duration) as averageDuration, SUM(bounced) as totalBounces FROM analytics " . $whereClause);
+            $stmt->execute($params);
+            $result = $stmt->fetch();
+            
+            // Ensure we have valid numeric values
+            return [
+                'totalVisitors' => (int)($result['totalVisitors'] ?? 0),
+                'totalPageViews' => (int)($result['totalPageViews'] ?? 0),
+                'averageDuration' => (float)($result['averageDuration'] ?? 0),
+                'totalBounces' => (int)($result['totalBounces'] ?? 0)
+            ];
+        } catch (Exception $e) {
+            error_log("Error in getStats: " . $e->getMessage());
+            return [
+                'totalVisitors' => 0,
+                'totalPageViews' => 0,
+                'averageDuration' => 0,
+                'totalBounces' => 0
+            ];
         }
-        
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) as totalVisitors, SUM(page_views) as totalPageViews, AVG(session_duration) as averageDuration, SUM(bounced) as totalBounces FROM analytics " . $whereClause);
-        $stmt->execute($params);
-        return $stmt->fetch();
     }
     
     public function getEnhancedStats($startDate = null, $endDate = null) {
-        $basicStats = $this->getStats($startDate, $endDate);
-        
-        $enhancedStats = array_merge($basicStats, [
-            'uniqueVisitors' => $this->getUniqueVisitors($startDate, $endDate),
-            'bounceRate' => $this->getBounceRate($startDate, $endDate),
-            'avgPagesPerSession' => $this->getAvgPagesPerSession($startDate, $endDate),
-            'topReferrers' => $this->getTopReferrers(5, $startDate, $endDate),
-            'deviceBreakdown' => $this->getDeviceBreakdown($startDate, $endDate),
-            'browserBreakdown' => $this->getBrowserBreakdown($startDate, $endDate),
-            'topPages' => $this->getTopPages(10, $startDate, $endDate),
-            'conversionRate' => $this->getConversionRate($startDate, $endDate)
-        ]);
-        
-        return $enhancedStats;
+        try {
+            $basicStats = $this->getStats($startDate, $endDate);
+            
+            $enhancedStats = array_merge($basicStats, [
+                'uniqueVisitors' => $this->getUniqueVisitors($startDate, $endDate),
+                'bounceRate' => $this->getBounceRate($startDate, $endDate),
+                'avgPagesPerSession' => $this->getAvgPagesPerSession($startDate, $endDate),
+                'topReferrers' => $this->getTopReferrers(5, $startDate, $endDate),
+                'deviceBreakdown' => $this->getDeviceBreakdown($startDate, $endDate),
+                'browserBreakdown' => $this->getBrowserBreakdown($startDate, $endDate),
+                'topPages' => $this->getTopPages(10, $startDate, $endDate),
+                'conversionRate' => $this->getConversionRate($startDate, $endDate)
+            ]);
+            
+            return $enhancedStats;
+        } catch (Exception $e) {
+            error_log("Error in getEnhancedStats: " . $e->getMessage());
+            // Return basic stats with empty arrays for complex data
+            return array_merge($this->getStats($startDate, $endDate), [
+                'uniqueVisitors' => 0,
+                'bounceRate' => 0,
+                'avgPagesPerSession' => 0,
+                'topReferrers' => [],
+                'deviceBreakdown' => [],
+                'browserBreakdown' => [],
+                'topPages' => [],
+                'conversionRate' => 0
+            ]);
+        }
     }
     
     public function getUniqueVisitors($startDate = null, $endDate = null) {
-        $whereClause = "";
-        $params = [];
-        
-        if ($startDate && $endDate) {
-            $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
-            $params = [$startDate, $endDate];
+        try {
+            $whereClause = "";
+            $params = [];
+            
+            if ($startDate && $endDate) {
+                $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+                $params = [$startDate, $endDate];
+            }
+            
+            $stmt = $this->pdo->prepare("SELECT COUNT(DISTINCT ip_address) as unique_visitors FROM analytics " . $whereClause);
+            $stmt->execute($params);
+            $result = $stmt->fetch();
+            return (int)($result['unique_visitors'] ?? 0);
+        } catch (Exception $e) {
+            error_log("Error in getUniqueVisitors: " . $e->getMessage());
+            return 0;
         }
-        
-        $stmt = $this->pdo->prepare("SELECT COUNT(DISTINCT ip_address) as unique_visitors FROM analytics " . $whereClause);
-        $stmt->execute($params);
-        return $stmt->fetch()['unique_visitors'];
     }
 
     public function getBounceRate($startDate = null, $endDate = null) {
-        $whereClause = "";
-        $params = [];
-        
-        if ($startDate && $endDate) {
-            $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
-            $params = [$startDate, $endDate];
+        try {
+            $whereClause = "";
+            $params = [];
+            
+            if ($startDate && $endDate) {
+                $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+                $params = [$startDate, $endDate];
+            }
+            
+            $stmt = $this->pdo->prepare("
+                SELECT 
+                    ROUND((SUM(bounced) * 100.0 / COUNT(*)), 2) as bounce_rate 
+                FROM analytics " . $whereClause
+            );
+            $stmt->execute($params);
+            $result = $stmt->fetch();
+            return (float)($result['bounce_rate'] ?? 0);
+        } catch (Exception $e) {
+            error_log("Error in getBounceRate: " . $e->getMessage());
+            return 0;
         }
-        
-        $stmt = $this->pdo->prepare("
-            SELECT 
-                ROUND((SUM(bounced) * 100.0 / COUNT(*)), 2) as bounce_rate 
-            FROM analytics " . $whereClause
-        );
-        $stmt->execute($params);
-        return $stmt->fetch()['bounce_rate'];
     }
 
     public function getAvgPagesPerSession($startDate = null, $endDate = null) {
-        $whereClause = "WHERE page_views > 0";
-        $params = [];
-        
-        if ($startDate && $endDate) {
-            $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
-            $params = [$startDate, $endDate];
+        try {
+            $whereClause = "WHERE page_views > 0";
+            $params = [];
+            
+            if ($startDate && $endDate) {
+                $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
+                $params = [$startDate, $endDate];
+            }
+            
+            $stmt = $this->pdo->prepare("
+                SELECT ROUND(AVG(page_views), 2) as avg_pages 
+                FROM analytics 
+                " . $whereClause
+            );
+            $stmt->execute($params);
+            $result = $stmt->fetch();
+            return (float)($result['avg_pages'] ?? 0);
+        } catch (Exception $e) {
+            error_log("Error in getAvgPagesPerSession: " . $e->getMessage());
+            return 0;
         }
-        
-        $stmt = $this->pdo->prepare("
-            SELECT ROUND(AVG(page_views), 2) as avg_pages 
-            FROM analytics 
-            " . $whereClause
-        );
-        $stmt->execute($params);
-        return $stmt->fetch()['avg_pages'];
     }
 
     public function getTopReferrers($limit = 5, $startDate = null, $endDate = null) {
@@ -253,7 +304,7 @@ class Analytics {
 
     public function getTopPages($limit = 10, $startDate = null, $endDate = null) {
         try {
-            $whereClause = "WHERE page_url IS NOT NULL AND page_url != ''";
+            $whereClause = "WHERE page_url IS NOT NULL AND page_url != '' AND page_url != '/'";
             $params = [];
             
             if ($startDate && $endDate) {
@@ -261,31 +312,40 @@ class Analytics {
                 $params = [$startDate, $endDate];
             }
             
-            // Build subquery for percentage calculation
-            $subqueryWhere = "WHERE page_url IS NOT NULL";
-            $allParams = $params; // Start with main query params
+            $params[] = $limit; // Add limit parameter at the end
             
-            if ($startDate && $endDate) {
-                $subqueryWhere .= " AND DATE(visit_time) BETWEEN ? AND ?";
-                $allParams = array_merge($allParams, [$startDate, $endDate]); // Add subquery params
-            }
-            
-            $allParams[] = $limit; // Add limit parameter at the end
-            
+            // Simplified query without complex subqueries
             $stmt = $this->pdo->prepare("
                 SELECT 
                     page_url, 
                     COUNT(*) as count,
-                    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics " . $subqueryWhere . ")), 2) as percentage
+                    ROUND((COUNT(*) * 100.0 / (
+                        SELECT COUNT(*) FROM analytics " . ($startDate && $endDate ? "WHERE DATE(visit_time) BETWEEN ? AND ?" : "") . "
+                    )), 2) as percentage
                 FROM analytics 
                 " . $whereClause . "
                 GROUP BY page_url 
                 ORDER BY count DESC 
                 LIMIT ?
             ");
-            $stmt->execute($allParams);
-            return $stmt->fetchAll();
+            
+            // Execute with all parameters
+            if ($startDate && $endDate) {
+                $stmt->execute([$startDate, $endDate, $startDate, $endDate, $limit]);
+            } else {
+                $stmt->execute([$limit]);
+            }
+            
+            $result = $stmt->fetchAll();
+            
+            // If no results, return empty array
+            if (empty($result)) {
+                return [];
+            }
+            
+            return $result;
         } catch (PDOException $e) {
+            error_log("Error in getTopPages: " . $e->getMessage());
             return [];
         }
     }

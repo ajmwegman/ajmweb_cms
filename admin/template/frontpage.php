@@ -817,7 +817,7 @@ $stats = $analytics->getEnhancedStats();
   // Top Pages Table
   function generateTopPagesTable() {
     try {
-      const topPagesData = <?php echo json_encode($stats['topPages']); ?>;
+      const topPagesData = <?php echo json_encode($stats['topPages'] ?? []); ?>;
       console.log('Top pages data:', topPagesData);
       
       const topPagesTable = document.getElementById('topPagesTable');
@@ -862,7 +862,7 @@ $stats = $analytics->getEnhancedStats();
             <tr>
               <td colspan="5" class="text-center text-muted">
                 <i class="bi bi-info-circle me-2"></i>
-                Geen pagina data beschikbaar
+                Geen pagina data beschikbaar voor de geselecteerde periode
               </td>
             </tr>
           `;
@@ -870,6 +870,17 @@ $stats = $analytics->getEnhancedStats();
       }
     } catch (error) {
       console.error('Error generating top pages table:', error);
+      const topPagesTable = document.getElementById('topPagesTable');
+      if (topPagesTable) {
+        topPagesTable.innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center text-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Fout bij laden van pagina data
+            </td>
+          </tr>
+        `;
+      }
     }
   }
   
@@ -1240,7 +1251,7 @@ $stats = $analytics->getEnhancedStats();
             <tr>
               <td colspan="5" class="text-center text-muted">
                 <i class="bi bi-info-circle me-2"></i>
-                Geen pagina data beschikbaar
+                Geen pagina data beschikbaar voor de geselecteerde periode
               </td>
             </tr>
           `;
@@ -1248,6 +1259,17 @@ $stats = $analytics->getEnhancedStats();
       }
     } catch (error) {
       console.error('Error updating top pages table:', error);
+      const topPagesTable = document.getElementById('topPagesTable');
+      if (topPagesTable) {
+        topPagesTable.innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center text-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Fout bij laden van pagina data
+            </td>
+          </tr>
+        `;
+      }
     }
   }
 
