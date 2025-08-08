@@ -18,13 +18,15 @@ try {
     $deviceBreakdown = $analytics->getDeviceBreakdown($startDate, $endDate, $siteId);
     $browserBreakdown = $analytics->getBrowserBreakdown($startDate, $endDate, $siteId);
     $topPages = $analytics->getTopPages(10, $startDate, $endDate, $siteId);
+    $topSearchKeywords = $analytics->getTopSearchKeywords(10, $startDate, $endDate, $siteId);
     
     echo json_encode([
         'success' => true,
         'stats' => $stats,
         'deviceBreakdown' => $deviceBreakdown,
         'browserBreakdown' => $browserBreakdown,
-        'topPages' => $topPages
+        'topPages' => $topPages,
+        'topSearchKeywords' => $topSearchKeywords
     ]);
     
 } catch (Exception $e) {

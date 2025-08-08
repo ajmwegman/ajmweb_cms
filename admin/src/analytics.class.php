@@ -160,6 +160,7 @@ class Analytics {
                 'bounceRate' => $this->getBounceRate($startDate, $endDate, $siteId),
                 'avgPagesPerSession' => $this->getAvgPagesPerSession($startDate, $endDate, $siteId),
                 'topReferrers' => $this->getTopReferrers(5, $startDate, $endDate, $siteId),
+                'topSearchKeywords' => $this->getTopSearchKeywords(10, $startDate, $endDate, $siteId),
                 'deviceBreakdown' => $this->getDeviceBreakdown($startDate, $endDate),
                 'browserBreakdown' => $this->getBrowserBreakdown($startDate, $endDate),
                 'topPages' => $this->getTopPages(10, $startDate, $endDate, $siteId),
@@ -175,6 +176,7 @@ class Analytics {
                 'bounceRate' => 0,
                 'avgPagesPerSession' => 0,
                 'topReferrers' => [],
+                'topSearchKeywords' => [],
                 'deviceBreakdown' => [],
                 'browserBreakdown' => [],
                 'topPages' => [],
@@ -275,6 +277,92 @@ class Analytics {
         ");
         $stmt->execute($params);
         return $stmt->fetchAll();
+    }
+
+    public function getTopSearchKeywords($limit = 10, $startDate = null, $endDate = null, $siteId = null) {
+        if ($siteId === null) {
+            $siteId = $this->getCurrentSiteId();
+        }
+        
+        $whereClause = "WHERE site_id = ? AND referer_url IS NOT NULL AND referer_url != 'unknown' AND referer_url != ''";
+        $params = [$siteId];
+
+        if ($startDate && $endDate) {
+            $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
+            $params[] = $startDate;
+            $params[] = $endDate;
+        }
+
+        $params[] = $limit;
+
+        $stmt = $this->pdo->prepare("
+            SELECT 
+                CASE 
+                    WHEN referer_url LIKE '%google.%' THEN 
+                        CASE 
+                            WHEN referer_url LIKE '%q=%' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(referer_url, 'q=', -1), '&', 1)
+                            WHEN referer_url LIKE '%query=%' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(referer_url, 'query=', -1), '&', 1)
+                            ELSE 'Google (direct)'
+                        END
+                    WHEN referer_url LIKE '%bing.%' THEN 
+                        CASE 
+                            WHEN referer_url LIKE '%q=%' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(referer_url, 'q=', -1), '&', 1)
+                            ELSE 'Bing (direct)'
+                        END
+                    WHEN referer_url LIKE '%yahoo.%' THEN 
+                        CASE 
+                            WHEN referer_url LIKE '%p=%' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(referer_url, 'p=', -1), '&', 1)
+                            ELSE 'Yahoo (direct)'
+                        END
+                    WHEN referer_url LIKE '%duckduckgo.%' THEN 
+                        CASE 
+                            WHEN referer_url LIKE '%q=%' THEN SUBSTRING_INDEX(SUBSTRING_INDEX(referer_url, 'q=', -1), '&', 1)
+                            ELSE 'DuckDuckGo (direct)'
+                        END
+                    WHEN referer_url = '' OR referer_url = 'unknown' THEN 'Direct bezoek'
+                    WHEN referer_url LIKE '%facebook.%' THEN 'Facebook'
+                    WHEN referer_url LIKE '%twitter.%' OR referer_url LIKE '%t.co%' THEN 'Twitter'
+                    WHEN referer_url LIKE '%instagram.%' THEN 'Instagram'
+                    WHEN referer_url LIKE '%linkedin.%' THEN 'LinkedIn'
+                    ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(REPLACE(referer_url, 'https://', ''), 'http://', ''), '/', 1), '?', 1)
+                END as source,
+                COUNT(*) as count,
+                ROUND((COUNT(*) * 100.0 / (
+                    SELECT COUNT(*) FROM analytics WHERE site_id = ? " . 
+                    ($startDate && $endDate ? " AND DATE(visit_time) BETWEEN ? AND ?" : "") . "
+                )), 2) as percentage
+            FROM analytics 
+            " . $whereClause . "
+            GROUP BY source 
+            HAVING source IS NOT NULL AND source != ''
+            ORDER BY count DESC 
+            LIMIT ?
+        ");
+        
+        // Build parameters for subquery
+        $executeParams = $params;
+        if ($startDate && $endDate) {
+            // Insert subquery params before the limit
+            array_splice($executeParams, -1, 0, [$siteId, $startDate, $endDate]);
+        } else {
+            // Insert subquery param before the limit
+            array_splice($executeParams, -1, 0, [$siteId]);
+        }
+        
+        $stmt->execute($executeParams);
+        $result = $stmt->fetchAll();
+        
+        // URL decode the search terms
+        foreach ($result as &$row) {
+            if (strpos($row['source'], '%') !== false) {
+                $row['source'] = urldecode($row['source']);
+            }
+            // Clean up common URL artifacts
+            $row['source'] = str_replace(['+', '%20'], ' ', $row['source']);
+            $row['source'] = trim($row['source']);
+        }
+        
+        return $result;
     }
 
     public function getDeviceBreakdown($startDate = null, $endDate = null) {

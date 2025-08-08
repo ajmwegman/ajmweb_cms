@@ -653,6 +653,33 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     </div>
   </div>
   
+  <!-- Top Zoekwoorden -->
+  <div class="row mb-4">
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="bi bi-search"></i> Top Zoekwoorden & Bronnen</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Bron/Zoekwoord</th>
+                  <th>Bezoeken</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody id="searchKeywordsTable">
+                <!-- Search keywords worden hier geladen -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- Top 10 Populairste Pagina's -->
   <div class="row mt-4">
     <div class="col-12">
@@ -666,11 +693,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
               <table class="table table-hover top-pages-table" style="margin-bottom: 0;">
                 <thead style="position: sticky; top: 0; background: white; z-index: 1;">
                   <tr>
-                    <th>#</th>
-                    <th>Pagina</th>
+                    <th>URL</th>
                     <th>Bezoeken</th>
-                    <th>Percentage</th>
-                    <th>Trend</th>
                   </tr>
                 </thead>
                 <tbody id="topPagesTable">
@@ -725,6 +749,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         // Initialize device and browser charts
         generateDeviceChart();
         generateBrowserChart();
+        generateSearchKeywordsTable();
         generateTopPagesTable();
         
         // Initialize performance chart
@@ -1160,6 +1185,95 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     }
   }
   
+  // Search Keywords Table
+  function generateSearchKeywordsTable() {
+    try {
+      const searchKeywordsData = <?php echo json_encode($stats['topSearchKeywords'] ?? []); ?>;
+      console.log('Search keywords data:', searchKeywordsData);
+      
+      const searchKeywordsTable = document.getElementById('searchKeywordsTable');
+      if (searchKeywordsTable && searchKeywordsData && searchKeywordsData.length > 0) {
+        let tableHtml = '';
+        
+        searchKeywordsData.forEach((keyword, index) => {
+          const source = keyword.source || 'Onbekend';
+          const visitCount = keyword.count || 0;
+          const percentage = keyword.percentage || 0;
+          
+          // Bepaal icon op basis van bron
+          let icon = 'bi-search';
+          let iconColor = '#6c757d';
+          
+          if (source.includes('Google')) {
+            icon = 'bi-google';
+            iconColor = '#4285f4';
+          } else if (source.includes('Bing')) {
+            icon = 'bi-microsoft';
+            iconColor = '#00809d';
+          } else if (source.includes('Yahoo')) {
+            icon = 'bi-search';
+            iconColor = '#7B0099';
+          } else if (source.includes('DuckDuckGo')) {
+            icon = 'bi-shield-check';
+            iconColor = '#de5833';
+          } else if (source.includes('Facebook')) {
+            icon = 'bi-facebook';
+            iconColor = '#1877f2';
+          } else if (source.includes('Twitter')) {
+            icon = 'bi-twitter';
+            iconColor = '#1da1f2';
+          } else if (source.includes('LinkedIn')) {
+            icon = 'bi-linkedin';
+            iconColor = '#0a66c2';
+          } else if (source.includes('Direct')) {
+            icon = 'bi-arrow-right-circle';
+            iconColor = '#198754';
+          }
+          
+          tableHtml += `
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <i class="bi ${icon} me-2" style="color: ${iconColor};"></i>
+                  <span class="text-truncate" title="${source}">${source}</span>
+                </div>
+              </td>
+              <td><strong>${visitCount}</strong></td>
+              <td><span class="badge bg-info">${percentage}%</span></td>
+            </tr>
+          `;
+        });
+        
+        searchKeywordsTable.innerHTML = tableHtml;
+      } else {
+        console.log('No search keywords data available');
+        if (searchKeywordsTable) {
+          searchKeywordsTable.innerHTML = `
+            <tr>
+              <td colspan="3" class="text-center text-muted">
+                <i class="bi bi-info-circle me-2"></i>
+                Geen zoekwoord data beschikbaar voor de geselecteerde periode
+              </td>
+            </tr>
+          `;
+        }
+      }
+    } catch (error) {
+      console.error('Error generating search keywords table:', error);
+      const searchKeywordsTable = document.getElementById('searchKeywordsTable');
+      if (searchKeywordsTable) {
+        searchKeywordsTable.innerHTML = `
+          <tr>
+            <td colspan="3" class="text-center text-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Fout bij laden van zoekwoord data
+            </td>
+          </tr>
+        `;
+      }
+    }
+  }
+  
   // Top Pages Table
   function generateTopPagesTable() {
     try {
@@ -1294,6 +1408,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           // Update charts
           updateDeviceChart(data.deviceBreakdown);
           updateBrowserChart(data.browserBreakdown);
+          updateSearchKeywordsTable(data.topSearchKeywords);
           updateTopPagesTable(data.topPages);
           
           // Update main performance chart
@@ -1401,8 +1516,28 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   }
 
   // Update device chart met nieuwe data
+  let deviceChartUpdating = false;
   function updateDeviceChart(deviceData) {
+    if (deviceChartUpdating) {
+      console.log('updateDeviceChart already running, skipping...');
+      return;
+    }
+    
     try {
+      deviceChartUpdating = true;
+      console.log('updateDeviceChart called with data:', deviceData);
+      
+      // Validate data
+      if (!deviceData) {
+        console.log('No deviceData received');
+        return;
+      }
+      
+      if (!Array.isArray(deviceData)) {
+        console.error('deviceData is not an array:', typeof deviceData);
+        return;
+      }
+      
       // Destroy existing chart
       const existingChart = Chart.getChart('deviceChart');
       if (existingChart) {
@@ -1495,12 +1630,34 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       }
     } catch (error) {
       console.error('Error updating device chart:', error);
+    } finally {
+      deviceChartUpdating = false;
     }
   }
 
   // Update browser chart met nieuwe data
+  let browserChartUpdating = false;
   function updateBrowserChart(browserData) {
+    if (browserChartUpdating) {
+      console.log('updateBrowserChart already running, skipping...');
+      return;
+    }
+    
     try {
+      browserChartUpdating = true;
+      console.log('updateBrowserChart called with data:', browserData);
+      
+      // Validate data
+      if (!browserData) {
+        console.log('No browserData received');
+        return;
+      }
+      
+      if (!Array.isArray(browserData)) {
+        console.error('browserData is not an array:', typeof browserData);
+        return;
+      }
+      
       // Destroy existing chart
       const existingChart = Chart.getChart('browserChart');
       if (existingChart) {
@@ -1599,6 +1756,95 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       }
     } catch (error) {
       console.error('Error updating browser chart:', error);
+    } finally {
+      browserChartUpdating = false;
+    }
+  }
+
+  // Update search keywords table met nieuwe data
+  function updateSearchKeywordsTable(searchKeywordsData) {
+    try {
+      console.log('updateSearchKeywordsTable called with data:', searchKeywordsData);
+      
+      const searchKeywordsTable = document.getElementById('searchKeywordsTable');
+      if (searchKeywordsTable && searchKeywordsData && searchKeywordsData.length > 0) {
+        let tableHtml = '';
+        
+        searchKeywordsData.forEach((keyword, index) => {
+          const source = keyword.source || 'Onbekend';
+          const visitCount = keyword.count || 0;
+          const percentage = keyword.percentage || 0;
+          
+          // Bepaal icon op basis van bron
+          let icon = 'bi-search';
+          let iconColor = '#6c757d';
+          
+          if (source.includes('Google')) {
+            icon = 'bi-google';
+            iconColor = '#4285f4';
+          } else if (source.includes('Bing')) {
+            icon = 'bi-microsoft';
+            iconColor = '#00809d';
+          } else if (source.includes('Yahoo')) {
+            icon = 'bi-search';
+            iconColor = '#7B0099';
+          } else if (source.includes('DuckDuckGo')) {
+            icon = 'bi-shield-check';
+            iconColor = '#de5833';
+          } else if (source.includes('Facebook')) {
+            icon = 'bi-facebook';
+            iconColor = '#1877f2';
+          } else if (source.includes('Twitter')) {
+            icon = 'bi-twitter';
+            iconColor = '#1da1f2';
+          } else if (source.includes('LinkedIn')) {
+            icon = 'bi-linkedin';
+            iconColor = '#0a66c2';
+          } else if (source.includes('Direct')) {
+            icon = 'bi-arrow-right-circle';
+            iconColor = '#198754';
+          }
+          
+          tableHtml += `
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <i class="bi ${icon} me-2" style="color: ${iconColor};"></i>
+                  <span class="text-truncate" title="${source}">${source}</span>
+                </div>
+              </td>
+              <td><strong>${visitCount}</strong></td>
+              <td><span class="badge bg-info">${percentage}%</span></td>
+            </tr>
+          `;
+        });
+        
+        searchKeywordsTable.innerHTML = tableHtml;
+      } else {
+        if (searchKeywordsTable) {
+          searchKeywordsTable.innerHTML = `
+            <tr>
+              <td colspan="3" class="text-center text-muted">
+                <i class="bi bi-info-circle me-2"></i>
+                Geen zoekwoord data beschikbaar voor de geselecteerde periode
+              </td>
+            </tr>
+          `;
+        }
+      }
+    } catch (error) {
+      console.error('Error updating search keywords table:', error);
+      const searchKeywordsTable = document.getElementById('searchKeywordsTable');
+      if (searchKeywordsTable) {
+        searchKeywordsTable.innerHTML = `
+          <tr>
+            <td colspan="3" class="text-center text-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Fout bij laden van zoekwoord data
+            </td>
+          </tr>
+        `;
+      }
     }
   }
 
