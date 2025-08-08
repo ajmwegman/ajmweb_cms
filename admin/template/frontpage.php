@@ -639,7 +639,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   
   <!-- Device & Browser Breakdown -->
   <div class="row">
-    <div class="col-md-6 mb-3">
+    <div class="col-6 mb-3">
       <div class="card breakdown-card">
         <div class="card-header">
           <h5><i class="bi bi-phone"></i> Device Breakdown</h5>
@@ -653,7 +653,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       </div>
     </div>
     
-    <div class="col-md-6 mb-3">
+    <div class="col-6 mb-3">
       <div class="card breakdown-card">
         <div class="card-header">
           <h5><i class="bi bi-globe"></i> Browser Breakdown</h5>
