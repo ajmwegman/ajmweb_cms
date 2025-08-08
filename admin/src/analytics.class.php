@@ -162,7 +162,7 @@ class Analytics {
                 'topReferrers' => $this->getTopReferrers(5, $startDate, $endDate, $siteId),
                 'deviceBreakdown' => $this->getDeviceBreakdown($startDate, $endDate),
                 'browserBreakdown' => $this->getBrowserBreakdown($startDate, $endDate),
-                'topPages' => $this->getTopPages(10, $startDate, $endDate),
+                'topPages' => $this->getTopPages(10, $startDate, $endDate, $siteId),
                 'conversionRate' => $this->getConversionRate($startDate, $endDate)
             ]);
 
@@ -430,7 +430,7 @@ class Analytics {
         }
     }
 
-    public function getTopPages($limit = 10, $startDate = null, $endDate = null) {
+    public function getTopPages($limit = 10, $startDate = null, $endDate = null, $siteId = null) {
         try {
             $whereClause = "WHERE page_url IS NOT NULL AND page_url != '' AND page_url != '/' 
                            AND page_url NOT LIKE '%?e=%' 
@@ -447,7 +447,30 @@ class Analytics {
                 $params = [$startDate, $endDate];
             }
             
+            if ($siteId) {
+                $whereClause .= " AND site_id = ?";
+                $params[] = $siteId;
+            }
+            
             $params[] = $limit; // Add limit parameter at the end
+            
+            // Build the subquery for percentage calculation
+            $subqueryWhere = "";
+            $subqueryParams = [];
+            
+            if ($startDate && $endDate) {
+                $subqueryWhere .= "WHERE DATE(visit_time) BETWEEN ? AND ?";
+                $subqueryParams = [$startDate, $endDate];
+            }
+            
+            if ($siteId) {
+                if ($subqueryWhere) {
+                    $subqueryWhere .= " AND site_id = ?";
+                } else {
+                    $subqueryWhere = "WHERE site_id = ?";
+                }
+                $subqueryParams[] = $siteId;
+            }
             
             // Simplified query without complex subqueries
             $stmt = $this->pdo->prepare("
@@ -455,7 +478,7 @@ class Analytics {
                     page_url, 
                     COUNT(*) as count,
                     ROUND((COUNT(*) * 100.0 / (
-                        SELECT COUNT(*) FROM analytics " . ($startDate && $endDate ? "WHERE DATE(visit_time) BETWEEN ? AND ?" : "") . "
+                        SELECT COUNT(*) FROM analytics " . $subqueryWhere . "
                     )), 2) as percentage
                 FROM analytics 
                 " . $whereClause . "
@@ -464,12 +487,9 @@ class Analytics {
                 LIMIT ?
             ");
             
-            // Execute with all parameters
-            if ($startDate && $endDate) {
-                $stmt->execute([$startDate, $endDate, $startDate, $endDate, $limit]);
-            } else {
-                $stmt->execute([$limit]);
-            }
+            // Build execution parameters: subquery params + main query params + limit
+            $executeParams = array_merge($subqueryParams, $params);
+            $stmt->execute($executeParams);
             
             $result = $stmt->fetchAll();
             

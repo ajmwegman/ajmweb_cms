@@ -6,92 +6,69 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
 ?>
 
 <style>
-  /* Date Range Styling - Slider-like Design */
-  .date-range-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .date-input-group {
-    position: relative;
-  }
-  
-  .date-input-group .form-label {
+  /* Modern Date Range & Filter Styling */
+  .form-label {
+    font-size: 0.85rem;
     font-weight: 600;
     color: #495057;
     margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
   
-  .date-input-group .form-label i {
+  .form-label i {
     color: #007bff;
-    font-size: 1.1rem;
-  }
-  
-  .input-wrapper {
-    position: relative;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 12px;
-    padding: 2px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .input-wrapper:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transform: translateY(-1px);
-  }
-  
-  .input-wrapper:focus-within {
-    box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
-  }
-  
-  .date-input {
-    border: none;
-    background: white;
-    border-radius: 10px;
-    padding: 12px 16px;
     font-size: 1rem;
+  }
+  
+  .form-control, .form-select {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
     font-weight: 500;
     color: #495057;
-    width: 100%;
+    background: #ffffff;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
   }
   
-  .date-input:focus {
-    outline: none;
-    box-shadow: none;
+  .form-control:focus, .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
     background: #f8f9ff;
+    outline: none;
   }
   
-  .date-slider-track {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
-    border-radius: 0 0 10px 10px;
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+  .form-control:hover, .form-select:hover {
+    border-color: rgba(0, 123, 255, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   }
   
-  .input-wrapper:focus-within .date-slider-track {
-    transform: scaleX(1);
-  }
-  
-  /* Date Range Info Styling */
-  .date-range-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  /* Info Display Styling */
+  .info-display {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
     padding: 1rem;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border-radius: 12px;
-    border: 1px solid #dee2e6;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .info-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  
+  .info-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-left: 0.5rem;
   }
   
   .range-display {
@@ -101,20 +78,23 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   }
   
   .range-label {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: #6c757d;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
   }
   
   .range-value {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #007bff;
-    background: white;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 123, 255, 0.1);
     display: inline-block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
   }
   
   .range-actions {
@@ -124,21 +104,29 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   }
   
   .range-actions .btn {
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
+    border: 1px solid rgba(0, 123, 255, 0.2);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    color: #007bff;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
   }
   
   .range-actions .btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border-color: transparent;
   }
   
   .range-actions .btn i {
-    margin-right: 0.25rem;
+    margin-right: 0.4rem;
+    font-size: 0.9rem;
   }
   
   /* Responsive Design */
@@ -224,9 +212,280 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     height: 350px;
     overflow: hidden;
   }
+  
+  /* Modern Dashboard Styling */
+  .card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    background: #ffffff;
+    overflow: hidden;
+  }
+  
+  .card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+  
+  .card-header {
+    background: transparent;
+    border: none;
+    padding: 1.5rem 1.5rem 0.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 0.95rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  /* Stats Cards Modern Styling */
+  .stats-card {
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #007bff, #0056b3);
+  }
+  
+  .stats-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .stats-card .card-body {
+    padding: 2rem 1.5rem;
+  }
+  
+  .stats-card .card-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #6c757d;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .stats-icon {
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+  
+  .stats-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  
+  .stats-subtitle {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: 500;
+  }
+  
+  /* Breakdown Cards Modern Styling */
+  .breakdown-card {
+    max-width: 300px;
+    margin: 0 auto;
+    height: 100%;
+    border: none;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+  }
+  
+  .breakdown-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+  
+  .breakdown-card .card-header {
+    background: transparent;
+    border: none;
+    padding: 1.5rem 1.5rem 0.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 0.95rem;
+  }
+  
+  .breakdown-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 320px;
+    padding: 1rem 1.5rem 1.5rem;
+  }
+  
+  .breakdown-card canvas {
+    max-height: 180px;
+    margin-bottom: 1rem;
+  }
+  
+  /* Device and Browser Stats Modern Styling */
+  .device-stat-item, .browser-stat-item {
+    padding: 1rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    transition: all 0.3s ease;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .device-stat-item:hover, .browser-stat-item:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 123, 255, 0.2);
+  }
+  
+  .device-icon, .browser-icon {
+    margin-bottom: 0.75rem;
+  }
+  
+  .device-name, .browser-name {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  
+  .device-count, .browser-count {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0.25rem 0;
+  }
+  
+  .device-percentage, .browser-percentage {
+    font-size: 0.75rem;
+    color: #007bff;
+    font-weight: 600;
+  }
+  
+  /* Top Pages Table Modern Styling */
+  .top-pages-table {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .top-pages-table thead th {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: none;
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 1rem 0.75rem;
+  }
+  
+  .top-pages-table tbody tr {
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .top-pages-table tbody tr:hover {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    transform: scale(1.01);
+  }
+  
+  .top-pages-table tbody td {
+    border: none;
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+  }
+  
+  .badge {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* Loading Indicator Modern Styling */
+  #loadingIndicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    z-index: 9999;
+  }
+  
+  #loadingIndicator .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3rem;
+  }
+  
+  /* Container Background */
+  body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  }
+  
+  /* Enhanced Shadows and Depth */
+  .visitorChart {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+  
+  /* Modern Table Responsive Container */
+  .table-responsive {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    background: #ffffff;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .breakdown-card {
+      max-width: 100%;
+    }
+    
+    .breakdown-card .card-body {
+      min-height: auto;
+      padding: 1rem;
+    }
+    
+    .stats-card .card-body {
+      padding: 1.5rem 1rem;
+    }
+    
+    .stats-number {
+      font-size: 2rem;
+    }
+  }
 </style>
 
-<div class="container mt-5">
+<div class="container-fluid px-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); min-height: 100vh; padding-top: 2rem; padding-bottom: 2rem;">
   <!-- Filters Card: Site & Datum Selectie -->
   <div class="row mb-4">
     <div class="col-12">
@@ -381,7 +640,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   <!-- Device & Browser Breakdown -->
   <div class="row">
     <div class="col-md-6 mb-3">
-      <div class="card">
+      <div class="card breakdown-card">
         <div class="card-header">
           <h5><i class="bi bi-phone"></i> Device Breakdown</h5>
         </div>
@@ -395,7 +654,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     </div>
     
     <div class="col-md-6 mb-3">
-      <div class="card">
+      <div class="card breakdown-card">
         <div class="card-header">
           <h5><i class="bi bi-globe"></i> Browser Breakdown</h5>
         </div>
@@ -780,36 +1039,81 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       
       if (browserData && browserData.length > 0) {
         const ctx = document.getElementById('browserChart').getContext('2d');
+        
+        // Browser-specifieke kleuren en iconen
+        const browserColors = {
+          'Chrome': '#4285f4',
+          'Firefox': '#ff7139',
+          'Safari': '#1b88ca',
+          'Edge': '#0078d4',
+          'Opera': '#ff1b2d',
+          'Internet Explorer': '#1ebbee'
+        };
+        
+        const browserIcons = {
+          'Chrome': 'bi-google',
+          'Firefox': 'bi-firefox',
+          'Safari': 'bi-apple',
+          'Edge': 'bi-microsoft',
+          'Opera': 'bi-browser-chrome',
+          'Internet Explorer': 'bi-browser-edge'
+        };
+        
         new Chart(ctx, {
           type: 'doughnut',
           data: {
             labels: browserData.map(item => item.browser),
             datasets: [{
               data: browserData.map(item => item.count),
-              backgroundColor: ['#49b5e7', '#16df7e', '#ffc107', '#dc3545', '#6f42c1'],
-              borderWidth: 2
+              backgroundColor: browserData.map(item => browserColors[item.browser] || '#6c757d'),
+              borderWidth: 3,
+              borderColor: '#ffffff'
             }]
           },
           options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
               legend: {
-                position: 'bottom'
+                position: 'bottom',
+                labels: {
+                  padding: 20,
+                  usePointStyle: true,
+                  pointStyle: 'circle'
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const browser = context.label;
+                    const count = context.parsed;
+                    const percentage = browserData.find(d => d.browser === browser)?.percentage || 0;
+                    return `${browser}: ${count} bezoeken (${percentage}%)`;
+                  }
+                }
               }
             }
           }
         });
         
-        // Toon browser stats
+        // Toon browser stats met iconen
         const browserStats = document.getElementById('browserStats');
         if (browserStats) {
           let statsHtml = '<div class="row text-center">';
           browserData.forEach(item => {
+            const icon = browserIcons[item.browser] || 'bi-browser-chrome';
+            const color = browserColors[item.browser] || '#6c757d';
+            
             statsHtml += `
               <div class="col-6 mb-2">
-                <div class="small text-muted">${item.browser}</div>
-                <div class="fw-bold">${item.count}</div>
-                <div class="small text-muted">${item.percentage}%</div>
+                <div class="browser-stat-item">
+                  <div class="browser-icon mb-2">
+                    <i class="bi ${icon}" style="color: ${color}; font-size: 1.5rem;"></i>
+                  </div>
+                  <div class="browser-name small text-muted">${item.browser}</div>
+                  <div class="browser-count fw-bold">${item.count}</div>
+                  <div class="browser-percentage small text-muted">${item.percentage}%</div>
+                </div>
               </div>
             `;
           });
@@ -1189,36 +1493,81 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       
       if (browserData && browserData.length > 0) {
         const ctx = document.getElementById('browserChart').getContext('2d');
+        
+        // Browser-specifieke kleuren en iconen
+        const browserColors = {
+          'Chrome': '#4285f4',
+          'Firefox': '#ff7139',
+          'Safari': '#1b88ca',
+          'Edge': '#0078d4',
+          'Opera': '#ff1b2d',
+          'Internet Explorer': '#1ebbee'
+        };
+        
+        const browserIcons = {
+          'Chrome': 'bi-google',
+          'Firefox': 'bi-firefox',
+          'Safari': 'bi-apple',
+          'Edge': 'bi-microsoft',
+          'Opera': 'bi-browser-chrome',
+          'Internet Explorer': 'bi-browser-edge'
+        };
+        
         new Chart(ctx, {
           type: 'doughnut',
           data: {
             labels: browserData.map(item => item.browser),
             datasets: [{
               data: browserData.map(item => item.count),
-              backgroundColor: ['#49b5e7', '#16df7e', '#ffc107', '#dc3545', '#6f42c1'],
-              borderWidth: 2
+              backgroundColor: browserData.map(item => browserColors[item.browser] || '#6c757d'),
+              borderWidth: 3,
+              borderColor: '#ffffff'
             }]
           },
           options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
               legend: {
-                position: 'bottom'
+                position: 'bottom',
+                labels: {
+                  padding: 20,
+                  usePointStyle: true,
+                  pointStyle: 'circle'
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const browser = context.label;
+                    const count = context.parsed;
+                    const percentage = browserData.find(d => d.browser === browser)?.percentage || 0;
+                    return `${browser}: ${count} bezoeken (${percentage}%)`;
+                  }
+                }
               }
             }
           }
         });
         
-        // Update browser stats
+        // Update browser stats met iconen
         const browserStats = document.getElementById('browserStats');
         if (browserStats) {
           let statsHtml = '<div class="row text-center">';
           browserData.forEach(item => {
+            const icon = browserIcons[item.browser] || 'bi-browser-chrome';
+            const color = browserColors[item.browser] || '#6c757d';
+            
             statsHtml += `
               <div class="col-6 mb-2">
-                <div class="small text-muted">${item.browser}</div>
-                <div class="fw-bold">${item.count}</div>
-                <div class="small text-muted">${item.percentage}%</div>
+                <div class="browser-stat-item">
+                  <div class="browser-icon mb-2">
+                    <i class="bi ${icon}" style="color: ${color}; font-size: 1.5rem;"></i>
+                  </div>
+                  <div class="browser-name small text-muted">${item.browser}</div>
+                  <div class="browser-count fw-bold">${item.count}</div>
+                  <div class="browser-percentage small text-muted">${item.percentage}%</div>
+                </div>
               </div>
             `;
           });
