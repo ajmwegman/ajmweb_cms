@@ -1,7 +1,7 @@
 <?php 
 // Get all available sites
 $sites = $analytics->getAllSites();
-$currentSiteId = isset($_GET['site_id']) ? (int)$_GET['site_id'] : $analytics->getCurrentSiteId();
+$currentSiteId = isset($_GET['site_id']) ? (int)$_GET['site_id'] : 1;
 $stats = $analytics->getEnhancedStats(null, null, $currentSiteId); 
 ?>
 
