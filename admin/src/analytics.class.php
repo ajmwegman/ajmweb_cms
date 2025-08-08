@@ -7,7 +7,7 @@ class Analytics {
         $this->pdo = $pdo;
     }
     
-    private function getCurrentSiteId() {
+    public function getCurrentSiteId() {
         try {
             // Check if sites table exists
             $stmt = $this->pdo->prepare("SHOW TABLES LIKE 'sites'");
@@ -139,26 +139,26 @@ class Analytics {
         }
     }
     
-    public function getEnhancedStats($startDate = null, $endDate = null) {
+    public function getEnhancedStats($startDate = null, $endDate = null, $siteId = null) {
         try {
-            $basicStats = $this->getStats($startDate, $endDate);
-            
+            $basicStats = $this->getStats($startDate, $endDate, $siteId);
+
             $enhancedStats = array_merge($basicStats, [
-                'uniqueVisitors' => $this->getUniqueVisitors($startDate, $endDate),
-                'bounceRate' => $this->getBounceRate($startDate, $endDate),
-                'avgPagesPerSession' => $this->getAvgPagesPerSession($startDate, $endDate),
-                'topReferrers' => $this->getTopReferrers(5, $startDate, $endDate),
+                'uniqueVisitors' => $this->getUniqueVisitors($startDate, $endDate, $siteId),
+                'bounceRate' => $this->getBounceRate($startDate, $endDate, $siteId),
+                'avgPagesPerSession' => $this->getAvgPagesPerSession($startDate, $endDate, $siteId),
+                'topReferrers' => $this->getTopReferrers(5, $startDate, $endDate, $siteId),
                 'deviceBreakdown' => $this->getDeviceBreakdown($startDate, $endDate),
                 'browserBreakdown' => $this->getBrowserBreakdown($startDate, $endDate),
                 'topPages' => $this->getTopPages(10, $startDate, $endDate),
                 'conversionRate' => $this->getConversionRate($startDate, $endDate)
             ]);
-            
+
             return $enhancedStats;
         } catch (Exception $e) {
             error_log("Error in getEnhancedStats: " . $e->getMessage());
             // Return basic stats with empty arrays for complex data
-            return array_merge($this->getStats($startDate, $endDate), [
+            return array_merge($this->getStats($startDate, $endDate, $siteId), [
                 'uniqueVisitors' => 0,
                 'bounceRate' => 0,
                 'avgPagesPerSession' => 0,
@@ -171,22 +171,20 @@ class Analytics {
         }
     }
     
-    public function getUniqueVisitors($startDate = null, $endDate = null) {
+    public function getUniqueVisitors($startDate = null, $endDate = null, $siteId = null) {
         try {
-            $whereClause = "WHERE page_url NOT LIKE '%?e=%' 
-                           AND page_url NOT LIKE '%?channel=%' 
-                           AND page_url NOT LIKE '%?from=%' 
-                           AND page_url NOT LIKE '%?utm_%' 
-                           AND page_url NOT LIKE '%?fbclid=%' 
-                           AND page_url NOT LIKE '%?gclid=%' 
-                           AND LENGTH(page_url) < 200";
-            $params = [];
-            
+            if ($siteId === null) {
+                $siteId = $this->getCurrentSiteId();
+            }
+            $whereClause = "WHERE site_id = ? AND page_url NOT LIKE '%?e=%' AND page_url NOT LIKE '%?channel=%' AND page_url NOT LIKE '%?from=%' AND page_url NOT LIKE '%?utm_%' AND page_url NOT LIKE '%?fbclid=%' AND page_url NOT LIKE '%?gclid=%' AND LENGTH(page_url) < 200";
+            $params = [$siteId];
+
             if ($startDate && $endDate) {
                 $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
-                $params = [$startDate, $endDate];
+                $params[] = $startDate;
+                $params[] = $endDate;
             }
-            
+
             $stmt = $this->pdo->prepare("SELECT COUNT(DISTINCT ip_address) as unique_visitors FROM analytics " . $whereClause);
             $stmt->execute($params);
             $result = $stmt->fetch();
@@ -197,27 +195,21 @@ class Analytics {
         }
     }
 
-    public function getBounceRate($startDate = null, $endDate = null) {
+    public function getBounceRate($startDate = null, $endDate = null, $siteId = null) {
         try {
-            $whereClause = "WHERE page_url NOT LIKE '%?e=%' 
-                           AND page_url NOT LIKE '%?channel=%' 
-                           AND page_url NOT LIKE '%?from=%' 
-                           AND page_url NOT LIKE '%?utm_%' 
-                           AND page_url NOT LIKE '%?fbclid=%' 
-                           AND page_url NOT LIKE '%?gclid=%' 
-                           AND LENGTH(page_url) < 200";
-            $params = [];
-            
+            if ($siteId === null) {
+                $siteId = $this->getCurrentSiteId();
+            }
+            $whereClause = "WHERE site_id = ? AND page_url NOT LIKE '%?e=%' AND page_url NOT LIKE '%?channel=%' AND page_url NOT LIKE '%?from=%' AND page_url NOT LIKE '%?utm_%' AND page_url NOT LIKE '%?fbclid=%' AND page_url NOT LIKE '%?gclid=%' AND LENGTH(page_url) < 200";
+            $params = [$siteId];
+
             if ($startDate && $endDate) {
                 $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
-                $params = [$startDate, $endDate];
+                $params[] = $startDate;
+                $params[] = $endDate;
             }
-            
-            $stmt = $this->pdo->prepare("
-                SELECT 
-                    ROUND((SUM(bounced) * 100.0 / COUNT(*)), 2) as bounce_rate 
-                FROM analytics " . $whereClause
-            );
+
+            $stmt = $this->pdo->prepare("SELECT ROUND((SUM(bounced) * 100.0 / COUNT(*)), 2) as bounce_rate FROM analytics " . $whereClause);
             $stmt->execute($params);
             $result = $stmt->fetch();
             return (float)($result['bounce_rate'] ?? 0);
@@ -227,28 +219,21 @@ class Analytics {
         }
     }
 
-    public function getAvgPagesPerSession($startDate = null, $endDate = null) {
+    public function getAvgPagesPerSession($startDate = null, $endDate = null, $siteId = null) {
         try {
-            $whereClause = "WHERE page_views > 0 
-                           AND page_url NOT LIKE '%?e=%' 
-                           AND page_url NOT LIKE '%?channel=%' 
-                           AND page_url NOT LIKE '%?from=%' 
-                           AND page_url NOT LIKE '%?utm_%' 
-                           AND page_url NOT LIKE '%?fbclid=%' 
-                           AND page_url NOT LIKE '%?gclid=%' 
-                           AND LENGTH(page_url) < 200";
-            $params = [];
-            
+            if ($siteId === null) {
+                $siteId = $this->getCurrentSiteId();
+            }
+            $whereClause = "WHERE site_id = ? AND page_views > 0 AND page_url NOT LIKE '%?e=%' AND page_url NOT LIKE '%?channel=%' AND page_url NOT LIKE '%?from=%' AND page_url NOT LIKE '%?utm_%' AND page_url NOT LIKE '%?fbclid=%' AND page_url NOT LIKE '%?gclid=%' AND LENGTH(page_url) < 200";
+            $params = [$siteId];
+
             if ($startDate && $endDate) {
                 $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
-                $params = [$startDate, $endDate];
+                $params[] = $startDate;
+                $params[] = $endDate;
             }
-            
-            $stmt = $this->pdo->prepare("
-                SELECT ROUND(AVG(page_views), 2) as avg_pages 
-                FROM analytics 
-                " . $whereClause
-            );
+
+            $stmt = $this->pdo->prepare("SELECT ROUND(AVG(page_views), 2) as avg_pages FROM analytics " . $whereClause);
             $stmt->execute($params);
             $result = $stmt->fetch();
             return (float)($result['avg_pages'] ?? 0);
@@ -258,30 +243,34 @@ class Analytics {
         }
     }
 
-    public function getTopReferrers($limit = 5, $startDate = null, $endDate = null) {
-        $whereClause = "WHERE referer_url != 'unknown' 
-                       AND page_url NOT LIKE '%?e=%' 
-                       AND page_url NOT LIKE '%?channel=%' 
-                       AND page_url NOT LIKE '%?from=%' 
-                       AND page_url NOT LIKE '%?utm_%' 
-                       AND page_url NOT LIKE '%?fbclid=%' 
-                       AND page_url NOT LIKE '%?gclid=%' 
+    public function getTopReferrers($limit = 5, $startDate = null, $endDate = null, $siteId = null) {
+        if ($siteId === null) {
+            $siteId = $this->getCurrentSiteId();
+        }
+        $whereClause = "WHERE site_id = ? AND referer_url != 'unknown'
+                       AND page_url NOT LIKE '%?e=%'
+                       AND page_url NOT LIKE '%?channel=%'
+                       AND page_url NOT LIKE '%?from=%'
+                       AND page_url NOT LIKE '%?utm_%'
+                       AND page_url NOT LIKE '%?fbclid=%'
+                       AND page_url NOT LIKE '%?gclid=%'
                        AND LENGTH(page_url) < 200";
-        $params = [];
-        
+        $params = [$siteId];
+
         if ($startDate && $endDate) {
             $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
-            $params = [$startDate, $endDate];
+            $params[] = $startDate;
+            $params[] = $endDate;
         }
-        
+
         $params[] = $limit; // Add limit parameter at the end
-        
+
         $stmt = $this->pdo->prepare("
-            SELECT referer_url, COUNT(*) as count 
-            FROM analytics 
+            SELECT referer_url, COUNT(*) as count
+            FROM analytics
             " . $whereClause . "
-            GROUP BY referer_url 
-            ORDER BY count DESC 
+            GROUP BY referer_url
+            ORDER BY count DESC
             LIMIT ?
         ");
         $stmt->execute($params);
