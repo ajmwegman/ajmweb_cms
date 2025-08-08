@@ -371,13 +371,7 @@ class Analytics {
                 $siteId = $this->getCurrentSiteId();
             }
             
-            $whereClause = "WHERE site_id = ? AND page_url NOT LIKE '%?e=%' 
-                           AND page_url NOT LIKE '%?channel=%' 
-                           AND page_url NOT LIKE '%?from=%' 
-                           AND page_url NOT LIKE '%?utm_%' 
-                           AND page_url NOT LIKE '%?fbclid=%' 
-                           AND page_url NOT LIKE '%?gclid=%' 
-                           AND LENGTH(page_url) < 200";
+            $whereClause = "WHERE site_id = ?";
             $params = [$siteId];
             
             if ($startDate && $endDate) {
@@ -482,14 +476,7 @@ class Analytics {
                 $siteId = $this->getCurrentSiteId();
             }
             
-            $whereClause = "WHERE site_id = ? AND browser != 'unknown' 
-                           AND page_url NOT LIKE '%?e=%' 
-                           AND page_url NOT LIKE '%?channel=%' 
-                           AND page_url NOT LIKE '%?from=%' 
-                           AND page_url NOT LIKE '%?utm_%' 
-                           AND page_url NOT LIKE '%?fbclid=%' 
-                           AND page_url NOT LIKE '%?gclid=%' 
-                           AND LENGTH(page_url) < 200";
+            $whereClause = "WHERE site_id = ? AND browser != 'unknown'";
             $params = [$siteId];
             
             if ($startDate && $endDate) {
