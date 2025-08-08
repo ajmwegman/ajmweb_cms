@@ -386,13 +386,30 @@ class Analytics {
                 $params[] = $endDate;
             }
             
+            // Debug: Check what we're searching for
+            error_log("getDeviceBreakdown - siteId: " . $siteId);
+            error_log("getDeviceBreakdown - startDate: " . $startDate);
+            error_log("getDeviceBreakdown - endDate: " . $endDate);
+            error_log("getDeviceBreakdown - whereClause: " . $whereClause);
+            error_log("getDeviceBreakdown - params: " . print_r($params, true));
+            
             // Eerst controleren of er data is
             $checkStmt = $this->pdo->prepare("SELECT COUNT(*) as total FROM analytics " . $whereClause);
             $checkStmt->execute($params);
             $totalRecords = $checkStmt->fetch()['total'];
             
+            error_log("getDeviceBreakdown - totalRecords found: " . $totalRecords);
+            
+            // Also check total records without filters to see if there's any data at all
+            $totalCheckStmt = $this->pdo->prepare("SELECT COUNT(*) as total FROM analytics WHERE site_id = ?");
+            $totalCheckStmt->execute([$siteId]);
+            $totalAllRecords = $totalCheckStmt->fetch()['total'];
+            
+            error_log("getDeviceBreakdown - totalAllRecords for siteId: " . $totalAllRecords);
+            
             if ($totalRecords == 0) {
                 // Geen data, return dummy data
+                error_log("getDeviceBreakdown - No records found, returning dummy data");
                 return [
                     ['device' => 'Desktop', 'count' => 0, 'percentage' => 0],
                     ['device' => 'Mobile', 'count' => 0, 'percentage' => 0],
