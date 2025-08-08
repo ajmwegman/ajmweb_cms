@@ -1098,7 +1098,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         
         const browserIcons = {
           'Chrome': 'bi-google',
-          'Firefox': 'bi-firefox',
+          'Firefox': 'bi-browser-firefox',
           'Safari': 'bi-apple',
           'Edge': 'bi-microsoft',
           'Opera': 'bi-browser-chrome',
@@ -1544,7 +1544,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         
         const browserIcons = {
           'Chrome': 'bi-google',
-          'Firefox': 'bi-firefox',
+          'Firefox': 'bi-browser-firefox',
           'Safari': 'bi-apple',
           'Edge': 'bi-microsoft',
           'Opera': 'bi-browser-chrome',
