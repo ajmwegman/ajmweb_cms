@@ -955,8 +955,21 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   // Device chart
   function generateDeviceChart() {
     try {
-      const deviceData = <?php echo json_encode($stats['deviceBreakdown']); ?>;
-      console.log('Device data:', deviceData);
+      const deviceData = <?php echo json_encode($stats['deviceBreakdown'] ?? []); ?>;
+      console.log('generateDeviceChart - Initial device data:', deviceData);
+      console.log('generateDeviceChart - Data type:', typeof deviceData);
+      console.log('generateDeviceChart - Is array:', Array.isArray(deviceData));
+      
+      // Validate data
+      if (!deviceData) {
+        console.log('generateDeviceChart - No deviceData received');
+        return;
+      }
+      
+      if (!Array.isArray(deviceData)) {
+        console.error('generateDeviceChart - deviceData is not an array:', typeof deviceData);
+        return;
+      }
       
       if (deviceData && deviceData.length > 0) {
         // Destroy existing chart if it exists
@@ -1526,26 +1539,42 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     try {
       deviceChartUpdating = true;
       console.log('updateDeviceChart called with data:', deviceData);
+      console.log('updateDeviceChart - Data length:', deviceData?.length);
+      console.log('updateDeviceChart - First item:', deviceData?.[0]);
       
       // Validate data
       if (!deviceData) {
-        console.log('No deviceData received');
+        console.log('updateDeviceChart - No deviceData received');
         return;
       }
       
       if (!Array.isArray(deviceData)) {
-        console.error('deviceData is not an array:', typeof deviceData);
+        console.error('updateDeviceChart - deviceData is not an array:', typeof deviceData);
         return;
       }
       
+      console.log('updateDeviceChart - About to destroy existing chart');
       // Destroy existing chart
       const existingChart = Chart.getChart('deviceChart');
       if (existingChart) {
+        console.log('updateDeviceChart - Destroying existing chart');
         existingChart.destroy();
+      } else {
+        console.log('updateDeviceChart - No existing chart to destroy');
       }
       
       if (deviceData && deviceData.length > 0) {
-        const ctx = document.getElementById('deviceChart').getContext('2d');
+        console.log('updateDeviceChart - Data has items, creating chart');
+        const chartElement = document.getElementById('deviceChart');
+        console.log('updateDeviceChart - Chart element:', chartElement);
+        
+        if (!chartElement) {
+          console.error('updateDeviceChart - deviceChart element not found!');
+          return;
+        }
+        
+        const ctx = chartElement.getContext('2d');
+        console.log('updateDeviceChart - Got context:', ctx);
         
         // Device-specifieke kleuren en iconen
         const deviceColors = {
@@ -1560,7 +1589,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           'Tablet': 'bi-tablet'
         };
         
-        new Chart(ctx, {
+        console.log('updateDeviceChart - About to create new Chart');
+        const newChart = new Chart(ctx, {
           type: 'doughnut',
           data: {
             labels: deviceData.map(item => item.device),
@@ -1598,6 +1628,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           }
         });
         
+        console.log('updateDeviceChart - Chart created successfully:', newChart);
+        
         // Update device stats
         const deviceStats = document.getElementById('deviceStats');
         if (deviceStats) {
@@ -1623,14 +1655,18 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           deviceStats.innerHTML = statsHtml;
         }
       } else {
+        console.log('updateDeviceChart - No data or empty data, showing no data message');
         const deviceStats = document.getElementById('deviceStats');
         if (deviceStats) {
           deviceStats.innerHTML = '<div class="text-center text-muted">Geen device data beschikbaar</div>';
         }
       }
+      
+      console.log('updateDeviceChart - Function completed successfully');
     } catch (error) {
       console.error('Error updating device chart:', error);
     } finally {
+      console.log('updateDeviceChart - Setting deviceChartUpdating to false');
       deviceChartUpdating = false;
     }
   }
