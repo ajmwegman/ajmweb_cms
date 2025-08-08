@@ -433,9 +433,13 @@ class Analytics {
                 GROUP BY device
                 ORDER BY count DESC
             ");
-            $stmt->execute($params);
+            // Execute with double params because subquery needs same parameters
+            $doubleParams = array_merge($params, $params);
+            error_log("getDeviceBreakdown - doubleParams: " . print_r($doubleParams, true));
+            $stmt->execute($doubleParams);
             
             $result = $stmt->fetchAll();
+            error_log("getDeviceBreakdown - result: " . print_r($result, true));
             
             // Als er geen resultaten zijn, voeg dummy data toe
             if (empty($result)) {
@@ -512,14 +516,17 @@ class Analytics {
             
             $stmt = $this->pdo->prepare("
                 SELECT browser, COUNT(*) as count,
-                ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics " . ($startDate && $endDate ? "WHERE DATE(visit_time) BETWEEN ? AND ?" : "") . ")), 2) as percentage
+                ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics " . $whereClause . ")), 2) as percentage
                 FROM analytics 
                 " . $whereClause . "
                 GROUP BY browser 
                 ORDER BY count DESC
                 LIMIT 5
             ");
-            $stmt->execute($params);
+            // Execute with double params because subquery needs same parameters
+            $doubleParams = array_merge($params, $params);
+            error_log("getBrowserBreakdown - doubleParams: " . print_r($doubleParams, true));
+            $stmt->execute($doubleParams);
             
             $result = $stmt->fetchAll();
             
