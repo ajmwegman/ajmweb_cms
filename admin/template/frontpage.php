@@ -493,74 +493,52 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
 </style>
 
 <div class="container-fluid px-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); min-height: 100vh; padding-top: 2rem; padding-bottom: 2rem;">
-  <!-- Filters Card: Site & Datum Selectie -->
+  <!-- Filters: Site & Datum Selectie -->
   <div class="row mb-4">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h5><i class="bi bi-sliders"></i> Site & Datum Selectie</h5>
-        </div>
-        <div class="card-body">
-          <div class="row g-3 align-items-end">
-            <div class="col-lg-4 col-md-6">
-              <label for="siteSelector" class="form-label">
-                <i class="bi bi-building"></i> Selecteer Website
-              </label>
-              <select id="siteSelector" name="site_id" class="form-select" onchange="changeSite()">
-                <?php foreach ($sites as $site): ?>
-                  <option value="<?php echo $site['id']; ?>" <?php echo ($site['id'] == $currentSiteId) ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars($site['name']); ?> (<?php echo htmlspecialchars($site['domain']); ?>)
-                  </option>
-                <?php endforeach; ?>
-              </select>
-            </div>
-            <div class="col-lg-4 col-md-3">
-              <label for="startDate" class="form-label">
-                <i class="bi bi-calendar-event"></i> Begin Datum
-              </label>
-              <input type="date" id="startDate" name="startDate" class="form-control" value="<?php echo date('Y-m-01'); ?>" onchange="updateAllAnalytics()">
-            </div>
-            <div class="col-lg-4 col-md-3">
-              <label for="endDate" class="form-label">
-                <i class="bi bi-calendar-check"></i> Eind Datum
-              </label>
-              <input type="date" id="endDate" name="endDate" class="form-control" value="<?php echo date('Y-m-d'); ?>" onchange="updateAllAnalytics()">
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <div class="info-display">
-                <span class="info-label">Huidige site:</span>
-                <span class="info-value" id="currentSiteDisplay">
-                  <?php
-                  $currentSite = array_filter($sites, function($site) use ($currentSiteId) { return $site['id'] == $currentSiteId; });
-                  $currentSite = reset($currentSite);
-                  echo htmlspecialchars($currentSite['name'] ?? 'Onbekend');
-                  ?>
-                </span>
-              </div>
-            </div>
-            <div class="col-md-6 text-md-end">
-              <div class="range-actions mb-2">
-                <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('today')">
-                  <i class="bi bi-calendar-day"></i> Vandaag
-                </button>
-                <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('week')">
-                  <i class="bi bi-calendar-week"></i> Deze week
-                </button>
-                <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('month')">
-                  <i class="bi bi-calendar-month"></i> Deze maand
-                </button>
-              </div>
-              <div class="range-display">
-                <span class="range-label">Geselecteerde periode:</span>
-                <span class="range-value" id="dateRangeDisplay">
-                  <?php echo date('d-m-Y'); ?> tot <?php echo date('d-m-Y'); ?>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="col-lg-4 col-md-6">
+      <label for="siteSelector" class="form-label">
+        <i class="bi bi-building"></i> Selecteer Website
+      </label>
+      <select id="siteSelector" name="site_id" class="form-select" onchange="changeSite()">
+        <?php foreach ($sites as $site): ?>
+          <option value="<?php echo $site['id']; ?>" <?php echo ($site['id'] == $currentSiteId) ? 'selected' : ''; ?>>
+            <?php echo htmlspecialchars($site['name']); ?>
+          </option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+    <div class="col-lg-4 col-md-3">
+      <label for="startDate" class="form-label">
+        <i class="bi bi-calendar-event"></i> Begin Datum
+      </label>
+      <input type="date" id="startDate" name="startDate" class="form-control" value="<?php echo date('Y-m-01'); ?>" onchange="updateAllAnalytics()">
+    </div>
+    <div class="col-lg-4 col-md-3">
+      <label for="endDate" class="form-label">
+        <i class="bi bi-calendar-check"></i> Eind Datum
+      </label>
+      <input type="date" id="endDate" name="endDate" class="form-control" value="<?php echo date('Y-m-d'); ?>" onchange="updateAllAnalytics()">
+    </div>
+  </div>
+  
+  <!-- Quick Actions & Date Range Display -->
+  <div class="row mb-4">
+    <div class="col-md-12 text-md-end">
+      <div class="range-actions mb-2">
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('today')">
+          <i class="bi bi-calendar-day"></i> Vandaag
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('week')">
+          <i class="bi bi-calendar-week"></i> Deze week
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('month')">
+          <i class="bi bi-calendar-month"></i> Deze maand
+        </button>
+      </div>
+      <div class="range-display">
+        <span id="dateRangeDisplay">
+          Geselecteerde periode: <?php echo date('d-m-Y'); ?> tot <?php echo date('d-m-Y'); ?>
+        </span>
       </div>
     </div>
   </div>
@@ -1784,7 +1762,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
      if (startDate && endDate) {
        const startFormatted = new Date(startDate).toLocaleDateString('nl-NL');
        const endFormatted = new Date(endDate).toLocaleDateString('nl-NL');
-       document.getElementById('dateRangeDisplay').textContent = `${startFormatted} tot ${endFormatted}`;
+       document.getElementById('dateRangeDisplay').textContent = `Geselecteerde periode: ${startFormatted} tot ${endFormatted}`;
      }
    }
    
