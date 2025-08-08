@@ -77,8 +77,13 @@ class AdvancedAnalytics {
             $isMobile = true;
         }
         
-        // Huidige pagina URL
-        $pageUrl = $_SERVER['REQUEST_URI'] ?? '/';
+        // Huidige pagina URL - clean and filter
+        $pageUrl = $this->cleanPageUrl($_SERVER['REQUEST_URI'] ?? '/');
+        
+        // Skip obvious bot/spam traffic
+        if ($this->isBotTraffic($userAgent, $referer, $pageUrl)) {
+            return;
+        }
         
         // Check if analytics table exists and has required columns
         $this->ensureAnalyticsTable();
@@ -194,6 +199,115 @@ class AdvancedAnalytics {
         } catch (PDOException $e) {
             error_log("Fout bij het berekenen van de gemiddelde sessieduur: " . $e->getMessage());
             return 0;
+        }
+    }
+    
+    private function isBotTraffic($userAgent, $referer, $pageUrl) {
+        try {
+            // Common bot user agents
+            $botPatterns = [
+                'bot', 'crawler', 'spider', 'scraper', 'scraper', 'crawler',
+                'semrush', 'ahrefs', 'mj12bot', 'dotbot', 'rogerbot',
+                'baiduspider', 'yandex', 'bingbot', 'googlebot'
+            ];
+            
+            // Check user agent for bot patterns
+            $userAgentLower = strtolower($userAgent);
+            foreach ($botPatterns as $pattern) {
+                if (strpos($userAgentLower, $pattern) !== false) {
+                    return true;
+                }
+            }
+            
+            // Check for suspicious URL patterns
+            $suspiciousPatterns = [
+                '/\?e=\d+/', // Tracking parameters
+                '/\?channel=\d+/', // Channel parameters
+                '/%[0-9A-F]{2}/', // URL encoded characters (excessive)
+                '/\?from=.*%/', // Encoded from parameters
+                '/\?utm_source=/', // UTM parameters (often spam)
+                '/\?fbclid=/', // Facebook click ID
+                '/\?gclid=/', // Google click ID
+            ];
+            
+            foreach ($suspiciousPatterns as $pattern) {
+                if (preg_match($pattern, $pageUrl)) {
+                    return true;
+                }
+            }
+            
+            // Check for excessive URL length (likely spam)
+            if (strlen($pageUrl) > 500) {
+                return true;
+            }
+            
+            // Check for suspicious referer patterns
+            if ($referer !== 'unknown') {
+                $suspiciousReferers = [
+                    'semrush', 'ahrefs', 'moz', 'seo', 'backlink',
+                    'linkbuilding', 'seo-tools'
+                ];
+                
+                $refererLower = strtolower($referer);
+                foreach ($suspiciousReferers as $pattern) {
+                    if (strpos($refererLower, $pattern) !== false) {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
+            
+        } catch (Exception $e) {
+            error_log("Error in bot traffic detection: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    private function cleanPageUrl($url) {
+        try {
+            // Remove query parameters that are likely spam/bot traffic
+            $spamParams = ['e', 'channel', 'from', 'utm_source', 'utm_medium', 'utm_campaign', 'fbclid', 'gclid'];
+            
+            // Parse URL
+            $parsedUrl = parse_url($url);
+            if (!$parsedUrl) {
+                return '/';
+            }
+            
+            // Clean path
+            $path = $parsedUrl['path'] ?? '/';
+            
+            // If path is empty or just '/', return '/'
+            if (empty($path) || $path === '/') {
+                return '/';
+            }
+            
+            // Remove query parameters that are spam indicators
+            if (isset($parsedUrl['query'])) {
+                parse_str($parsedUrl['query'], $queryParams);
+                
+                // Remove spam parameters
+                foreach ($spamParams as $spamParam) {
+                    unset($queryParams[$spamParam]);
+                }
+                
+                // If we have remaining legitimate query parameters, add them back
+                if (!empty($queryParams)) {
+                    $path .= '?' . http_build_query($queryParams);
+                }
+            }
+            
+            // Limit URL length to prevent database issues
+            if (strlen($path) > 200) {
+                $path = substr($path, 0, 200);
+            }
+            
+            return $path;
+            
+        } catch (Exception $e) {
+            error_log("Error cleaning page URL: " . $e->getMessage());
+            return '/';
         }
     }
 }

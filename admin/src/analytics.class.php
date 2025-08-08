@@ -304,7 +304,14 @@ class Analytics {
 
     public function getTopPages($limit = 10, $startDate = null, $endDate = null) {
         try {
-            $whereClause = "WHERE page_url IS NOT NULL AND page_url != '' AND page_url != '/'";
+            $whereClause = "WHERE page_url IS NOT NULL AND page_url != '' AND page_url != '/' 
+                           AND page_url NOT LIKE '%?e=%' 
+                           AND page_url NOT LIKE '%?channel=%' 
+                           AND page_url NOT LIKE '%?from=%' 
+                           AND page_url NOT LIKE '%?utm_%' 
+                           AND page_url NOT LIKE '%?fbclid=%' 
+                           AND page_url NOT LIKE '%?gclid=%' 
+                           AND LENGTH(page_url) < 200";
             $params = [];
             
             if ($startDate && $endDate) {
