@@ -1152,7 +1152,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
             const color = browserColors[item.browser] || '#6c757d';
             
             statsHtml += `
-              <div class="col-6 mb-2">
+              <div class="col-4 mb-2">
                 <div class="browser-stat-item">
                   <div class="browser-icon mb-2">
                     <i class="bi ${icon}" style="color: ${color}; font-size: 1.5rem;"></i>
@@ -1598,7 +1598,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
             const color = browserColors[item.browser] || '#6c757d';
             
             statsHtml += `
-              <div class="col-6 mb-2">
+              <div class="col-4 mb-2">
                 <div class="browser-stat-item">
                   <div class="browser-icon mb-2">
                     <i class="bi ${icon}" style="color: ${color}; font-size: 1.5rem;"></i>
