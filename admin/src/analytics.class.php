@@ -161,8 +161,8 @@ class Analytics {
                 'avgPagesPerSession' => $this->getAvgPagesPerSession($startDate, $endDate, $siteId),
                 'topReferrers' => $this->getTopReferrers(5, $startDate, $endDate, $siteId),
                 'topSearchKeywords' => $this->getTopSearchKeywords(10, $startDate, $endDate, $siteId),
-                'deviceBreakdown' => $this->getDeviceBreakdown($startDate, $endDate),
-                'browserBreakdown' => $this->getBrowserBreakdown($startDate, $endDate),
+                'deviceBreakdown' => $this->getDeviceBreakdown($startDate, $endDate, $siteId),
+                'browserBreakdown' => $this->getBrowserBreakdown($startDate, $endDate, $siteId),
                 'topPages' => $this->getTopPages(10, $startDate, $endDate, $siteId),
                 'conversionRate' => $this->getConversionRate($startDate, $endDate)
             ]);
@@ -365,20 +365,25 @@ class Analytics {
         return $result;
     }
 
-    public function getDeviceBreakdown($startDate = null, $endDate = null) {
+    public function getDeviceBreakdown($startDate = null, $endDate = null, $siteId = null) {
         try {
-            $whereClause = "WHERE page_url NOT LIKE '%?e=%' 
+            if ($siteId === null) {
+                $siteId = $this->getCurrentSiteId();
+            }
+            
+            $whereClause = "WHERE site_id = ? AND page_url NOT LIKE '%?e=%' 
                            AND page_url NOT LIKE '%?channel=%' 
                            AND page_url NOT LIKE '%?from=%' 
                            AND page_url NOT LIKE '%?utm_%' 
                            AND page_url NOT LIKE '%?fbclid=%' 
                            AND page_url NOT LIKE '%?gclid=%' 
                            AND LENGTH(page_url) < 200";
-            $params = [];
+            $params = [$siteId];
             
             if ($startDate && $endDate) {
                 $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
-                $params = [$startDate, $endDate];
+                $params[] = $startDate;
+                $params[] = $endDate;
             }
             
             // Eerst controleren of er data is
@@ -454,9 +459,13 @@ class Analytics {
         }
     }
 
-    public function getBrowserBreakdown($startDate = null, $endDate = null) {
+    public function getBrowserBreakdown($startDate = null, $endDate = null, $siteId = null) {
         try {
-            $whereClause = "WHERE browser != 'unknown' 
+            if ($siteId === null) {
+                $siteId = $this->getCurrentSiteId();
+            }
+            
+            $whereClause = "WHERE site_id = ? AND browser != 'unknown' 
                            AND page_url NOT LIKE '%?e=%' 
                            AND page_url NOT LIKE '%?channel=%' 
                            AND page_url NOT LIKE '%?from=%' 
@@ -464,16 +473,17 @@ class Analytics {
                            AND page_url NOT LIKE '%?fbclid=%' 
                            AND page_url NOT LIKE '%?gclid=%' 
                            AND LENGTH(page_url) < 200";
-            $params = [];
+            $params = [$siteId];
             
             if ($startDate && $endDate) {
                 $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
-                $params = [$startDate, $endDate];
+                $params[] = $startDate;
+                $params[] = $endDate;
             }
             
             // Eerst controleren of er data is
-            $checkStmt = $this->pdo->prepare("SELECT COUNT(*) as total FROM analytics " . ($startDate && $endDate ? "WHERE DATE(visit_time) BETWEEN ? AND ?" : ""));
-            $checkStmt->execute($startDate && $endDate ? [$startDate, $endDate] : []);
+            $checkStmt = $this->pdo->prepare("SELECT COUNT(*) as total FROM analytics " . $whereClause);
+            $checkStmt->execute($params);
             $totalRecords = $checkStmt->fetch()['total'];
             
             if ($totalRecords == 0) {
