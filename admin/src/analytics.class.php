@@ -97,21 +97,32 @@ class Analytics {
                 FROM analytics " . $currentWhereClause;
             
             // Query voor geaggregeerde data (ouder dan 24 uur)
-            $aggregatedQuery = "SELECT 
-                SUM(total_visits) as totalVisitors, 
-                SUM(total_page_views) as totalPageViews, 
-                AVG(total_session_duration) as averageDuration, 
-                SUM(total_bounces) as totalBounces 
+            $aggregatedQuery = "SELECT
+                SUM(total_visits) as totalVisitors,
+                SUM(total_page_views) as totalPageViews,
+                AVG(total_session_duration) as averageDuration,
+                SUM(total_bounces) as totalBounces
                 FROM analytics_aggregated " . $aggregatedWhereClause;
-            
-            // Voer beide queries uit
+
+            // Voer query voor huidige data uit
             $stmt = $this->pdo->prepare($currentQuery);
             $stmt->execute($startDate && $endDate ? [$siteId, $startDate, $endDate] : [$siteId]);
             $currentResult = $stmt->fetch();
-            
-            $stmt = $this->pdo->prepare($aggregatedQuery);
-            $stmt->execute($startDate && $endDate ? [$siteId, $startDate, $endDate] : [$siteId]);
-            $aggregatedResult = $stmt->fetch();
+
+            // Controleer of de geaggregeerde tabel bestaat
+            $aggregatedResult = [
+                'totalVisitors' => 0,
+                'totalPageViews' => 0,
+                'averageDuration' => 0,
+                'totalBounces' => 0
+            ];
+            $stmt = $this->pdo->prepare("SHOW TABLES LIKE 'analytics_aggregated'");
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $stmt = $this->pdo->prepare($aggregatedQuery);
+                $stmt->execute($startDate && $endDate ? [$siteId, $startDate, $endDate] : [$siteId]);
+                $aggregatedResult = $stmt->fetch();
+            }
             
             // Combineer resultaten
             $result = [
@@ -197,22 +208,10 @@ class Analytics {
 
     public function getBounceRate($startDate = null, $endDate = null, $siteId = null) {
         try {
-            if ($siteId === null) {
-                $siteId = $this->getCurrentSiteId();
-            }
-            $whereClause = "WHERE site_id = ? AND page_url NOT LIKE '%?e=%' AND page_url NOT LIKE '%?channel=%' AND page_url NOT LIKE '%?from=%' AND page_url NOT LIKE '%?utm_%' AND page_url NOT LIKE '%?fbclid=%' AND page_url NOT LIKE '%?gclid=%' AND LENGTH(page_url) < 200";
-            $params = [$siteId];
-
-            if ($startDate && $endDate) {
-                $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
-                $params[] = $startDate;
-                $params[] = $endDate;
-            }
-
-            $stmt = $this->pdo->prepare("SELECT ROUND((SUM(bounced) * 100.0 / COUNT(*)), 2) as bounce_rate FROM analytics " . $whereClause);
-            $stmt->execute($params);
-            $result = $stmt->fetch();
-            return (float)($result['bounce_rate'] ?? 0);
+            $stats = $this->getStats($startDate, $endDate, $siteId);
+            $totalVisits = $stats['totalVisitors'] ?? 0;
+            $totalBounces = $stats['totalBounces'] ?? 0;
+            return $totalVisits > 0 ? round(($totalBounces * 100.0) / $totalVisits, 2) : 0;
         } catch (Exception $e) {
             error_log("Error in getBounceRate: " . $e->getMessage());
             return 0;
