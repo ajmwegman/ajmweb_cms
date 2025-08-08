@@ -93,14 +93,18 @@ class AdvancedAnalytics {
         $stmt->execute([$ipAddress, $userAgent]);
         $row = $stmt->fetch();
         
+        // Get current site_id based on domain
+        $currentDomain = $_SERVER['HTTP_HOST'] ?? 'default';
+        $siteId = $this->getSiteId($currentDomain);
+        
         if ($row) {
             // Update existing record
             $stmt = $this->pdo->prepare("UPDATE analytics SET page_views = page_views + 1, bounced = 0, page_url = ?, visit_time = NOW() WHERE id = ?");
             $stmt->execute([$pageUrl, $row['id']]);
         } else {
             // Insert new record
-            $stmt = $this->pdo->prepare("INSERT INTO analytics (session_id, ip_address, user_agent, country_code, referer_url, browser, is_mobile, session_start, visit_time, page_url, page_views, bounced) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?, 1, 0)");
-            $stmt->execute([$sessionId, $ipAddress, $userAgent, $countryCode, $referer, $browser, $isMobile, $pageUrl]);
+            $stmt = $this->pdo->prepare("INSERT INTO analytics (site_id, session_id, ip_address, user_agent, country_code, referer_url, browser, is_mobile, session_start, visit_time, page_url, page_views, bounced) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), ?, 1, 0)");
+            $stmt->execute([$siteId, $sessionId, $ipAddress, $userAgent, $countryCode, $referer, $browser, $isMobile ? 1 : 0, $pageUrl]);
         }
     } catch (Exception $e) {
         // Log error but don't break the application
@@ -118,6 +122,7 @@ class AdvancedAnalytics {
                 // Create analytics table
                 $sql = "CREATE TABLE analytics (
                     id INT AUTO_INCREMENT PRIMARY KEY,
+                    site_id INT DEFAULT 1,
                     session_id VARCHAR(255),
                     ip_address VARCHAR(45),
                     user_agent TEXT,
@@ -133,10 +138,21 @@ class AdvancedAnalytics {
                     session_duration INT DEFAULT 0,
                     INDEX idx_ip_useragent (ip_address, user_agent),
                     INDEX idx_visit_time (visit_time),
-                    INDEX idx_page_url (page_url)
+                    INDEX idx_page_url (page_url),
+                    INDEX idx_site_id (site_id)
                 )";
                 $this->pdo->exec($sql);
             } else {
+                // Check if site_id column exists
+                $stmt = $this->pdo->prepare("SHOW COLUMNS FROM analytics LIKE 'site_id'");
+                $stmt->execute();
+                
+                if ($stmt->rowCount() == 0) {
+                    // Add site_id column
+                    $this->pdo->exec("ALTER TABLE analytics ADD COLUMN site_id INT DEFAULT 1 AFTER id");
+                    $this->pdo->exec("CREATE INDEX idx_site_id ON analytics(site_id)");
+                }
+                
                 // Check if bounced column exists
                 $stmt = $this->pdo->prepare("SHOW COLUMNS FROM analytics LIKE 'bounced'");
                 $stmt->execute();
@@ -199,6 +215,33 @@ class AdvancedAnalytics {
         } catch (PDOException $e) {
             error_log("Fout bij het berekenen van de gemiddelde sessieduur: " . $e->getMessage());
             return 0;
+        }
+    }
+    
+    private function getSiteId($domain) {
+        try {
+            // Check if sites table exists
+            $stmt = $this->pdo->prepare("SHOW TABLES LIKE 'sites'");
+            $stmt->execute();
+            
+            if ($stmt->rowCount() == 0) {
+                return 1; // Default site_id
+            }
+            
+            // Get site_id for domain
+            $stmt = $this->pdo->prepare("SELECT id FROM sites WHERE domain = ? AND status = 'active'");
+            $stmt->execute([$domain]);
+            $result = $stmt->fetch();
+            
+            if ($result) {
+                return $result['id'];
+            }
+            
+            // If domain not found, return default site_id
+            return 1;
+        } catch (Exception $e) {
+            error_log("Error getting site_id: " . $e->getMessage());
+            return 1; // Default site_id
         }
     }
     

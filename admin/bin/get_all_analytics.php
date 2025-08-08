@@ -7,16 +7,17 @@ header('Content-Type: application/json');
 try {
     $analytics = new Analytics($pdo);
     
-    // Get date range from request
+    // Get date range and site_id from request
     $input = json_decode(file_get_contents('php://input'), true);
     $startDate = $input['startDate'] ?? date('Y-m-01');
     $endDate = $input['endDate'] ?? date('Y-m-d');
+    $siteId = $input['siteId'] ?? null;
     
-    // Fetch all analytics data for the date range
-    $stats = $analytics->getEnhancedStats($startDate, $endDate);
-    $deviceBreakdown = $analytics->getDeviceBreakdown($startDate, $endDate);
-    $browserBreakdown = $analytics->getBrowserBreakdown($startDate, $endDate);
-    $topPages = $analytics->getTopPages(10, $startDate, $endDate);
+    // Fetch all analytics data for the date range and site
+    $stats = $analytics->getEnhancedStats($startDate, $endDate, $siteId);
+    $deviceBreakdown = $analytics->getDeviceBreakdown($startDate, $endDate, $siteId);
+    $browserBreakdown = $analytics->getBrowserBreakdown($startDate, $endDate, $siteId);
+    $topPages = $analytics->getTopPages(10, $startDate, $endDate, $siteId);
     
     echo json_encode([
         'success' => true,

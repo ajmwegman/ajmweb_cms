@@ -1,5 +1,8 @@
 <?php 
-$stats = $analytics->getEnhancedStats(); 
+// Get all available sites
+$sites = $analytics->getAllSites();
+$currentSiteId = isset($_GET['site_id']) ? (int)$_GET['site_id'] : $analytics->getCurrentSiteId();
+$stats = $analytics->getEnhancedStats(null, null, $currentSiteId); 
 ?>
 
 <style>
@@ -224,6 +227,49 @@ $stats = $analytics->getEnhancedStats();
 </style>
 
 <div class="container mt-5">
+  <!-- Site Selector Card - Top -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="bi bi-globe"></i> Site Selectie</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="siteSelector" class="form-label">
+                  <i class="bi bi-building"></i> Selecteer Website
+                </label>
+                <select id="siteSelector" name="site_id" class="form-control" onchange="changeSite()">
+                  <?php foreach ($sites as $site): ?>
+                    <option value="<?php echo $site['id']; ?>" <?php echo ($site['id'] == $currentSiteId) ? 'selected' : ''; ?>>
+                      <?php echo htmlspecialchars($site['name']); ?> (<?php echo htmlspecialchars($site['domain']); ?>)
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="site-info">
+                <div class="info-display">
+                  <span class="info-label">Huidige site:</span>
+                  <span class="info-value" id="currentSiteDisplay">
+                    <?php 
+                    $currentSite = array_filter($sites, function($site) use ($currentSiteId) { return $site['id'] == $currentSiteId; });
+                    $currentSite = reset($currentSite);
+                    echo htmlspecialchars($currentSite['name'] ?? 'Onbekend'); 
+                    ?>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Date Range Control Card - Top -->
   <div class="row mb-4">
     <div class="col-12">
@@ -898,6 +944,19 @@ $stats = $analytics->getEnhancedStats();
     }
   });
   
+  // Functie om van site te wisselen
+  function changeSite() {
+    try {
+      var siteId = document.getElementById('siteSelector').value;
+      var currentUrl = new URL(window.location);
+      currentUrl.searchParams.set('site_id', siteId);
+      window.location.href = currentUrl.toString();
+    } catch (error) {
+      console.error('Error changing site:', error);
+      alert('Fout bij wisselen van site: ' + error.message);
+    }
+  }
+  
   // Functie om alle analytics data bij te werken wanneer de datumkiezers worden gewijzigd
   function updateAllAnalytics() {
     try {
@@ -922,10 +981,11 @@ $stats = $analytics->getEnhancedStats();
       // Toon loading state
       showLoadingState();
 
-      // Haal alle analytics data op voor de geselecteerde datum range
+      // Haal alle analytics data op voor de geselecteerde datum range en site
+      var siteId = document.getElementById('siteSelector').value;
       fetch('/admin/bin/get_all_analytics.php', {
         method: 'POST',
-        body: JSON.stringify({ startDate: startDate, endDate: endDate }),
+        body: JSON.stringify({ startDate: startDate, endDate: endDate, siteId: siteId }),
         headers: {
           'Content-Type': 'application/json'
         }

@@ -16,6 +16,7 @@ try {
     
     $startDate = $data['startDate'] ?? date('Y-m-01');
     $endDate = $data['endDate'] ?? date('Y-m-d');
+    $siteId = $data['siteId'] ?? null;
 
     // Validate dates
     if (!$startDate || !$endDate) {
@@ -27,7 +28,7 @@ try {
     }
 
     // Roep de getVisitorCountsByDay()-functie aan om gegevens op te halen
-    $result = $analytics->getVisitorCountsByDay($startDate, $endDate);
+    $result = $analytics->getVisitorCountsByDay($startDate, $endDate, $siteId);
 
     // Check if there's an error in the result
     if (isset($result['error'])) {

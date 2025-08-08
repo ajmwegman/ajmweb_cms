@@ -6,20 +6,120 @@ class Analytics {
     public function __construct($pdo) {
         $this->pdo = $pdo;
     }
-
-    public function getStats($startDate = null, $endDate = null) {
+    
+    private function getCurrentSiteId() {
         try {
-            $whereClause = "";
-            $params = [];
+            // Check if sites table exists
+            $stmt = $this->pdo->prepare("SHOW TABLES LIKE 'sites'");
+            $stmt->execute();
             
-            if ($startDate && $endDate) {
-                $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
-                $params = [$startDate, $endDate];
+            if ($stmt->rowCount() == 0) {
+                return 1; // Default site_id
             }
             
-            $stmt = $this->pdo->prepare("SELECT COUNT(*) as totalVisitors, SUM(page_views) as totalPageViews, AVG(session_duration) as averageDuration, SUM(bounced) as totalBounces FROM analytics " . $whereClause);
-            $stmt->execute($params);
+            // Get current domain
+            $currentDomain = $_SERVER['HTTP_HOST'] ?? 'default';
+            
+            // Get site_id for domain
+            $stmt = $this->pdo->prepare("SELECT id FROM sites WHERE domain = ? AND status = 'active'");
+            $stmt->execute([$currentDomain]);
             $result = $stmt->fetch();
+            
+            if ($result) {
+                return $result['id'];
+            }
+            
+            // If domain not found, return default site_id
+            return 1;
+        } catch (Exception $e) {
+            error_log("Error getting current site_id: " . $e->getMessage());
+            return 1; // Default site_id
+        }
+    }
+    
+    public function getAllSites() {
+        try {
+            // Check if sites table exists
+            $stmt = $this->pdo->prepare("SHOW TABLES LIKE 'sites'");
+            $stmt->execute();
+            
+            if ($stmt->rowCount() == 0) {
+                return [['id' => 1, 'domain' => 'default', 'name' => 'Default Site']];
+            }
+            
+            $stmt = $this->pdo->prepare("SELECT id, domain, name, description, status FROM sites WHERE status = 'active' ORDER BY name");
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            error_log("Error getting all sites: " . $e->getMessage());
+            return [['id' => 1, 'domain' => 'default', 'name' => 'Default Site']];
+        }
+    }
+
+    public function getStats($startDate = null, $endDate = null, $siteId = null) {
+        try {
+            // Get site_id if not provided
+            if ($siteId === null) {
+                $siteId = $this->getCurrentSiteId();
+            }
+            
+            // Combineer data uit beide tabellen
+            $currentWhereClause = "WHERE site_id = ? 
+                                 AND page_url NOT LIKE '%?e=%' 
+                                 AND page_url NOT LIKE '%?channel=%' 
+                                 AND page_url NOT LIKE '%?from=%' 
+                                 AND page_url NOT LIKE '%?utm_%' 
+                                 AND page_url NOT LIKE '%?fbclid=%' 
+                                 AND page_url NOT LIKE '%?gclid=%' 
+                                 AND LENGTH(page_url) < 200";
+            $aggregatedWhereClause = "WHERE site_id = ? 
+                                    AND page_url NOT LIKE '%?e=%' 
+                                    AND page_url NOT LIKE '%?channel=%' 
+                                    AND page_url NOT LIKE '%?from=%' 
+                                    AND page_url NOT LIKE '%?utm_%' 
+                                    AND page_url NOT LIKE '%?fbclid=%' 
+                                    AND page_url NOT LIKE '%?gclid=%' 
+                                    AND LENGTH(page_url) < 200";
+            $params = [$siteId];
+            
+            if ($startDate && $endDate) {
+                $currentWhereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
+                $aggregatedWhereClause .= " AND date_key BETWEEN ? AND ?";
+                $params = array_merge($params, [$startDate, $endDate, $startDate, $endDate]);
+            }
+            
+            // Query voor huidige data (laatste 24 uur)
+            $currentQuery = "SELECT 
+                COUNT(*) as totalVisitors, 
+                SUM(page_views) as totalPageViews, 
+                AVG(session_duration) as averageDuration, 
+                SUM(bounced) as totalBounces 
+                FROM analytics " . $currentWhereClause;
+            
+            // Query voor geaggregeerde data (ouder dan 24 uur)
+            $aggregatedQuery = "SELECT 
+                SUM(total_visits) as totalVisitors, 
+                SUM(total_page_views) as totalPageViews, 
+                AVG(total_session_duration) as averageDuration, 
+                SUM(total_bounces) as totalBounces 
+                FROM analytics_aggregated " . $aggregatedWhereClause;
+            
+            // Voer beide queries uit
+            $stmt = $this->pdo->prepare($currentQuery);
+            $stmt->execute($startDate && $endDate ? [$siteId, $startDate, $endDate] : [$siteId]);
+            $currentResult = $stmt->fetch();
+            
+            $stmt = $this->pdo->prepare($aggregatedQuery);
+            $stmt->execute($startDate && $endDate ? [$siteId, $startDate, $endDate] : [$siteId]);
+            $aggregatedResult = $stmt->fetch();
+            
+            // Combineer resultaten
+            $result = [
+                'totalVisitors' => ($currentResult['totalVisitors'] ?? 0) + ($aggregatedResult['totalVisitors'] ?? 0),
+                'totalPageViews' => ($currentResult['totalPageViews'] ?? 0) + ($aggregatedResult['totalPageViews'] ?? 0),
+                'averageDuration' => ($currentResult['averageDuration'] ?? 0) + ($aggregatedResult['averageDuration'] ?? 0),
+                'totalBounces' => ($currentResult['totalBounces'] ?? 0) + ($aggregatedResult['totalBounces'] ?? 0)
+            ];
             
             // Ensure we have valid numeric values
             return [
@@ -73,11 +173,17 @@ class Analytics {
     
     public function getUniqueVisitors($startDate = null, $endDate = null) {
         try {
-            $whereClause = "";
+            $whereClause = "WHERE page_url NOT LIKE '%?e=%' 
+                           AND page_url NOT LIKE '%?channel=%' 
+                           AND page_url NOT LIKE '%?from=%' 
+                           AND page_url NOT LIKE '%?utm_%' 
+                           AND page_url NOT LIKE '%?fbclid=%' 
+                           AND page_url NOT LIKE '%?gclid=%' 
+                           AND LENGTH(page_url) < 200";
             $params = [];
             
             if ($startDate && $endDate) {
-                $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+                $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
                 $params = [$startDate, $endDate];
             }
             
@@ -93,11 +199,17 @@ class Analytics {
 
     public function getBounceRate($startDate = null, $endDate = null) {
         try {
-            $whereClause = "";
+            $whereClause = "WHERE page_url NOT LIKE '%?e=%' 
+                           AND page_url NOT LIKE '%?channel=%' 
+                           AND page_url NOT LIKE '%?from=%' 
+                           AND page_url NOT LIKE '%?utm_%' 
+                           AND page_url NOT LIKE '%?fbclid=%' 
+                           AND page_url NOT LIKE '%?gclid=%' 
+                           AND LENGTH(page_url) < 200";
             $params = [];
             
             if ($startDate && $endDate) {
-                $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+                $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
                 $params = [$startDate, $endDate];
             }
             
@@ -117,7 +229,14 @@ class Analytics {
 
     public function getAvgPagesPerSession($startDate = null, $endDate = null) {
         try {
-            $whereClause = "WHERE page_views > 0";
+            $whereClause = "WHERE page_views > 0 
+                           AND page_url NOT LIKE '%?e=%' 
+                           AND page_url NOT LIKE '%?channel=%' 
+                           AND page_url NOT LIKE '%?from=%' 
+                           AND page_url NOT LIKE '%?utm_%' 
+                           AND page_url NOT LIKE '%?fbclid=%' 
+                           AND page_url NOT LIKE '%?gclid=%' 
+                           AND LENGTH(page_url) < 200";
             $params = [];
             
             if ($startDate && $endDate) {
@@ -140,7 +259,14 @@ class Analytics {
     }
 
     public function getTopReferrers($limit = 5, $startDate = null, $endDate = null) {
-        $whereClause = "WHERE referer_url != 'unknown'";
+        $whereClause = "WHERE referer_url != 'unknown' 
+                       AND page_url NOT LIKE '%?e=%' 
+                       AND page_url NOT LIKE '%?channel=%' 
+                       AND page_url NOT LIKE '%?from=%' 
+                       AND page_url NOT LIKE '%?utm_%' 
+                       AND page_url NOT LIKE '%?fbclid=%' 
+                       AND page_url NOT LIKE '%?gclid=%' 
+                       AND LENGTH(page_url) < 200";
         $params = [];
         
         if ($startDate && $endDate) {
@@ -164,11 +290,17 @@ class Analytics {
 
     public function getDeviceBreakdown($startDate = null, $endDate = null) {
         try {
-            $whereClause = "";
+            $whereClause = "WHERE page_url NOT LIKE '%?e=%' 
+                           AND page_url NOT LIKE '%?channel=%' 
+                           AND page_url NOT LIKE '%?from=%' 
+                           AND page_url NOT LIKE '%?utm_%' 
+                           AND page_url NOT LIKE '%?fbclid=%' 
+                           AND page_url NOT LIKE '%?gclid=%' 
+                           AND LENGTH(page_url) < 200";
             $params = [];
             
             if ($startDate && $endDate) {
-                $whereClause = "WHERE DATE(visit_time) BETWEEN ? AND ?";
+                $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
                 $params = [$startDate, $endDate];
             }
             
@@ -247,7 +379,14 @@ class Analytics {
 
     public function getBrowserBreakdown($startDate = null, $endDate = null) {
         try {
-            $whereClause = "WHERE browser != 'unknown'";
+            $whereClause = "WHERE browser != 'unknown' 
+                           AND page_url NOT LIKE '%?e=%' 
+                           AND page_url NOT LIKE '%?channel=%' 
+                           AND page_url NOT LIKE '%?from=%' 
+                           AND page_url NOT LIKE '%?utm_%' 
+                           AND page_url NOT LIKE '%?fbclid=%' 
+                           AND page_url NOT LIKE '%?gclid=%' 
+                           AND LENGTH(page_url) < 200";
             $params = [];
             
             if ($startDate && $endDate) {
@@ -358,7 +497,14 @@ class Analytics {
     }
 
     public function getConversionRate($startDate = null, $endDate = null) {
-        $whereClause = "WHERE session_duration > 300";
+        $whereClause = "WHERE session_duration > 300 
+                       AND page_url NOT LIKE '%?e=%' 
+                       AND page_url NOT LIKE '%?channel=%' 
+                       AND page_url NOT LIKE '%?from=%' 
+                       AND page_url NOT LIKE '%?utm_%' 
+                       AND page_url NOT LIKE '%?fbclid=%' 
+                       AND page_url NOT LIKE '%?gclid=%' 
+                       AND LENGTH(page_url) < 200";
         $params = [];
         
         if ($startDate && $endDate) {
