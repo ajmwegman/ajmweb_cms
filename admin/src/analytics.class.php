@@ -411,18 +411,20 @@ class Analytics {
                 ];
             }
             
-            // Verbeterde device detection met user agent parsing
+            // Simplified device detection based on user_agent
             $stmt = $this->pdo->prepare("
                 SELECT 
                     CASE 
-                        WHEN is_mobile = 1 AND (
-                            user_agent LIKE '%iPad%' OR 
-                            user_agent LIKE '%Android%' AND user_agent LIKE '%Tablet%' OR
-                            user_agent LIKE '%PlayBook%' OR
-                            user_agent LIKE '%Silk%' OR
-                            user_agent LIKE '%Kindle%'
-                        ) THEN 'Tablet'
-                        WHEN is_mobile = 1 THEN 'Mobile'
+                        WHEN user_agent LIKE '%iPad%' 
+                            OR user_agent LIKE '%Android%Tablet%' 
+                            OR user_agent LIKE '%PlayBook%' 
+                            OR user_agent LIKE '%Silk%' 
+                            OR user_agent LIKE '%Kindle%' THEN 'Tablet'
+                        WHEN user_agent LIKE '%Mobile%' 
+                            OR user_agent LIKE '%Android%' 
+                            OR user_agent LIKE '%iPhone%' 
+                            OR user_agent LIKE '%BlackBerry%' 
+                            OR user_agent LIKE '%Windows Phone%' THEN 'Mobile'
                         ELSE 'Desktop'
                     END as device,
                     COUNT(*) as count,
@@ -485,10 +487,19 @@ class Analytics {
                 $params[] = $endDate;
             }
             
+            // Debug: Check what we're searching for
+            error_log("getBrowserBreakdown - siteId: " . $siteId);
+            error_log("getBrowserBreakdown - startDate: " . $startDate);
+            error_log("getBrowserBreakdown - endDate: " . $endDate);
+            error_log("getBrowserBreakdown - whereClause: " . $whereClause);
+            error_log("getBrowserBreakdown - params: " . print_r($params, true));
+            
             // Eerst controleren of er data is
             $checkStmt = $this->pdo->prepare("SELECT COUNT(*) as total FROM analytics " . $whereClause);
             $checkStmt->execute($params);
             $totalRecords = $checkStmt->fetch()['total'];
+            
+            error_log("getBrowserBreakdown - totalRecords found: " . $totalRecords);
             
             if ($totalRecords == 0) {
                 // Geen data, return dummy data
