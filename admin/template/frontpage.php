@@ -1098,7 +1098,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         
         const browserIcons = {
           'Chrome': 'bi-google',
-          'Firefox': 'bi-browser-firefox',
+          'Firefox': 'bi-fire',
           'Safari': 'bi-apple',
           'Edge': 'bi-microsoft',
           'Opera': 'bi-browser-chrome',
@@ -1148,7 +1148,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         if (browserStats) {
           let statsHtml = '<div class="row text-center">';
           browserData.forEach(item => {
-            const icon = browserIcons[item.browser] || 'bi-browser-chrome';
+            const icon = browserIcons[item.browser] || 'bi-globe';
             const color = browserColors[item.browser] || '#6c757d';
             
             statsHtml += `
@@ -1544,7 +1544,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         
         const browserIcons = {
           'Chrome': 'bi-google',
-          'Firefox': 'bi-browser-firefox',
+          'Firefox': 'bi-fire',
           'Safari': 'bi-apple',
           'Edge': 'bi-microsoft',
           'Opera': 'bi-browser-chrome',
@@ -1594,7 +1594,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         if (browserStats) {
           let statsHtml = '<div class="row text-center">';
           browserData.forEach(item => {
-            const icon = browserIcons[item.browser] || 'bi-browser-chrome';
+            const icon = browserIcons[item.browser] || 'bi-globe';
             const color = browserColors[item.browser] || '#6c757d';
             
             statsHtml += `
