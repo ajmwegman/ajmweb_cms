@@ -301,6 +301,13 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     font-weight: 500;
   }
   
+  /* Chart Container Fix for Infinite Height Issue */
+  #browserChart, #deviceChart {
+    max-height: 300px !important;
+    height: 300px !important;
+    width: 100% !important;
+  }
+  
   /* Breakdown Cards Modern Styling */
   .breakdown-card {
     max-width: 300px;
@@ -983,7 +990,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           },
           options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
+            aspectRatio: 1.2,
             plugins: {
               legend: {
                 position: 'bottom',
@@ -1110,7 +1118,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           },
           options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
+            aspectRatio: 1.2,
             plugins: {
               legend: {
                 position: 'bottom',
@@ -1451,7 +1460,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           },
           options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
+            aspectRatio: 1.2,
             plugins: {
               legend: {
                 position: 'bottom',
@@ -1554,7 +1564,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           },
           options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
+            aspectRatio: 1.2,
             plugins: {
               legend: {
                 position: 'bottom',
