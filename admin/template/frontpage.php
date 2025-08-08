@@ -949,6 +949,12 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       console.log('Device data:', deviceData);
       
       if (deviceData && deviceData.length > 0) {
+        // Destroy existing chart if it exists
+        const existingChart = Chart.getChart('deviceChart');
+        if (existingChart) {
+          existingChart.destroy();
+        }
+        
         const ctx = document.getElementById('deviceChart').getContext('2d');
         
         // Device-specifieke kleuren en iconen
@@ -1039,12 +1045,37 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   }
   
   // Browser chart
+  let browserChartGenerating = false;
   function generateBrowserChart() {
+    if (browserChartGenerating) {
+      console.log('generateBrowserChart already running, skipping...');
+      return;
+    }
+    
     try {
+      browserChartGenerating = true;
+      console.log('generateBrowserChart called');
       const browserData = <?php echo json_encode($stats['browserBreakdown']); ?>;
       console.log('Browser data:', browserData);
       
+      // Validate data
+      if (!browserData) {
+        console.log('No browserData received');
+        return;
+      }
+      
+      if (!Array.isArray(browserData)) {
+        console.error('browserData is not an array:', typeof browserData);
+        return;
+      }
+      
       if (browserData && browserData.length > 0) {
+        // Destroy existing chart if it exists
+        const existingChart = Chart.getChart('browserChart');
+        if (existingChart) {
+          existingChart.destroy();
+        }
+        
         const ctx = document.getElementById('browserChart').getContext('2d');
         
         // Browser-specifieke kleuren en iconen
@@ -1137,6 +1168,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       }
     } catch (error) {
       console.error('Error generating browser chart:', error);
+    } finally {
+      browserChartGenerating = false;
     }
   }
   
