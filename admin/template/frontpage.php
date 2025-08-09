@@ -49,6 +49,9 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('month')">
           <i class="bi bi-calendar-month"></i> Deze maand
         </button>
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('year')">
+          <i class="bi bi-calendar-year"></i> Dit jaar
+        </button>
       </div>
       <div class="range-display">
         <span id="dateRangeDisplay">
@@ -1746,11 +1749,17 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
        case 'week':
          const startOfWeek = new Date(today);
          startOfWeek.setDate(today.getDate() - today.getDay());
+         const endOfWeek = new Date(startOfWeek);
+         endOfWeek.setDate(startOfWeek.getDate() + 6);
          startDate = startOfWeek.toISOString().split('T')[0];
-         endDate = today.toISOString().split('T')[0];
+         endDate = endOfWeek.toISOString().split('T')[0];
          break;
        case 'month':
          startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+         endDate = today.toISOString().split('T')[0];
+         break;
+       case 'year':
+         startDate = new Date(today.getFullYear(), 0, 1).toISOString().split('T')[0];
          endDate = today.toISOString().split('T')[0];
          break;
        default:
