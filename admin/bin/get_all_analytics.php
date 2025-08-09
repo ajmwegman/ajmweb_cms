@@ -19,7 +19,6 @@ try {
     $browserBreakdown = $analytics->getBrowserBreakdown($startDate, $endDate, $siteId);
     $topPages = $analytics->getTopPages(10, $startDate, $endDate, $siteId);
     $referralSources = $analytics->getReferralSources(10, $startDate, $endDate, $siteId);
-    $topSearchKeywords = $analytics->getTopSearchKeywords(10, $startDate, $endDate, $siteId);
     
     echo json_encode([
         'success' => true,
@@ -27,8 +26,7 @@ try {
         'deviceBreakdown' => $deviceBreakdown,
         'browserBreakdown' => $browserBreakdown,
         'topPages' => $topPages,
-        'referralSources' => $referralSources,
-        'topSearchKeywords' => $topSearchKeywords
+        'referralSources' => $referralSources
     ]);
     
 } catch (Exception $e) {

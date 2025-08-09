@@ -199,7 +199,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     </div>
   </div>
   
-  <!-- Referral Bronnen & Zoekwoorden -->
+  <!-- Referral Bronnen -->
   <div class="row mb-4">
     <!-- Referral Bronnen -->
     <div class="col-md-6 mb-3">
@@ -223,36 +223,6 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
                 </thead>
                 <tbody id="referralSourcesTable">
                   <!-- Referral sources worden hier geladen -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Zoekwoorden -->
-    <div class="col-md-6 mb-3">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5><i class="bi bi-search"></i> Zoekwoorden</h5>
-          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#searchKeywordsCard" aria-expanded="true">
-            <i class="bi bi-chevron-up"></i>
-          </button>
-        </div>
-        <div id="searchKeywordsCard" class="collapse show">
-          <div class="card-body">
-            <div class="table-responsive search-keywords-table-container">
-              <table class="table table-sm">
-                <thead>
-                  <tr>
-                    <th>Zoekwoord</th>
-                    <th>Bezoeken</th>
-                    <th>%</th>
-                  </tr>
-                </thead>
-                <tbody id="searchKeywordsTable">
-                  <!-- Search keywords worden hier geladen -->
                 </tbody>
               </table>
             </div>
@@ -337,7 +307,6 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         generateDeviceChart();
         generateBrowserChart();
         generateReferralSourcesTable();
-        generateSearchKeywordsTable();
         generateTopPagesTable();
         
         // Initialize performance chart
@@ -1091,7 +1060,6 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           updateDeviceChart(data.deviceBreakdown);
           updateBrowserChart(data.browserBreakdown);
           updateReferralSourcesTable(data.referralSources);
-          updateSearchKeywordsTable(data.topSearchKeywords);
           updateTopPagesTable(data.topPages);
           
           // Update main performance chart
