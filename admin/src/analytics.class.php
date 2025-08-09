@@ -160,6 +160,7 @@ class Analytics {
                 'bounceRate' => $this->getBounceRate($startDate, $endDate, $siteId),
                 'avgPagesPerSession' => $this->getAvgPagesPerSession($startDate, $endDate, $siteId),
                 'topReferrers' => $this->getTopReferrers(5, $startDate, $endDate, $siteId),
+                'referralSources' => $this->getReferralSources(10, $startDate, $endDate, $siteId),
                 'topSearchKeywords' => $this->getTopSearchKeywords(10, $startDate, $endDate, $siteId),
                 'deviceBreakdown' => $this->getDeviceBreakdown($startDate, $endDate, $siteId),
                 'browserBreakdown' => $this->getBrowserBreakdown($startDate, $endDate, $siteId),
@@ -176,6 +177,7 @@ class Analytics {
                 'bounceRate' => 0,
                 'avgPagesPerSession' => 0,
                 'topReferrers' => [],
+                'referralSources' => [],
                 'topSearchKeywords' => [],
                 'deviceBreakdown' => [],
                 'browserBreakdown' => [],
@@ -277,6 +279,48 @@ class Analytics {
         ");
         $stmt->execute($params);
         return $stmt->fetchAll();
+    }
+
+    public function getReferralSources($limit = 10, $startDate = null, $endDate = null, $siteId = null) {
+        try {
+            if ($siteId === null) {
+                $siteId = $this->getCurrentSiteId();
+            }
+            
+            $whereClause = "WHERE site_id = ? AND referer_url IS NOT NULL AND referer_url != ''";
+            $params = [$siteId];
+            
+            if ($startDate && $endDate) {
+                $whereClause .= " AND DATE(visit_time) BETWEEN ? AND ?";
+                $params[] = $startDate;
+                $params[] = $endDate;
+            }
+            
+            // Get referral sources (domains only)
+            $stmt = $this->pdo->prepare("
+                SELECT 
+                    CASE 
+                        WHEN referer_url LIKE 'http%' THEN 
+                            SUBSTRING_INDEX(SUBSTRING_INDEX(REPLACE(REPLACE(referer_url, 'https://', ''), 'http://', ''), '/', 1), '?', 1)
+                        ELSE 'Direct bezoek'
+                    END as source,
+                    COUNT(*) as count,
+                    ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM analytics " . $whereClause . ")), 2) as percentage
+                FROM analytics " . $whereClause . "
+                GROUP BY source
+                ORDER BY count DESC
+                LIMIT ?
+            ");
+            
+            $doubleParams = array_merge($params, $params, [$limit]);
+            $stmt->execute($doubleParams);
+            
+            return $stmt->fetchAll();
+            
+        } catch (PDOException $e) {
+            error_log("Error in getReferralSources: " . $e->getMessage());
+            return [];
+        }
     }
 
     public function getTopSearchKeywords($limit = 10, $startDate = null, $endDate = null, $siteId = null) {

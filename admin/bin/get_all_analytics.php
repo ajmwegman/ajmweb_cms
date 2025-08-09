@@ -18,6 +18,7 @@ try {
     $deviceBreakdown = $analytics->getDeviceBreakdown($startDate, $endDate, $siteId);
     $browserBreakdown = $analytics->getBrowserBreakdown($startDate, $endDate, $siteId);
     $topPages = $analytics->getTopPages(10, $startDate, $endDate, $siteId);
+    $referralSources = $analytics->getReferralSources(10, $startDate, $endDate, $siteId);
     $topSearchKeywords = $analytics->getTopSearchKeywords(10, $startDate, $endDate, $siteId);
     
     echo json_encode([
@@ -26,6 +27,7 @@ try {
         'deviceBreakdown' => $deviceBreakdown,
         'browserBreakdown' => $browserBreakdown,
         'topPages' => $topPages,
+        'referralSources' => $referralSources,
         'topSearchKeywords' => $topSearchKeywords
     ]);
     

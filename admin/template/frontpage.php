@@ -83,60 +83,76 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   <div class="row mb-4">
     <div class="col-3 mb-3">
       <div class="card stats-card">
-        <div class="card-body text-center">
-          <div class="stats-icon">
-            <i class="bi bi-people-fill"></i>
+        <div class="card-header d-flex justify-content-between align-items-center p-2">
+          <h6 class="mb-0"><i class="bi bi-people-fill me-1"></i> Bezoekers</h6>
+          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#visitorsCard" aria-expanded="true">
+            <i class="bi bi-chevron-up"></i>
+          </button>
+        </div>
+        <div id="visitorsCard" class="collapse show">
+          <div class="card-body text-center">
+            <div class="stats-number">
+              <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo $stats['totalVisitors']; ?>" data-purecounter-duration="2">0</span>
+            </div>
+            <div class="stats-subtitle">Unieke: <?php echo $stats['uniqueVisitors']; ?></div>
           </div>
-          <h5 class="card-title">Totaal Bezoekers</h5>
-          <div class="stats-number">
-            <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo $stats['totalVisitors']; ?>" data-purecounter-duration="2">0</span>
-          </div>
-          <div class="stats-subtitle">Unieke: <?php echo $stats['uniqueVisitors']; ?></div>
         </div>
       </div>
     </div>
     
     <div class="col-3 mb-3">
       <div class="card stats-card">
-        <div class="card-body text-center">
-          <div class="stats-icon">
-            <i class="bi bi-eye-fill"></i>
+        <div class="card-header d-flex justify-content-between align-items-center p-2">
+          <h6 class="mb-0"><i class="bi bi-eye-fill me-1"></i> Paginaweergaven</h6>
+          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#pageViewsCard" aria-expanded="true">
+            <i class="bi bi-chevron-up"></i>
+          </button>
+        </div>
+        <div id="pageViewsCard" class="collapse show">
+          <div class="card-body text-center">
+            <div class="stats-number">
+              <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo $stats['totalPageViews']; ?>" data-purecounter-duration="2">0</span>
+            </div>
+            <div class="stats-subtitle">Gem. <?php echo $stats['avgPagesPerSession']; ?> per sessie</div>
           </div>
-          <h5 class="card-title">Page Views</h5>
-          <div class="stats-number">
-            <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo $stats['totalPageViews']; ?>" data-purecounter-duration="2">0</span>
-          </div>
-          <div class="stats-subtitle">Gem. <?php echo $stats['avgPagesPerSession']; ?> per sessie</div>
         </div>
       </div>
     </div>
     
     <div class="col-3 mb-3">
       <div class="card stats-card">
-        <div class="card-body text-center">
-          <div class="stats-icon">
-            <i class="bi bi-clock-fill"></i>
+        <div class="card-header d-flex justify-content-between align-items-center p-2">
+          <h6 class="mb-0"><i class="bi bi-clock-fill me-1"></i> Sessieduur</h6>
+          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#sessionDurationCard" aria-expanded="true">
+            <i class="bi bi-chevron-up"></i>
+          </button>
+        </div>
+        <div id="sessionDurationCard" class="collapse show">
+          <div class="card-body text-center">
+            <div class="stats-number">
+              <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo round($stats['averageDuration']); ?>" data-purecounter-duration="2">0</span>
+            </div>
+            <div class="stats-subtitle">seconden gemiddeld</div>
           </div>
-          <h5 class="card-title">Sessieduur</h5>
-          <div class="stats-number">
-            <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo round($stats['averageDuration']); ?>" data-purecounter-duration="2">0</span>
-          </div>
-          <div class="stats-subtitle">seconden gemiddeld</div>
         </div>
       </div>
     </div>
     
     <div class="col-3 mb-3">
       <div class="card stats-card">
-        <div class="card-body text-center">
-          <div class="stats-icon">
-            <i class="bi bi-percent"></i>
+        <div class="card-header d-flex justify-content-between align-items-center p-2">
+          <h6 class="mb-0"><i class="bi bi-percent me-1"></i> Bounce Rate</h6>
+          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#bounceRateCard" aria-expanded="true">
+            <i class="bi bi-chevron-up"></i>
+          </button>
+        </div>
+        <div id="bounceRateCard" class="collapse show">
+          <div class="card-body text-center">
+            <div class="stats-number">
+              <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo $stats['bounceRate']; ?>" data-purecounter-duration="2" data-purecounter-decimals="1">0</span>%
+            </div>
+            <div class="stats-subtitle"><?php echo $stats['totalBounces']; ?> bounces</div>
           </div>
-          <h5 class="card-title">Bounce Rate</h5>
-          <div class="stats-number">
-            <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo $stats['bounceRate']; ?>" data-purecounter-duration="2" data-purecounter-decimals="1">0</span>%
-          </div>
-          <div class="stats-subtitle"><?php echo $stats['totalBounces']; ?> bounces</div>
         </div>
       </div>
     </div>
@@ -183,12 +199,43 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     </div>
   </div>
   
-  <!-- Top Zoekwoorden -->
+  <!-- Referral Bronnen & Zoekwoorden -->
   <div class="row mb-4">
+    <!-- Referral Bronnen -->
     <div class="col-md-6 mb-3">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5><i class="bi bi-search"></i> Top Zoekwoorden & Bronnen</h5>
+          <h5><i class="bi bi-link-45deg"></i> Referral Bronnen</h5>
+          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#referralSourcesCard" aria-expanded="true">
+            <i class="bi bi-chevron-up"></i>
+          </button>
+        </div>
+        <div id="referralSourcesCard" class="collapse show">
+          <div class="card-body">
+            <div class="table-responsive search-keywords-table-container">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Referral Bron</th>
+                    <th>Bezoeken</th>
+                    <th>%</th>
+                  </tr>
+                </thead>
+                <tbody id="referralSourcesTable">
+                  <!-- Referral sources worden hier geladen -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Zoekwoorden -->
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5><i class="bi bi-search"></i> Zoekwoorden</h5>
           <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#searchKeywordsCard" aria-expanded="true">
             <i class="bi bi-chevron-up"></i>
           </button>
@@ -199,7 +246,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
               <table class="table table-sm">
                 <thead>
                   <tr>
-                    <th>Bron/Zoekwoord</th>
+                    <th>Zoekwoord</th>
                     <th>Bezoeken</th>
                     <th>%</th>
                   </tr>
@@ -217,7 +264,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   
   <!-- Top 10 Populairste Pagina's -->
   <div class="row mt-4">
-    <div class="col-12">
+    <div class="col-6">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5><i class="bi bi-list-ol"></i> Top 10 Populairste Pagina's</h5>
@@ -227,13 +274,13 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         </div>
         <div id="topPagesCard" class="collapse show">
           <div class="card-body">
-            <div class="table-container">
-              <div class="table-responsive top-pages-table-container">
-                <table class="table table-hover top-pages-table">
+            <div class="table-container-compact">
+              <div class="table-responsive top-pages-table-container-compact">
+                <table class="table table-hover table-sm top-pages-table-compact">
                   <thead class="sticky-header">
                     <tr>
-                      <th>URL</th>
-                      <th>Bezoeken</th>
+                      <th class="text-truncate">Pagina</th>
+                      <th class="text-center" style="width: 80px;">Hits</th>
                     </tr>
                   </thead>
                   <tbody id="topPagesTable">
@@ -289,6 +336,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         // Initialize device and browser charts
         generateDeviceChart();
         generateBrowserChart();
+        generateReferralSourcesTable();
         generateSearchKeywordsTable();
         generateTopPagesTable();
         
@@ -738,6 +786,87 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     }
   }
   
+  // Referral Sources Table
+  function generateReferralSourcesTable() {
+    try {
+      const referralSourcesData = <?php echo json_encode($stats['referralSources'] ?? []); ?>;
+      console.log('Referral sources data:', referralSourcesData);
+      
+      const referralSourcesTable = document.getElementById('referralSourcesTable');
+      if (referralSourcesTable && referralSourcesData && referralSourcesData.length > 0) {
+        let tableHtml = '';
+        
+        referralSourcesData.forEach(source => {
+          const sourceName = source.source || 'Onbekend';
+          const count = source.count || 0;
+          const percentage = source.percentage || 0;
+          
+          // Bepaal icon op basis van source
+          let icon = 'bi-link-45deg';
+          let iconColor = '#6c757d';
+          
+          if (sourceName.includes('google')) {
+            icon = 'bi-google';
+            iconColor = '#4285f4';
+          } else if (sourceName.includes('facebook')) {
+            icon = 'bi-facebook';
+            iconColor = '#1877f2';
+          } else if (sourceName.includes('twitter')) {
+            icon = 'bi-twitter';
+            iconColor = '#1da1f2';
+          } else if (sourceName.includes('linkedin')) {
+            icon = 'bi-linkedin';
+            iconColor = '#0077b5';
+          } else if (sourceName.includes('instagram')) {
+            icon = 'bi-instagram';
+            iconColor = '#e4405f';
+          } else if (sourceName === 'Direct bezoek') {
+            icon = 'bi-person-fill';
+            iconColor = '#28a745';
+          }
+          
+          tableHtml += `
+            <tr>
+              <td>
+                <i class="bi ${icon} me-2" style="color: ${iconColor};"></i>
+                ${sourceName}
+              </td>
+              <td class="text-center"><span class="badge bg-primary">${count}</span></td>
+              <td class="text-center"><small class="text-muted">${percentage}%</small></td>
+            </tr>
+          `;
+        });
+        
+        referralSourcesTable.innerHTML = tableHtml;
+      } else {
+        console.log('No referral sources data available');
+        if (referralSourcesTable) {
+          referralSourcesTable.innerHTML = `
+            <tr>
+              <td colspan="3" class="text-center text-muted">
+                <i class="bi bi-info-circle me-2"></i>
+                Geen referral data beschikbaar
+              </td>
+            </tr>
+          `;
+        }
+      }
+    } catch (error) {
+      console.error('Error generating referral sources table:', error);
+      const referralSourcesTable = document.getElementById('referralSourcesTable');
+      if (referralSourcesTable) {
+        referralSourcesTable.innerHTML = `
+          <tr>
+            <td colspan="3" class="text-center text-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Fout bij laden van referral data
+            </td>
+          </tr>
+        `;
+      }
+    }
+  }
+  
   // Search Keywords Table
   function generateSearchKeywordsTable() {
     try {
@@ -961,6 +1090,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           // Update charts
           updateDeviceChart(data.deviceBreakdown);
           updateBrowserChart(data.browserBreakdown);
+          updateReferralSourcesTable(data.referralSources);
           updateSearchKeywordsTable(data.topSearchKeywords);
           updateTopPagesTable(data.topPages);
           
@@ -1337,6 +1467,85 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     }
   }
 
+  // Update referral sources table met nieuwe data
+  function updateReferralSourcesTable(referralSourcesData) {
+    try {
+      console.log('updateReferralSourcesTable called with data:', referralSourcesData);
+      
+      const referralSourcesTable = document.getElementById('referralSourcesTable');
+      if (referralSourcesTable && referralSourcesData && referralSourcesData.length > 0) {
+        let tableHtml = '';
+        
+        referralSourcesData.forEach(source => {
+          const sourceName = source.source || 'Onbekend';
+          const count = source.count || 0;
+          const percentage = source.percentage || 0;
+          
+          // Bepaal icon op basis van source
+          let icon = 'bi-link-45deg';
+          let iconColor = '#6c757d';
+          
+          if (sourceName.includes('google')) {
+            icon = 'bi-google';
+            iconColor = '#4285f4';
+          } else if (sourceName.includes('facebook')) {
+            icon = 'bi-facebook';
+            iconColor = '#1877f2';
+          } else if (sourceName.includes('twitter')) {
+            icon = 'bi-twitter';
+            iconColor = '#1da1f2';
+          } else if (sourceName.includes('linkedin')) {
+            icon = 'bi-linkedin';
+            iconColor = '#0077b5';
+          } else if (sourceName.includes('instagram')) {
+            icon = 'bi-instagram';
+            iconColor = '#e4405f';
+          } else if (sourceName === 'Direct bezoek') {
+            icon = 'bi-person-fill';
+            iconColor = '#28a745';
+          }
+          
+          tableHtml += `
+            <tr>
+              <td>
+                <i class="bi ${icon} me-2" style="color: ${iconColor};"></i>
+                ${sourceName}
+              </td>
+              <td class="text-center"><span class="badge bg-primary">${count}</span></td>
+              <td class="text-center"><small class="text-muted">${percentage}%</small></td>
+            </tr>
+          `;
+        });
+        
+        referralSourcesTable.innerHTML = tableHtml;
+      } else {
+        if (referralSourcesTable) {
+          referralSourcesTable.innerHTML = `
+            <tr>
+              <td colspan="3" class="text-center text-muted">
+                <i class="bi bi-info-circle me-2"></i>
+                Geen referral data beschikbaar voor de geselecteerde periode
+              </td>
+            </tr>
+          `;
+        }
+      }
+    } catch (error) {
+      console.error('Error updating referral sources table:', error);
+      const referralSourcesTable = document.getElementById('referralSourcesTable');
+      if (referralSourcesTable) {
+        referralSourcesTable.innerHTML = `
+          <tr>
+            <td colspan="3" class="text-center text-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Fout bij laden van referral data
+            </td>
+          </tr>
+        `;
+      }
+    }
+  }
+
   // Update search keywords table met nieuwe data
   function updateSearchKeywordsTable(searchKeywordsData) {
     try {
@@ -1594,8 +1803,75 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
    document.getElementById('startDate').addEventListener('change', updateDateRangeDisplay);
    document.getElementById('endDate').addEventListener('change', updateDateRangeDisplay);
    
-   // Card collapse functionality
+   // Card collapse functionality with localStorage
    document.addEventListener('DOMContentLoaded', function() {
+     const STORAGE_KEY = 'analytics_card_states';
+     
+     // Load saved states from localStorage
+     function loadCardStates() {
+       try {
+         const savedStates = localStorage.getItem(STORAGE_KEY);
+         return savedStates ? JSON.parse(savedStates) : {};
+       } catch (e) {
+         console.warn('Could not load card states from localStorage:', e);
+         return {};
+       }
+     }
+     
+     // Save states to localStorage
+     function saveCardStates(states) {
+       try {
+         localStorage.setItem(STORAGE_KEY, JSON.stringify(states));
+       } catch (e) {
+         console.warn('Could not save card states to localStorage:', e);
+       }
+     }
+     
+     // Get current states of all cards
+     function getCurrentStates() {
+       const states = {};
+       const collapseElements = document.querySelectorAll('[data-bs-toggle="collapse"]');
+       
+       collapseElements.forEach(function(toggle) {
+         const targetId = toggle.getAttribute('data-bs-target').replace('#', '');
+         const targetElement = document.getElementById(targetId);
+         if (targetElement) {
+           states[targetId] = targetElement.classList.contains('show');
+         }
+       });
+       
+       return states;
+     }
+     
+     // Apply saved states to cards
+     function applyCardStates(states) {
+       Object.keys(states).forEach(function(cardId) {
+         const cardElement = document.getElementById(cardId);
+         const toggle = document.querySelector(`[data-bs-target="#${cardId}"]`);
+         
+         if (cardElement && toggle) {
+           const chevronIcon = toggle.querySelector('i');
+           const shouldShow = states[cardId];
+           
+           if (shouldShow) {
+             cardElement.classList.add('show');
+             chevronIcon.className = 'bi bi-chevron-up';
+             toggle.setAttribute('aria-expanded', 'true');
+           } else {
+             cardElement.classList.remove('show');
+             chevronIcon.className = 'bi bi-chevron-down';
+             toggle.setAttribute('aria-expanded', 'false');
+           }
+         }
+       });
+     }
+     
+     // Load and apply saved states
+     const savedStates = loadCardStates();
+     if (Object.keys(savedStates).length > 0) {
+       applyCardStates(savedStates);
+     }
+     
      // Add event listeners for all collapse toggles
      const collapseToggles = document.querySelectorAll('.collapse-toggle');
      
@@ -1609,11 +1885,19 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
          targetElement.addEventListener('shown.bs.collapse', function() {
            chevronIcon.className = 'bi bi-chevron-up';
            toggle.setAttribute('aria-expanded', 'true');
+           
+           // Save state to localStorage
+           const currentStates = getCurrentStates();
+           saveCardStates(currentStates);
          });
          
          targetElement.addEventListener('hidden.bs.collapse', function() {
            chevronIcon.className = 'bi bi-chevron-down';
            toggle.setAttribute('aria-expanded', 'false');
+           
+           // Save state to localStorage
+           const currentStates = getCurrentStates();
+           saveCardStates(currentStates);
          });
        }
      });

@@ -700,6 +700,21 @@ input:checked + .slider:before {
   overflow: hidden;
 }
 
+.stats-card .card-header {
+  background: transparent;
+  border: none;
+  padding: 0.75rem 1rem 0.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 0.85rem;
+}
+
+.stats-card .card-header h6 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #495057;
+}
+
 .stats-card::before {
   content: '';
   position: absolute;
@@ -939,8 +954,58 @@ body {
   max-height: 350px;
 }
 
+/* Compact Table Containers */
+.table-container-compact {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+}
+
+.top-pages-table-container-compact {
+  height: 280px;
+  overflow-y: auto;
+  max-height: 280px;
+}
+
 .top-pages-table {
   margin-bottom: 0;
+}
+
+/* Compact Top Pages Table Styling */
+.top-pages-table-compact {
+  margin-bottom: 0;
+  font-size: 0.85rem;
+}
+
+.top-pages-table-compact th {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.top-pages-table-compact td {
+  padding: 0.5rem 0.75rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.top-pages-table-compact tbody tr:hover {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+/* URL truncation for compact table */
+.top-pages-table-compact .url-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-pages-table-compact .hits-cell {
+  text-align: center;
+  font-weight: 600;
+  color: #007bff;
 }
 
 .sticky-header {
