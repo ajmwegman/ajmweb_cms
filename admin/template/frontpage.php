@@ -1959,5 +1959,29 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         });
       }
     });
+
+    // Force chart resize after page load to fix initial sizing issues
+    setTimeout(() => {
+      console.log('Forcing initial chart resize...');
+      const charts = document.querySelectorAll('canvas[id*="Chart"]');
+      charts.forEach(canvas => {
+        if (canvas.chart) {
+          canvas.chart.resize();
+          canvas.chart.update('none');
+        }
+      });
+    }, 200);
+
+    // Additional resize calls to ensure proper sizing
+    setTimeout(() => {
+      console.log('Second chart resize call...');
+      const charts = document.querySelectorAll('canvas[id*="Chart"]');
+      charts.forEach(canvas => {
+        if (canvas.chart) {
+          canvas.chart.resize();
+          canvas.chart.update('none');
+        }
+      });
+    }, 1000);
   });
 </script>

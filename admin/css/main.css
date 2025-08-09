@@ -420,6 +420,8 @@ input:checked + .slider:before {
   width: 100%;
   height: auto;
   min-height: 200px;
+  max-height: 300px;
+  overflow: hidden;
 }
 
 /* Ensure charts are properly sized when cards are expanded */
@@ -427,6 +429,23 @@ input:checked + .slider:before {
   width: 100% !important;
   height: auto !important;
   max-height: 300px;
+}
+
+/* Force proper chart sizing on initial load */
+canvas[id*="Chart"] {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 300px !important;
+  min-height: 200px !important;
+  box-sizing: border-box !important;
+  display: block !important;
+}
+
+/* Ensure chart containers have proper dimensions */
+.chart-container canvas[id*="Chart"],
+.chart-wrapper canvas[id*="Chart"] {
+  height: 250px !important;
+  max-height: 250px !important;
 }
 
 @media (max-width: 768px) {
@@ -809,7 +828,7 @@ input:checked + .slider:before {
 /* Chart Container Fix for Infinite Height Issue */
 #browserChart, #deviceChart {
   max-height: 300px !important;
-  height: 300px !important;
+  height: auto !important;
   width: 100% !important;
   /* Performance optimizations */
   transition: none !important;
@@ -850,7 +869,8 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 320px;
+  min-height: 280px;
+  max-height: 320px;
   padding: 1rem 1.5rem 1.5rem;
 }
 

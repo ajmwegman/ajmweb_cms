@@ -17,6 +17,11 @@ class ChartOptimizer {
       this.optimizeAllCharts();
     }
 
+    // Force chart resize after a short delay to ensure proper initial sizing
+    setTimeout(() => this.forceChartResize(), 100);
+    setTimeout(() => this.forceChartResize(), 500);
+    setTimeout(() => this.forceChartResize(), 1000);
+
     // Listen for window resize events
     window.addEventListener('resize', this.debounce(() => {
       this.optimizeAllCharts();
@@ -223,6 +228,20 @@ class ChartOptimizer {
         Chart = Chart._originalConstructor;
       }
     }
+  }
+
+  // Method to force chart resize for proper initial sizing
+  forceChartResize() {
+    const chartCanvases = document.querySelectorAll('canvas[id*="Chart"], .chart-canvas');
+    
+    chartCanvases.forEach(canvas => {
+      if (canvas.chart) {
+        console.log('Forcing resize for chart:', canvas.id);
+        // Force chart to recalculate dimensions
+        canvas.chart.resize();
+        canvas.chart.update('none'); // Update without animation
+      }
+    });
   }
 
   // Method to re-render charts when they become visible
