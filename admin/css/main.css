@@ -407,9 +407,26 @@ input:checked + .slider:before {
 }
 
 /* Device Chart Improvements */
-#deviceChart {
+#deviceChart, #browserChart {
   max-height: 300px;
   margin-bottom: 20px;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Chart container improvements */
+.chart-container, .chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 200px;
+}
+
+/* Ensure charts are properly sized when cards are expanded */
+.card.card-expanded canvas[id*="Chart"] {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 300px;
 }
 
 @media (max-width: 768px) {

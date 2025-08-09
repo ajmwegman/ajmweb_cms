@@ -18,12 +18,22 @@ class ChartOptimizer {
     }
 
     // Listen for window resize events
-    window.addEventListener('resize', this.debounce(() => this.optimizeAllCharts(), 100));
+    window.addEventListener('resize', this.debounce(() => {
+      this.optimizeAllCharts();
+      // Re-render visible charts after resize
+      setTimeout(() => this.reRenderVisibleCharts(), 200);
+    }, 100));
     
     // Listen for orientation change
     window.addEventListener('orientationchange', () => {
-      setTimeout(() => this.optimizeAllCharts(), 100);
+      setTimeout(() => {
+        this.optimizeAllCharts();
+        this.reRenderVisibleCharts();
+      }, 200);
     });
+
+    // Set up intersection observer for charts
+    this.setupIntersectionObserver();
   }
 
   optimizeAllCharts() {
@@ -67,6 +77,11 @@ class ChartOptimizer {
       if (chart && chart.id) {
         self.optimizeChart(chart);
         self.optimizedCharts.set(chart.id, chart);
+        
+        // Observe the canvas element for visibility changes
+        if (ctx && ctx.canvas) {
+          self.observeNewChart(ctx.canvas);
+        }
       }
       
       return chart;
@@ -150,6 +165,13 @@ class ChartOptimizer {
       // Force hardware acceleration
       canvas.style.transform = 'translateZ(0)';
       canvas.style.backfaceVisibility = 'hidden';
+      
+      // Ensure proper sizing for responsive charts
+      if (canvas.chart) {
+        setTimeout(() => {
+          canvas.chart.resize();
+        }, 50);
+      }
     });
   }
 
@@ -174,6 +196,13 @@ class ChartOptimizer {
     }
   }
 
+  // Method to observe new charts
+  observeNewChart(canvas) {
+    if (this.intersectionObserver && canvas) {
+      this.intersectionObserver.observe(canvas);
+    }
+  }
+
   // Method to disable all chart animations globally
   disableAllAnimations() {
     if (Chart.defaults) {
@@ -193,6 +222,62 @@ class ChartOptimizer {
       if (Chart._originalConstructor) {
         Chart = Chart._originalConstructor;
       }
+    }
+  }
+
+  // Method to re-render charts when they become visible
+  reRenderVisibleCharts() {
+    const chartCanvases = document.querySelectorAll('canvas[id*="Chart"], .chart-canvas');
+    
+    chartCanvases.forEach(canvas => {
+      if (canvas.chart && this.isElementVisible(canvas)) {
+        console.log('Re-rendering visible chart:', canvas.id);
+        setTimeout(() => {
+          canvas.chart.resize();
+          canvas.chart.update('none');
+        }, 100);
+      }
+    });
+  }
+
+  // Helper method to check if element is visible
+  isElementVisible(element) {
+    const rect = element.getBoundingClientRect();
+    const style = window.getComputedStyle(element);
+    
+    return rect.width > 0 && 
+           rect.height > 0 && 
+           style.display !== 'none' && 
+           style.visibility !== 'hidden' &&
+           style.opacity !== '0';
+  }
+
+  // Set up intersection observer to watch for charts becoming visible
+  setupIntersectionObserver() {
+    if ('IntersectionObserver' in window) {
+      this.intersectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.target.chart) {
+            console.log('Chart became visible:', entry.target.id);
+            // Re-render chart when it becomes visible
+            setTimeout(() => {
+              if (entry.target.chart) {
+                entry.target.chart.resize();
+                entry.target.chart.update('none');
+              }
+            }, 100);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '50px'
+      });
+
+      // Observe all chart canvases
+      const chartCanvases = document.querySelectorAll('canvas[id*="Chart"], .chart-canvas');
+      chartCanvases.forEach(canvas => {
+        this.intersectionObserver.observe(canvas);
+      });
     }
   }
 }

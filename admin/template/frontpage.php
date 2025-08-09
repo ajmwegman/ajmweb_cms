@@ -164,7 +164,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
             <i class="bi bi-chevron-down"></i>
           </button>
         </div>
-        <div id="deviceCard" class="collapse">
+        <div id="deviceCard" class="collapse" data-bs-parent="#deviceCard">
           <div class="card-body">
             <canvas id="deviceChart"></canvas>
             <div id="deviceStats" class="mt-2">
@@ -183,7 +183,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
             <i class="bi bi-chevron-down"></i>
           </button>
         </div>
-        <div id="browserCard" class="collapse">
+        <div id="browserCard" class="collapse" data-bs-parent="#browserCard">
           <div class="card-body">
             <canvas id="browserChart"></canvas>
             <div id="browserStats" class="mt-2">
@@ -566,8 +566,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           },
           options: {
             responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: 1.2,
+            maintainAspectRatio: false,
             animation: {
               duration: 0, // Disable animations for instant responsiveness
               easing: 'linear',
@@ -698,8 +697,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           },
           options: {
             responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: 1.2,
+            maintainAspectRatio: false,
             plugins: {
               legend: {
                 position: 'bottom',
@@ -1248,8 +1246,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           },
           options: {
             responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: 1.2,
+            maintainAspectRatio: false,
             animation: {
               duration: 0 // Disable animations for instant responsiveness
             },
@@ -1377,14 +1374,13 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
             datasets: [{
               data: browserData.map(item => item.count),
               backgroundColor: browserData.map(item => browserColors[item.browser] || '#6c757d'),
-              borderWidth: 3,
+              borderWidth: 0,
               borderColor: '#ffffff'
             }]
           },
           options: {
             responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: 1.2,
+            maintainAspectRatio: false,
             plugins: {
               legend: {
                 position: 'bottom',
@@ -1933,6 +1929,23 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           targetElement.closest('.card').classList.remove('card-collapsed');
           updateRowClasses();
           saveCurrentCardStates();
+          
+          // Re-render charts when card is expanded to fix sizing issues
+          setTimeout(() => {
+            if (targetId === '#deviceCard') {
+              console.log('Device card expanded, re-rendering device chart...');
+              const deviceData = <?php echo json_encode($stats['deviceBreakdown'] ?? []); ?>;
+              if (deviceData && deviceData.length > 0) {
+                updateDeviceChart(deviceData);
+              }
+            } else if (targetId === '#browserCard') {
+              console.log('Browser card expanded, re-rendering browser chart...');
+              const browserData = <?php echo json_encode($stats['browserBreakdown'] ?? []); ?>;
+              if (browserData && browserData.length > 0) {
+                updateBrowserChart(browserData);
+              }
+            }
+          }, 150); // Small delay to ensure collapse animation is complete
         });
         
         targetElement.addEventListener('hidden.bs.collapse', function() {
