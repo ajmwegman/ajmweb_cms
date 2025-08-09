@@ -30,6 +30,9 @@
     
 <!-- Optimized Transitions CSS -->
 <link href="/assets/css/transitions-optimized.css" rel="stylesheet">
+
+<!-- Chart Performance Optimizations CSS -->
+<link href="/assets/css/chart-optimizations.css" rel="stylesheet">
     
 <link href="/admin/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
 </head>

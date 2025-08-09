@@ -486,8 +486,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           responsive: true,
           maintainAspectRatio: false,
           animation: {
-            duration: 2000,
-            easing: 'easeInOutQuart',
+            duration: 0, // Disable animations for instant responsiveness
+            easing: 'linear',
           },
           scales: {
             x: {
@@ -568,6 +568,10 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
             responsive: true,
             maintainAspectRatio: true,
             aspectRatio: 1.2,
+            animation: {
+              duration: 0, // Disable animations for instant responsiveness
+              easing: 'linear',
+            },
             plugins: {
               legend: {
                 position: 'bottom',
