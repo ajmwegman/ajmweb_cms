@@ -1046,6 +1046,171 @@ body {
   transition: transform 0.3s ease;
 }
 
+/* Prevent page jumping during collapse transitions */
+.collapse {
+  transition: height 0.15s ease !important;
+}
+
+.collapsing {
+  transition: height 0.15s ease !important;
+  overflow: hidden;
+}
+
+/* Smooth card transitions */
+.card {
+  transition: all 0.2s ease;
+}
+
+/* Mobile responsive improvements */
+@media (max-width: 768px) {
+  .analytics-dashboard-container {
+    padding: 0.5rem !important;
+  }
+  
+  .card {
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .card-header {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.9rem;
+  }
+  
+  .card-header h5 {
+    font-size: 1rem !important;
+    margin-bottom: 0 !important;
+  }
+  
+  .card-header h6 {
+    font-size: 0.85rem !important;
+    margin-bottom: 0 !important;
+  }
+  
+  .card-body {
+    padding: 0.75rem !important;
+  }
+  
+  /* Stats cards mobile layout */
+  .stats-card {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .stats-card .card-body {
+    padding: 0.5rem !important;
+  }
+  
+  /* Chart containers mobile */
+  .chart-container {
+    height: 250px !important;
+  }
+  
+  .chart-canvas {
+    max-height: 200px !important;
+    height: 200px !important;
+  }
+  
+  /* Table responsive mobile */
+  .table-responsive {
+    font-size: 0.85rem;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.5rem 0.25rem !important;
+  }
+  
+  /* Form controls mobile */
+  .form-control,
+  .form-select {
+    padding: 0.375rem 0.5rem !important;
+    font-size: 0.9rem !important;
+  }
+  
+  /* Button spacing mobile */
+  .btn {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.85rem !important;
+  }
+  
+  /* Date range display mobile */
+  .alert {
+    padding: 0.5rem !important;
+    font-size: 0.85rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  /* Collapse buttons mobile */
+  .collapse-toggle {
+    padding: 0.2rem 0.4rem !important;
+  }
+  
+  .collapse-toggle i {
+    font-size: 0.8rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Extra small screens */
+  .analytics-dashboard-container {
+    padding: 0.25rem !important;
+  }
+  
+  .card-header h5 {
+    font-size: 0.9rem !important;
+  }
+  
+  .card-header h6 {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Stack all columns on mobile */
+  .col-md-6,
+  .col-6 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Stats cards full width on mobile */
+  .stats-card {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Smaller charts on mobile */
+  .chart-container {
+    height: 200px !important;
+  }
+  
+  .chart-canvas {
+    max-height: 150px !important;
+    height: 150px !important;
+  }
+  
+  /* Browser stats mobile layout */
+  .browser-stat-item {
+    padding: 0.5rem !important;
+  }
+  
+  .browser-icon {
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .browser-icon i {
+    font-size: 1.2rem !important;
+  }
+  
+  /* Table compact mobile */
+  .table-container-compact,
+  .top-pages-table-container-compact,
+  .search-keywords-table-container {
+    font-size: 0.8rem !important;
+  }
+  
+  .top-pages-table-compact th,
+  .top-pages-table-compact td {
+    padding: 0.25rem 0.1rem !important;
+  }
+}
+
 /* Enhanced Shadows and Depth */
 .visitorChart {
   border-radius: 12px;

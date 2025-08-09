@@ -85,11 +85,11 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       <div class="card stats-card">
         <div class="card-header d-flex justify-content-between align-items-center p-2">
           <h6 class="mb-0"><i class="bi bi-people-fill me-1"></i> Bezoekers</h6>
-          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#visitorsCard" aria-expanded="true">
-            <i class="bi bi-chevron-up"></i>
+          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#visitorsCard" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i>
           </button>
         </div>
-        <div id="visitorsCard" class="collapse show">
+        <div id="visitorsCard" class="collapse">
           <div class="card-body text-center">
             <div class="stats-number">
               <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo $stats['totalVisitors']; ?>" data-purecounter-duration="2">0</span>
@@ -104,11 +104,11 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       <div class="card stats-card">
         <div class="card-header d-flex justify-content-between align-items-center p-2">
           <h6 class="mb-0"><i class="bi bi-eye-fill me-1"></i> Paginaweergaven</h6>
-          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#pageViewsCard" aria-expanded="true">
-            <i class="bi bi-chevron-up"></i>
+          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#pageViewsCard" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i>
           </button>
         </div>
-        <div id="pageViewsCard" class="collapse show">
+        <div id="pageViewsCard" class="collapse">
           <div class="card-body text-center">
             <div class="stats-number">
               <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo $stats['totalPageViews']; ?>" data-purecounter-duration="2">0</span>
@@ -123,11 +123,11 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       <div class="card stats-card">
         <div class="card-header d-flex justify-content-between align-items-center p-2">
           <h6 class="mb-0"><i class="bi bi-clock-fill me-1"></i> Sessieduur</h6>
-          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#sessionDurationCard" aria-expanded="true">
-            <i class="bi bi-chevron-up"></i>
+          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#sessionDurationCard" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i>
           </button>
         </div>
-        <div id="sessionDurationCard" class="collapse show">
+        <div id="sessionDurationCard" class="collapse">
           <div class="card-body text-center">
             <div class="stats-number">
               <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo round($stats['averageDuration']); ?>" data-purecounter-duration="2">0</span>
@@ -142,11 +142,11 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       <div class="card stats-card">
         <div class="card-header d-flex justify-content-between align-items-center p-2">
           <h6 class="mb-0"><i class="bi bi-percent me-1"></i> Bounce Rate</h6>
-          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#bounceRateCard" aria-expanded="true">
-            <i class="bi bi-chevron-up"></i>
+          <button class="btn btn-sm collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#bounceRateCard" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i>
           </button>
         </div>
-        <div id="bounceRateCard" class="collapse show">
+        <div id="bounceRateCard" class="collapse">
           <div class="card-body text-center">
             <div class="stats-number">
               <span class="purecounter" data-purecounter-start="0" data-purecounter-end="<?php echo $stats['bounceRate']; ?>" data-purecounter-duration="2" data-purecounter-decimals="1">0</span>%
@@ -164,11 +164,11 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5><i class="bi bi-phone"></i> Apparaten overzicht</h5>
-          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#deviceCard" aria-expanded="true">
-            <i class="bi bi-chevron-up"></i>
+          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#deviceCard" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i>
           </button>
         </div>
-        <div id="deviceCard" class="collapse show">
+        <div id="deviceCard" class="collapse">
           <div class="card-body">
             <canvas id="deviceChart"></canvas>
             <div id="deviceStats" class="mt-2">
@@ -183,11 +183,11 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5><i class="bi bi-globe"></i> Browserstatistieken</h5>
-          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#browserCard" aria-expanded="true">
-            <i class="bi bi-chevron-up"></i>
+          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#browserCard" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i>
           </button>
         </div>
-        <div id="browserCard" class="collapse show">
+        <div id="browserCard" class="collapse">
           <div class="card-body">
             <canvas id="browserChart"></canvas>
             <div id="browserStats" class="mt-2">
@@ -206,11 +206,11 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5><i class="bi bi-link-45deg"></i> Referral Bronnen</h5>
-          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#referralSourcesCard" aria-expanded="true">
-            <i class="bi bi-chevron-up"></i>
+          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#referralSourcesCard" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i>
           </button>
         </div>
-        <div id="referralSourcesCard" class="collapse show">
+        <div id="referralSourcesCard" class="collapse">
           <div class="card-body">
             <div class="table-responsive search-keywords-table-container">
               <table class="table table-sm">
@@ -236,11 +236,11 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5><i class="bi bi-list-ol"></i> Top 10 Populairste Pagina's</h5>
-          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#topPagesCard" aria-expanded="true">
-            <i class="bi bi-chevron-up"></i>
+          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#topPagesCard" aria-expanded="false">
+            <i class="bi bi-chevron-down"></i>
           </button>
         </div>
-        <div id="topPagesCard" class="collapse show">
+        <div id="topPagesCard" class="collapse">
           <div class="card-body">
             <div class="table-container-compact">
               <div class="table-responsive top-pages-table-container-compact">
@@ -310,11 +310,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         // Initialize performance chart
         generateEnhancedChart(startDate, endDate);
         
-        // Apply saved card states after content is loaded
-        setTimeout(function() {
-          console.log('Applying card states after analytics load...');
-          applyStoredCardStates();
-        }, 500);
+        // Apply saved card states immediately after content is loaded
+        applyStoredCardStates();
       }
     } catch (error) {
       console.error('Error initializing analytics:', error);
@@ -1784,15 +1781,31 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
       const savedStates = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
       console.log('Applying stored card states:', savedStates);
       
+      // Default states - only Performance card open by default
+      const defaultStates = {
+        'performanceCard': true,
+        'visitorsCard': false,
+        'pageViewsCard': false,
+        'sessionDurationCard': false,
+        'bounceRateCard': false,
+        'deviceCard': false,
+        'browserCard': false,
+        'referralSourcesCard': false,
+        'topPagesCard': false
+      };
+      
+      // Merge saved states with defaults
+      const finalStates = { ...defaultStates, ...savedStates };
+      
       // Filter out non-card elements (like navbarSupportedContent)
       const cardStates = {};
-      Object.keys(savedStates).forEach(key => {
+      Object.keys(finalStates).forEach(key => {
         if (key.includes('Card') || key.includes('card')) {
-          cardStates[key] = savedStates[key];
+          cardStates[key] = finalStates[key];
         }
       });
       
-      console.log('Filtered card states:', cardStates);
+      console.log('Final card states:', cardStates);
       
       Object.keys(cardStates).forEach(function(cardId) {
         const cardElement = document.getElementById(cardId);
@@ -1806,9 +1819,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           
           if (shouldShow) {
             // Show the card
-            if (!cardElement.classList.contains('show')) {
-              cardElement.classList.add('show');
-            }
+            cardElement.classList.add('show');
             if (chevronIcon) chevronIcon.className = 'bi bi-chevron-up';
             toggle.setAttribute('aria-expanded', 'true');
           } else {
