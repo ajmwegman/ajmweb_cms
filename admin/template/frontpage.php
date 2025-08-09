@@ -199,7 +199,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     </div>
   </div>
   
-  <!-- Referral Bronnen -->
+  <!-- Referral Bronnen & Top 10 Populairste Pagina's -->
   <div class="row mb-4">
     <!-- Referral Bronnen -->
     <div class="col-md-6 mb-3">
@@ -230,11 +230,9 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         </div>
       </div>
     </div>
-  </div>
-  
-  <!-- Top 10 Populairste Pagina's -->
-  <div class="row mt-4">
-    <div class="col-6">
+    
+    <!-- Top 10 Populairste Pagina's -->
+    <div class="col-md-6 mb-3">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5><i class="bi bi-list-ol"></i> Top 10 Populairste Pagina's</h5>
