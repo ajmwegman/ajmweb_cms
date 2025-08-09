@@ -309,6 +309,33 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         
         // Initialize performance chart
         generateEnhancedChart(startDate, endDate);
+        
+        // Apply saved card states after content is loaded
+        setTimeout(function() {
+          const savedStates = JSON.parse(localStorage.getItem('analytics_card_states') || '{}');
+          console.log('Applying saved card states after content load:', savedStates);
+          if (Object.keys(savedStates).length > 0) {
+            Object.keys(savedStates).forEach(function(cardId) {
+              const cardElement = document.getElementById(cardId);
+              const toggle = document.querySelector(`[data-bs-target="#${cardId}"]`);
+              
+              if (cardElement && toggle) {
+                const chevronIcon = toggle.querySelector('i');
+                const shouldShow = savedStates[cardId];
+                
+                if (shouldShow) {
+                  cardElement.classList.add('show');
+                  chevronIcon.className = 'bi bi-chevron-up';
+                  toggle.setAttribute('aria-expanded', 'true');
+                } else {
+                  cardElement.classList.remove('show');
+                  chevronIcon.className = 'bi bi-chevron-down';
+                  toggle.setAttribute('aria-expanded', 'false');
+                }
+              }
+            });
+          }
+        }, 500);
       }
     } catch (error) {
       console.error('Error initializing analytics:', error);
@@ -1819,12 +1846,19 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
            const chevronIcon = toggle.querySelector('i');
            const shouldShow = states[cardId];
            
+           console.log(`Applying state for ${cardId}: ${shouldShow}`);
+           
            if (shouldShow) {
+             // Show the card
              cardElement.classList.add('show');
+             cardElement.classList.remove('collapse');
+             cardElement.classList.add('collapse', 'show');
              chevronIcon.className = 'bi bi-chevron-up';
              toggle.setAttribute('aria-expanded', 'true');
            } else {
+             // Hide the card
              cardElement.classList.remove('show');
+             cardElement.classList.add('collapse');
              chevronIcon.className = 'bi bi-chevron-down';
              toggle.setAttribute('aria-expanded', 'false');
            }
@@ -1832,11 +1866,14 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
        });
      }
      
-     // Load and apply saved states
-     const savedStates = loadCardStates();
-     if (Object.keys(savedStates).length > 0) {
-       applyCardStates(savedStates);
-     }
+     // Load and apply saved states after a short delay to ensure Bootstrap is ready
+     setTimeout(function() {
+       const savedStates = loadCardStates();
+       console.log('Loading saved states:', savedStates);
+       if (Object.keys(savedStates).length > 0) {
+         applyCardStates(savedStates);
+       }
+     }, 100);
      
      // Add event listeners for all collapse toggles
      const collapseToggles = document.querySelectorAll('.collapse-toggle');
