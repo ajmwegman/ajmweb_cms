@@ -400,6 +400,9 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          animation: {
+            duration: 0 // Disable animations for instant responsiveness
+          },
           interaction: {
             mode: 'index',
             intersect: false,
@@ -1247,6 +1250,9 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
             responsive: true,
             maintainAspectRatio: true,
             aspectRatio: 1.2,
+            animation: {
+              duration: 0 // Disable animations for instant responsiveness
+            },
             plugins: {
               legend: {
                 position: 'bottom',

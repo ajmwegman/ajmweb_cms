@@ -941,6 +941,9 @@ body {
 .chart-canvas {
   width: 100% !important;
   height: 100% !important;
+  /* Optimize for instant responsiveness */
+  transition: none !important;
+  will-change: auto;
 }
 
 /* Table Containers */
@@ -1057,6 +1060,12 @@ body {
   overflow: hidden;
 }
 
+/* Optimize chart responsiveness - remove slow transitions */
+.chart-canvas {
+  transition: none !important;
+  will-change: auto;
+}
+
 /* Smooth card transitions */
 .card {
   transition: all 0.2s ease;
@@ -1108,6 +1117,9 @@ body {
   .chart-canvas {
     max-height: 200px !important;
     height: 200px !important;
+    /* Optimize for instant responsiveness on mobile */
+    transition: none !important;
+    will-change: auto;
   }
   
   /* Table responsive mobile */
