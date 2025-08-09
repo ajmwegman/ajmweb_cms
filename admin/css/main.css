@@ -960,6 +960,13 @@ body {
 .chart-wrapper {
   height: 100%;
   position: relative;
+  /* Performance optimizations */
+  transition: none !important;
+  animation: none !important;
+  will-change: auto !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  perspective: 1000px !important;
 }
 
 .chart-canvas {
@@ -967,7 +974,11 @@ body {
   height: 100% !important;
   /* Optimize for instant responsiveness */
   transition: none !important;
-  will-change: auto;
+  animation: none !important;
+  will-change: auto !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  perspective: 1000px !important;
 }
 
 /* Table Containers */
@@ -1358,6 +1369,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Performance optimizations */
+  transition: none !important;
+  animation: none !important;
+  will-change: auto !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  perspective: 1000px !important;
 }
 
 /* Table containers should fill available space */
@@ -1371,6 +1389,13 @@ body {
   overflow: hidden;
   background: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  /* Performance optimizations */
+  transition: none !important;
+  animation: none !important;
+  will-change: auto !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  perspective: 1000px !important;
 }
 
 /* Modern Table Responsive Container */

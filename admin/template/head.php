@@ -25,6 +25,9 @@
 <!-- Charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- Chart Performance Optimizer -->
+<script src="/assets/js/chart-optimizer.js"></script>
+
 <!-- Bootstrap core CSS -->
 <link href="/admin/css/main.css" rel="stylesheet">
     
