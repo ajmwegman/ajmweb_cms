@@ -28,6 +28,9 @@
 <!-- Bootstrap core CSS -->
 <link href="/admin/css/main.css" rel="stylesheet">
     
+<!-- Optimized Transitions CSS -->
+<link href="/assets/css/transitions-optimized.css" rel="stylesheet">
+    
 <link href="/admin/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
 </head>
 

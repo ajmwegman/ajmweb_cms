@@ -41,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 40px;
   height: 40px;
   border-radius: 4px;
-  transition: all 0.4s;
+  transition: background-color 0.2s, opacity 0.2s;
 }
 .back-to-top i {
   font-size: 24px;
@@ -62,7 +62,7 @@ h1, h2, h3, h4, h5, h6 {
 --------------------------------------------------------------*/
 #header {
   background: #fff;
-  transition: all 0.5s;
+  transition: background-color 0.2s, box-shadow 0.2s, padding 0.2s;
   z-index: 997;
   padding: 20px 0;
 }
@@ -553,7 +553,7 @@ section {
   text-align: center;
   border: 1px solid #fff;
   padding: 80px 20px;
-  transition: all ease-in-out 0.3s;
+  transition: border-color 0.15s ease-in-out;
   background: #fff;
 }
 .services .icon-box .icon {
@@ -562,12 +562,12 @@ section {
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  transition: ease-in-out 0.3s;
+  transition: transform 0.15s ease-in-out;
 }
 .services .icon-box .icon i {
   color: #16df7e;
   font-size: 36px;
-  transition: 0.3s;
+  transition: color 0.15s;
 }
 .services .icon-box h4 {
   font-weight: 700;
@@ -576,7 +576,7 @@ section {
 }
 .services .icon-box h4 a {
   color: #5f687b;
-  transition: ease-in-out 0.3s;
+  transition: color 0.15s ease-in-out;
 }
 .services .icon-box p {
   line-height: 24px;
@@ -609,7 +609,7 @@ section {
   line-height: 1;
   text-transform: uppercase;
   color: #444444;
-  transition: all 0.3s ease-in-out;
+  transition: color 0.15s ease-in-out;
 }
 .gallery #gallery-buttons li:hover, .gallery #gallery-buttons li.filter-active {
   color: #16df7e;
@@ -627,7 +627,7 @@ section {
   right: 30px;
   bottom: 0;
   z-index: 3;
-  transition: all ease-in-out 0.3s;
+  transition: opacity 0.15s ease-in-out;
   background: rgba(255, 255, 255, 0.9);
   padding: 15px;
 }

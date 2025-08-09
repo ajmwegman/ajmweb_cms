@@ -25,6 +25,9 @@
   <!--- Template Main CSS File -->
   <link href="<?php echo $site_location; ?><?php echo $theme; ?>/assets/css/style.css" rel="stylesheet">
 
+  <!-- Optimized Transitions CSS -->
+  <link href="<?php echo $site_location; ?>assets/css/transitions-optimized.css" rel="stylesheet">
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
 <style>
 	.navbar-collapse { display: block !important; }
@@ -45,3 +48,8 @@ require_once($_SERVER['DOCUMENT_ROOT']."/modules/gallery.php");
 require_once($theme."/sections/contact.php");
 require_once($theme."/sections/footer.php");
 ?>
+  <!-- Template Main JS File -->
+  <script src="<?php echo $site_location; ?><?php echo $theme; ?>/assets/js/main.js"></script>
+
+  <!-- Transitions Optimizer JS -->
+  <script src="<?php echo $site_location; ?>assets/js/transitions-optimizer.js"></script>

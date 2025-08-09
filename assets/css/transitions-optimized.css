@@ -1,0 +1,139 @@
+/* 
+ * Optimized Transitions for Better Responsiveness
+ * This file overrides slow transitions with faster, more specific ones
+ */
+
+:root {
+  --transition-fast: 0.1s;
+  --transition-medium: 0.15s;
+  --transition-slow: 0.2s;
+  --transition-timing: ease-out;
+}
+
+/* Global transition optimizations */
+* {
+  transition-duration: var(--transition-medium) !important;
+  transition-timing-function: var(--transition-timing) !important;
+}
+
+/* Disable transitions when needed */
+*[style*="--transition-disabled: true"] {
+  transition: none !important;
+}
+
+/* Header transitions */
+#header {
+  transition: background-color var(--transition-fast) var(--transition-timing), 
+              box-shadow var(--transition-fast) var(--transition-timing), 
+              padding var(--transition-fast) var(--transition-timing) !important;
+}
+
+/* Navigation transitions */
+.navbar a, .navbar a:focus {
+  transition: color var(--transition-fast) var(--transition-timing) !important;
+}
+
+/* Button and interactive element transitions */
+.btn, .btn:focus {
+  transition: background-color var(--transition-fast) var(--transition-timing), 
+              color var(--transition-fast) var(--transition-timing), 
+              border-color var(--transition-fast) var(--transition-timing), 
+              transform var(--transition-fast) var(--transition-timing) !important;
+}
+
+/* Card and container transitions */
+.card, .icon-box {
+  transition: border-color var(--transition-medium) var(--transition-timing), 
+              box-shadow var(--transition-medium) var(--transition-timing), 
+              transform var(--transition-medium) var(--transition-timing) !important;
+}
+
+/* Gallery and image transitions */
+.gallery-item, .gallery-item img {
+  transition: opacity var(--transition-fast) var(--transition-timing), 
+              transform var(--transition-fast) var(--transition-timing) !important;
+}
+
+/* Form element transitions */
+input, textarea, select {
+  transition: border-color var(--transition-fast) var(--transition-timing), 
+              box-shadow var(--transition-fast) var(--transition-timing) !important;
+}
+
+/* Hover effects */
+*:hover {
+  transition-duration: var(--transition-fast) !important;
+}
+
+/* Media queries for responsive transitions */
+@media (max-width: 768px) {
+  :root {
+    --transition-fast: 0.05s;
+    --transition-medium: 0.1s;
+    --transition-slow: 0.15s;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --transition-fast: 0.03s;
+    --transition-medium: 0.08s;
+    --transition-slow: 0.12s;
+  }
+}
+
+/* Specific element overrides */
+.back-to-top {
+  transition: background-color var(--transition-fast) var(--transition-timing), 
+              opacity var(--transition-fast) var(--transition-timing) !important;
+}
+
+.services .icon-box {
+  transition: border-color var(--transition-medium) var(--transition-timing) !important;
+}
+
+.services .icon-box .icon {
+  transition: transform var(--transition-medium) var(--transition-timing) !important;
+}
+
+.services .icon-box .icon i {
+  transition: color var(--transition-medium) var(--transition-timing) !important;
+}
+
+.services .icon-box h4 a {
+  transition: color var(--transition-medium) var(--transition-timing) !important;
+}
+
+.gallery #gallery-buttons li {
+  transition: color var(--transition-medium) var(--transition-timing) !important;
+}
+
+.gallery .gallery-item .gallery-info {
+  transition: opacity var(--transition-medium) var(--transition-timing) !important;
+}
+
+/* Admin specific optimizations */
+.slider {
+  transition: background-color var(--transition-medium) var(--transition-timing) !important;
+}
+
+.slider:before {
+  transition: transform var(--transition-medium) var(--transition-timing) !important;
+}
+
+.device-stat-item {
+  transition: transform var(--transition-medium) var(--transition-timing), 
+              box-shadow var(--transition-medium) var(--transition-timing) !important;
+}
+
+/* Override any remaining slow transitions */
+*[style*="transition: all 0.3s"],
+*[style*="transition: all 0.4s"],
+*[style*="transition: all 0.5s"] {
+  transition: all var(--transition-medium) var(--transition-timing) !important;
+}
+
+/* Force fast transitions for critical elements */
+#header, .navbar, .btn, .card, .icon-box {
+  transition-duration: var(--transition-fast) !important;
+}
