@@ -955,6 +955,32 @@ body {
   display: none;
 }
 
+/* Card Collapse Functionality */
+.collapse-toggle {
+  border: none;
+  background: transparent;
+  color: #6c757d;
+  transition: all 0.3s ease;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+.collapse-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #007bff;
+  transform: scale(1.1);
+}
+
+.collapse-toggle:focus {
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.collapse-toggle i {
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+}
+
 /* Enhanced Shadows and Depth */
 .visitorChart {
   border-radius: 12px;

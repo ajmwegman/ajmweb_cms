@@ -62,12 +62,17 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   <div class="row mb-4">
     <div class="col-12">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
           <h5><i class="bi bi-graph-up"></i> Website Performance</h5>
+          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#performanceCard" aria-expanded="true">
+            <i class="bi bi-chevron-up"></i>
+          </button>
         </div>
-        <div class="card-body chart-container">
-          <div class="visitorChart chart-wrapper">
-            <canvas id="visitorChart" class="chart-canvas"></canvas>
+        <div id="performanceCard" class="collapse show">
+          <div class="card-body chart-container">
+            <div class="visitorChart chart-wrapper">
+              <canvas id="visitorChart" class="chart-canvas"></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -137,17 +142,22 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     </div>
   </div>
   
-  <!-- Device & Browser Breakdown -->
+  <!-- Apparaten overzicht & Browserstatistieken -->
   <div class="row">
     <div class="col-6 mb-3">
       <div class="card">
-        <div class="card-header">
-          <h5><i class="bi bi-phone"></i> Device Breakdown</h5>
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5><i class="bi bi-phone"></i> Apparaten overzicht</h5>
+          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#deviceCard" aria-expanded="true">
+            <i class="bi bi-chevron-up"></i>
+          </button>
         </div>
-        <div class="card-body">
-          <canvas id="deviceChart"></canvas>
-          <div id="deviceStats" class="mt-2">
-            <!-- Device stats worden hier getoond -->
+        <div id="deviceCard" class="collapse show">
+          <div class="card-body">
+            <canvas id="deviceChart"></canvas>
+            <div id="deviceStats" class="mt-2">
+              <!-- Device stats worden hier getoond -->
+            </div>
           </div>
         </div>
       </div>
@@ -155,13 +165,18 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     
     <div class="col-6 mb-3">
       <div class="card">
-        <div class="card-header">
-          <h5><i class="bi bi-globe"></i> Browser Breakdown</h5>
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5><i class="bi bi-globe"></i> Browserstatistieken</h5>
+          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#browserCard" aria-expanded="true">
+            <i class="bi bi-chevron-up"></i>
+          </button>
         </div>
-        <div class="card-body">
-          <canvas id="browserChart"></canvas>
-          <div id="browserStats" class="mt-2">
-            <!-- Browser stats worden hier getoond -->
+        <div id="browserCard" class="collapse show">
+          <div class="card-body">
+            <canvas id="browserChart"></canvas>
+            <div id="browserStats" class="mt-2">
+              <!-- Browser stats worden hier getoond -->
+            </div>
           </div>
         </div>
       </div>
@@ -172,23 +187,28 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   <div class="row mb-4">
     <div class="col-md-6 mb-3">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
           <h5><i class="bi bi-search"></i> Top Zoekwoorden & Bronnen</h5>
+          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#searchKeywordsCard" aria-expanded="true">
+            <i class="bi bi-chevron-up"></i>
+          </button>
         </div>
-        <div class="card-body">
-          <div class="table-responsive search-keywords-table-container">
-            <table class="table table-sm">
-              <thead>
-                <tr>
-                  <th>Bron/Zoekwoord</th>
-                  <th>Bezoeken</th>
-                  <th>%</th>
-                </tr>
-              </thead>
-              <tbody id="searchKeywordsTable">
-                <!-- Search keywords worden hier geladen -->
-              </tbody>
-            </table>
+        <div id="searchKeywordsCard" class="collapse show">
+          <div class="card-body">
+            <div class="table-responsive search-keywords-table-container">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Bron/Zoekwoord</th>
+                    <th>Bezoeken</th>
+                    <th>%</th>
+                  </tr>
+                </thead>
+                <tbody id="searchKeywordsTable">
+                  <!-- Search keywords worden hier geladen -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -199,23 +219,28 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   <div class="row mt-4">
     <div class="col-12">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between align-items-center">
           <h5><i class="bi bi-list-ol"></i> Top 10 Populairste Pagina's</h5>
+          <button class="btn btn-sm btn-outline-secondary collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#topPagesCard" aria-expanded="true">
+            <i class="bi bi-chevron-up"></i>
+          </button>
         </div>
-        <div class="card-body">
-          <div class="table-container">
-            <div class="table-responsive top-pages-table-container">
-              <table class="table table-hover top-pages-table">
-                <thead class="sticky-header">
-                  <tr>
-                    <th>URL</th>
-                    <th>Bezoeken</th>
-                  </tr>
-                </thead>
-                <tbody id="topPagesTable">
-                  <!-- Top pages worden hier geladen -->
-                </tbody>
-              </table>
+        <div id="topPagesCard" class="collapse show">
+          <div class="card-body">
+            <div class="table-container">
+              <div class="table-responsive top-pages-table-container">
+                <table class="table table-hover top-pages-table">
+                  <thead class="sticky-header">
+                    <tr>
+                      <th>URL</th>
+                      <th>Bezoeken</th>
+                    </tr>
+                  </thead>
+                  <tbody id="topPagesTable">
+                    <!-- Top pages worden hier geladen -->
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -1568,4 +1593,29 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
    // Update display when dates change
    document.getElementById('startDate').addEventListener('change', updateDateRangeDisplay);
    document.getElementById('endDate').addEventListener('change', updateDateRangeDisplay);
+   
+   // Card collapse functionality
+   document.addEventListener('DOMContentLoaded', function() {
+     // Add event listeners for all collapse toggles
+     const collapseToggles = document.querySelectorAll('.collapse-toggle');
+     
+     collapseToggles.forEach(function(toggle) {
+       const targetId = toggle.getAttribute('data-bs-target');
+       const targetElement = document.querySelector(targetId);
+       const chevronIcon = toggle.querySelector('i');
+       
+       if (targetElement) {
+         // Bootstrap collapse events
+         targetElement.addEventListener('shown.bs.collapse', function() {
+           chevronIcon.className = 'bi bi-chevron-up';
+           toggle.setAttribute('aria-expanded', 'true');
+         });
+         
+         targetElement.addEventListener('hidden.bs.collapse', function() {
+           chevronIcon.className = 'bi bi-chevron-down';
+           toggle.setAttribute('aria-expanded', 'false');
+         });
+       }
+     });
+   });
 </script>
