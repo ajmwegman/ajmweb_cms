@@ -1839,6 +1839,9 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           console.log(`Element not found for ${cardId}`);
         }
       });
+      
+      // Update row classes after applying all states
+      updateRowClasses();
     } catch (e) {
       console.warn('Could not apply card states:', e);
     }
@@ -1857,6 +1860,22 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           card.classList.add('card-collapsed');
           card.classList.remove('card-expanded');
         }
+      }
+    });
+    updateRowClasses();
+  }
+  
+  // Update row classes based on card states
+  function updateRowClasses() {
+    const rows = document.querySelectorAll('.row');
+    rows.forEach(function(row) {
+      const cardsInRow = row.querySelectorAll('.card');
+      const collapsedCards = row.querySelectorAll('.card.card-collapsed');
+      
+      if (collapsedCards.length === 0 && cardsInRow.length > 0) {
+        row.classList.add('all-expanded');
+      } else {
+        row.classList.remove('all-expanded');
       }
     });
   }
@@ -1900,6 +1919,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           // Add expanded class for equal height
           targetElement.closest('.card').classList.add('card-expanded');
           targetElement.closest('.card').classList.remove('card-collapsed');
+          updateRowClasses();
           saveCurrentCardStates();
         });
         
@@ -1909,6 +1929,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           // Add collapsed class to prevent stretching
           targetElement.closest('.card').classList.add('card-collapsed');
           targetElement.closest('.card').classList.remove('card-expanded');
+          updateRowClasses();
           saveCurrentCardStates();
         });
       }

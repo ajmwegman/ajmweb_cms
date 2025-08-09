@@ -1196,14 +1196,22 @@ body {
     max-width: 50% !important;
   }
   
-  /* Adjust card heights for mobile */
-  .row .col-6 .card,
-  .row .col-md-6 .card {
+  /* Adjust card heights for mobile - only expanded cards */
+  .row .col-6 .card.card-expanded,
+  .row .col-md-6 .card.card-expanded {
     min-height: 300px !important;
   }
   
-  .stats-row .card {
+  .stats-row .card.card-expanded {
     min-height: 100px !important;
+  }
+  
+  /* Collapsed cards on mobile should be minimal */
+  .row .col-6 .card.card-collapsed,
+  .row .col-md-6 .card.card-collapsed,
+  .stats-row .card.card-collapsed {
+    min-height: auto !important;
+    height: auto !important;
   }
   
   /* Smaller charts on mobile */
@@ -1269,25 +1277,43 @@ body {
   justify-content: center;
 }
 
-/* Collapsed cards should not stretch */
+/* Collapsed cards should not stretch and use minimal height */
 .row > [class*="col-"] .card.card-collapsed {
   flex: none;
+  height: auto !important;
+  min-height: auto !important;
 }
 
 /* Specific height adjustments for stats cards */
 .stats-row {
+  align-items: flex-start;
+}
+
+/* Stretch when row has all expanded cards */
+.stats-row.all-expanded {
   align-items: stretch;
 }
 
-.stats-row .card {
+.stats-row .card.card-expanded {
   height: 100%;
   min-height: 120px;
 }
 
-/* Device and Browser breakdown row equal height */
-.row .col-6 .card,
-.row .col-md-6 .card {
+.stats-row .card.card-collapsed {
+  height: auto !important;
+  min-height: auto !important;
+}
+
+/* Device and Browser breakdown row equal height - only when expanded */
+.row .col-6 .card.card-expanded,
+.row .col-md-6 .card.card-expanded {
   min-height: 400px;
+}
+
+/* Override min-height for collapsed cards */
+.row .col-6 .card.card-collapsed,
+.row .col-md-6 .card.card-collapsed {
+  min-height: auto !important;
 }
 
 /* Chart containers should fill available space */
