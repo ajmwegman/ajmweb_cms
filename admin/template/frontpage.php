@@ -40,18 +40,11 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   <div class="row mb-4">
     <div class="col-md-12 text-md-end">
       <div class="range-actions mb-2">
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('today')">
-          <i class="bi bi-calendar-day"></i> Vandaag
-        </button>
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('week')">
-          <i class="bi bi-calendar-week"></i> Deze week
-        </button>
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('month')">
-          <i class="bi bi-calendar-month"></i> Deze maand
-        </button>
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="setQuickRange('year')">
-          <i class="bi bi-calendar-year"></i> Dit jaar
-        </button>
+        <span class="quick-selection-label">Snelle selectie:</span>
+        <a href="#" class="quick-link" onclick="setQuickRange('today'); return false;">Vandaag</a>
+        <a href="#" class="quick-link" onclick="setQuickRange('week'); return false;">Deze week</a>
+        <a href="#" class="quick-link" onclick="setQuickRange('month'); return false;">Deze maand</a>
+        <a href="#" class="quick-link" onclick="setQuickRange('year'); return false;">Dit jaar</a>
       </div>
       <div class="range-display">
         <span id="dateRangeDisplay">

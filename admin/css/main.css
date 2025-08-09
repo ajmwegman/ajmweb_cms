@@ -577,6 +577,30 @@ input:checked + .slider:before {
   font-size: 0.9rem;
 }
 
+/* Snelle selectie styling */
+.quick-selection-label {
+  font-weight: bold;
+  color: #495057;
+  margin-right: 10px;
+  font-size: 0.9rem;
+}
+
+.quick-link {
+  color: #0d6efd;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  margin-right: 8px;
+}
+
+.quick-link:hover {
+  color: #0a58ca;
+  background-color: #f8f9fa;
+  text-decoration: none;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .date-range-container {
