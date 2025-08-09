@@ -312,29 +312,8 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         
         // Apply saved card states after content is loaded
         setTimeout(function() {
-          const savedStates = JSON.parse(localStorage.getItem('analytics_card_states') || '{}');
-          console.log('Applying saved card states after content load:', savedStates);
-          if (Object.keys(savedStates).length > 0) {
-            Object.keys(savedStates).forEach(function(cardId) {
-              const cardElement = document.getElementById(cardId);
-              const toggle = document.querySelector(`[data-bs-target="#${cardId}"]`);
-              
-              if (cardElement && toggle) {
-                const chevronIcon = toggle.querySelector('i');
-                const shouldShow = savedStates[cardId];
-                
-                if (shouldShow) {
-                  cardElement.classList.add('show');
-                  chevronIcon.className = 'bi bi-chevron-up';
-                  toggle.setAttribute('aria-expanded', 'true');
-                } else {
-                  cardElement.classList.remove('show');
-                  chevronIcon.className = 'bi bi-chevron-down';
-                  toggle.setAttribute('aria-expanded', 'false');
-                }
-              }
-            });
-          }
+          console.log('Applying card states after analytics load...');
+          applyStoredCardStates();
         }, 500);
       }
     } catch (error) {
@@ -1796,113 +1775,102 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
    document.getElementById('startDate').addEventListener('change', updateDateRangeDisplay);
    document.getElementById('endDate').addEventListener('change', updateDateRangeDisplay);
    
-   // Card collapse functionality with localStorage
-   document.addEventListener('DOMContentLoaded', function() {
-     const STORAGE_KEY = 'analytics_card_states';
-     
-     // Load saved states from localStorage
-     function loadCardStates() {
-       try {
-         const savedStates = localStorage.getItem(STORAGE_KEY);
-         return savedStates ? JSON.parse(savedStates) : {};
-       } catch (e) {
-         console.warn('Could not load card states from localStorage:', e);
-         return {};
-       }
-     }
-     
-     // Save states to localStorage
-     function saveCardStates(states) {
-       try {
-         localStorage.setItem(STORAGE_KEY, JSON.stringify(states));
-       } catch (e) {
-         console.warn('Could not save card states to localStorage:', e);
-       }
-     }
-     
-     // Get current states of all cards
-     function getCurrentStates() {
-       const states = {};
-       const collapseElements = document.querySelectorAll('[data-bs-toggle="collapse"]');
-       
-       collapseElements.forEach(function(toggle) {
-         const targetId = toggle.getAttribute('data-bs-target').replace('#', '');
-         const targetElement = document.getElementById(targetId);
-         if (targetElement) {
-           states[targetId] = targetElement.classList.contains('show');
-         }
-       });
-       
-       return states;
-     }
-     
-     // Apply saved states to cards
-     function applyCardStates(states) {
-       Object.keys(states).forEach(function(cardId) {
-         const cardElement = document.getElementById(cardId);
-         const toggle = document.querySelector(`[data-bs-target="#${cardId}"]`);
-         
-         if (cardElement && toggle) {
-           const chevronIcon = toggle.querySelector('i');
-           const shouldShow = states[cardId];
-           
-           console.log(`Applying state for ${cardId}: ${shouldShow}`);
-           
-           if (shouldShow) {
-             // Show the card
-             cardElement.classList.add('show');
-             cardElement.classList.remove('collapse');
-             cardElement.classList.add('collapse', 'show');
-             chevronIcon.className = 'bi bi-chevron-up';
-             toggle.setAttribute('aria-expanded', 'true');
-           } else {
-             // Hide the card
-             cardElement.classList.remove('show');
-             cardElement.classList.add('collapse');
-             chevronIcon.className = 'bi bi-chevron-down';
-             toggle.setAttribute('aria-expanded', 'false');
-           }
-         }
-       });
-     }
-     
-     // Load and apply saved states after a short delay to ensure Bootstrap is ready
-     setTimeout(function() {
-       const savedStates = loadCardStates();
-       console.log('Loading saved states:', savedStates);
-       if (Object.keys(savedStates).length > 0) {
-         applyCardStates(savedStates);
-       }
-     }, 100);
-     
-     // Add event listeners for all collapse toggles
-     const collapseToggles = document.querySelectorAll('.collapse-toggle');
-     
-     collapseToggles.forEach(function(toggle) {
-       const targetId = toggle.getAttribute('data-bs-target');
-       const targetElement = document.querySelector(targetId);
-       const chevronIcon = toggle.querySelector('i');
-       
-       if (targetElement) {
-         // Bootstrap collapse events
-         targetElement.addEventListener('shown.bs.collapse', function() {
-           chevronIcon.className = 'bi bi-chevron-up';
-           toggle.setAttribute('aria-expanded', 'true');
-           
-           // Save state to localStorage
-           const currentStates = getCurrentStates();
-           saveCardStates(currentStates);
-         });
-         
-         targetElement.addEventListener('hidden.bs.collapse', function() {
-           chevronIcon.className = 'bi bi-chevron-down';
-           toggle.setAttribute('aria-expanded', 'false');
-           
-           // Save state to localStorage
-           const currentStates = getCurrentStates();
-           saveCardStates(currentStates);
-         });
-       }
-     });
-   });
+     // Improved Card collapse functionality with localStorage
+  const STORAGE_KEY = 'analytics_card_states';
+  
+  // Apply stored card states
+  function applyStoredCardStates() {
+    try {
+      const savedStates = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      console.log('Applying stored card states:', savedStates);
+      
+      // Filter out non-card elements (like navbarSupportedContent)
+      const cardStates = {};
+      Object.keys(savedStates).forEach(key => {
+        if (key.includes('Card') || key.includes('card')) {
+          cardStates[key] = savedStates[key];
+        }
+      });
+      
+      console.log('Filtered card states:', cardStates);
+      
+      Object.keys(cardStates).forEach(function(cardId) {
+        const cardElement = document.getElementById(cardId);
+        const toggle = document.querySelector(`[data-bs-target="#${cardId}"]`);
+        
+        if (cardElement && toggle) {
+          const chevronIcon = toggle.querySelector('i');
+          const shouldShow = cardStates[cardId];
+          
+          console.log(`Setting ${cardId} to ${shouldShow ? 'open' : 'closed'}`);
+          
+          if (shouldShow) {
+            // Show the card
+            if (!cardElement.classList.contains('show')) {
+              cardElement.classList.add('show');
+            }
+            if (chevronIcon) chevronIcon.className = 'bi bi-chevron-up';
+            toggle.setAttribute('aria-expanded', 'true');
+          } else {
+            // Hide the card
+            cardElement.classList.remove('show');
+            if (chevronIcon) chevronIcon.className = 'bi bi-chevron-down';
+            toggle.setAttribute('aria-expanded', 'false');
+          }
+        } else {
+          console.log(`Element not found for ${cardId}`);
+        }
+      });
+    } catch (e) {
+      console.warn('Could not apply card states:', e);
+    }
+  }
+  
+  // Save current card states
+  function saveCurrentCardStates() {
+    try {
+      const states = {};
+      const collapseElements = document.querySelectorAll('.collapse-toggle');
+      
+      collapseElements.forEach(function(toggle) {
+        const targetId = toggle.getAttribute('data-bs-target').replace('#', '');
+        const targetElement = document.getElementById(targetId);
+        if (targetElement && (targetId.includes('Card') || targetId.includes('card'))) {
+          states[targetId] = targetElement.classList.contains('show');
+        }
+      });
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(states));
+      console.log('Saved card states:', states);
+    } catch (e) {
+      console.warn('Could not save card states:', e);
+    }
+  }
+  
+  // Initialize card collapse functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add event listeners for all collapse toggles
+    const collapseToggles = document.querySelectorAll('.collapse-toggle');
+    
+    collapseToggles.forEach(function(toggle) {
+      const targetId = toggle.getAttribute('data-bs-target');
+      const targetElement = document.querySelector(targetId);
+      const chevronIcon = toggle.querySelector('i');
+      
+      if (targetElement) {
+        // Bootstrap collapse events
+        targetElement.addEventListener('shown.bs.collapse', function() {
+          if (chevronIcon) chevronIcon.className = 'bi bi-chevron-up';
+          toggle.setAttribute('aria-expanded', 'true');
+          saveCurrentCardStates();
+        });
+        
+        targetElement.addEventListener('hidden.bs.collapse', function() {
+          if (chevronIcon) chevronIcon.className = 'bi bi-chevron-down';
+          toggle.setAttribute('aria-expanded', 'false');
+          saveCurrentCardStates();
+        });
+      }
+    });
+  });
 </script>
