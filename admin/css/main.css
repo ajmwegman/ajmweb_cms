@@ -289,7 +289,7 @@ input:checked + .slider:before {
 
 /* Analytics Stats Styling */
 .stats-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
   border: none;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -372,7 +372,7 @@ input:checked + .slider:before {
 .device-stat-item {
   padding: 10px;
   border-radius: 8px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
   background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
   border: 1px solid rgba(0,0,0,0.05);
 }
@@ -690,7 +690,7 @@ input:checked + .slider:before {
   border: none;
   border-radius: 16px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
   background: #ffffff;
   overflow: hidden;
 }
@@ -719,7 +719,7 @@ input:checked + .slider:before {
   border-radius: 16px;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
   position: relative;
   overflow: hidden;
 }
@@ -794,6 +794,13 @@ input:checked + .slider:before {
   max-height: 300px !important;
   height: 300px !important;
   width: 100% !important;
+  /* Performance optimizations */
+  transition: none !important;
+  animation: none !important;
+  will-change: auto !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  perspective: 1000px !important;
 }
 
 /* Breakdown Cards Modern Styling */
@@ -805,7 +812,7 @@ input:checked + .slider:before {
   border-radius: 16px;
   background: #ffffff;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .breakdown-card:hover {
@@ -840,7 +847,7 @@ input:checked + .slider:before {
   padding: 1rem;
   border-radius: 12px;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  transition: all 0.3s ease;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   margin-bottom: 0.75rem;
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
