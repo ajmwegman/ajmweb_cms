@@ -1242,7 +1242,7 @@ body {
   }
 }
 
-/* Equal height cards per row */
+/* Equal height cards per row - only when expanded */
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -1254,16 +1254,24 @@ body {
 }
 
 .row > [class*="col-"] .card {
-  flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.row > [class*="col-"] .card .card-body {
+/* Only apply equal height to expanded cards */
+.row > [class*="col-"] .card.card-expanded {
   flex: 1;
+}
+
+.row > [class*="col-"] .card .card-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+/* Collapsed cards should not stretch */
+.row > [class*="col-"] .card.card-collapsed {
+  flex: none;
 }
 
 /* Specific height adjustments for stats cards */

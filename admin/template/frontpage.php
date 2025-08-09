@@ -312,6 +312,9 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         
         // Apply saved card states immediately after content is loaded
         applyStoredCardStates();
+        
+        // Initialize card expanded/collapsed classes
+        initializeCardClasses();
       }
     } catch (error) {
       console.error('Error initializing analytics:', error);
@@ -1820,11 +1823,15 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
           if (shouldShow) {
             // Show the card
             cardElement.classList.add('show');
+            cardElement.closest('.card').classList.add('card-expanded');
+            cardElement.closest('.card').classList.remove('card-collapsed');
             if (chevronIcon) chevronIcon.className = 'bi bi-chevron-up';
             toggle.setAttribute('aria-expanded', 'true');
           } else {
             // Hide the card
             cardElement.classList.remove('show');
+            cardElement.closest('.card').classList.add('card-collapsed');
+            cardElement.closest('.card').classList.remove('card-expanded');
             if (chevronIcon) chevronIcon.className = 'bi bi-chevron-down';
             toggle.setAttribute('aria-expanded', 'false');
           }
@@ -1837,6 +1844,23 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
     }
   }
   
+  // Initialize card expanded/collapsed classes based on current state
+  function initializeCardClasses() {
+    const allCards = document.querySelectorAll('.card');
+    allCards.forEach(function(card) {
+      const collapseElement = card.querySelector('.collapse');
+      if (collapseElement) {
+        if (collapseElement.classList.contains('show')) {
+          card.classList.add('card-expanded');
+          card.classList.remove('card-collapsed');
+        } else {
+          card.classList.add('card-collapsed');
+          card.classList.remove('card-expanded');
+        }
+      }
+    });
+  }
+
   // Save current card states
   function saveCurrentCardStates() {
     try {
@@ -1873,12 +1897,18 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
         targetElement.addEventListener('shown.bs.collapse', function() {
           if (chevronIcon) chevronIcon.className = 'bi bi-chevron-up';
           toggle.setAttribute('aria-expanded', 'true');
+          // Add expanded class for equal height
+          targetElement.closest('.card').classList.add('card-expanded');
+          targetElement.closest('.card').classList.remove('card-collapsed');
           saveCurrentCardStates();
         });
         
         targetElement.addEventListener('hidden.bs.collapse', function() {
           if (chevronIcon) chevronIcon.className = 'bi bi-chevron-down';
           toggle.setAttribute('aria-expanded', 'false');
+          // Add collapsed class to prevent stretching
+          targetElement.closest('.card').classList.add('card-collapsed');
+          targetElement.closest('.card').classList.remove('card-expanded');
           saveCurrentCardStates();
         });
       }
