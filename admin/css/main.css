@@ -679,7 +679,7 @@ input:checked + .slider:before {
 .card-header {
   background: transparent;
   border: none;
-  padding: 1.5rem 1.5rem 0.5rem;
+  padding: 0.75rem 1.5rem 0.5rem;
   font-weight: 600;
   color: #1a1a1a;
   font-size: 0.95rem;
@@ -703,7 +703,7 @@ input:checked + .slider:before {
 .stats-card .card-header {
   background: transparent;
   border: none;
-  padding: 0.75rem 1rem 0.5rem;
+  padding: 0.5rem 1rem 0.25rem;
   font-weight: 600;
   color: #1a1a1a;
   font-size: 0.85rem;
@@ -713,6 +713,7 @@ input:checked + .slider:before {
   font-size: 0.8rem;
   font-weight: 600;
   color: #495057;
+  margin-bottom: 0;
 }
 
 .stats-card::before {
@@ -791,7 +792,7 @@ input:checked + .slider:before {
 .breakdown-card .card-header {
   background: transparent;
   border: none;
-  padding: 1.5rem 1.5rem 0.5rem;
+  padding: 0.75rem 1.5rem 0.5rem;
   font-weight: 600;
   color: #1a1a1a;
   font-size: 0.95rem;
@@ -1163,16 +1164,46 @@ body {
     font-size: 0.8rem !important;
   }
   
-  /* Stack all columns on mobile */
+  /* Stack main columns on mobile */
   .col-md-6,
-  .col-6 {
+  .col-6:not(.stats-card):not(.stats-card *) {
     flex: 0 0 100% !important;
     max-width: 100% !important;
   }
   
-  /* Stats cards full width on mobile */
+  /* Stats cards - 2 per row on mobile (50% width) */
   .stats-card {
     margin-bottom: 0.5rem !important;
+  }
+  
+  .stats-card .card-body {
+    padding: 0.75rem !important;
+    text-align: center;
+  }
+  
+  .stats-card .stat-value {
+    font-size: 1.5rem !important;
+    font-weight: bold;
+  }
+  
+  .stats-card .stat-label {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Target only stats cards columns on mobile - 2 per row */
+  .stats-row .col-3 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
+  
+  /* Adjust card heights for mobile */
+  .row .col-6 .card,
+  .row .col-md-6 .card {
+    min-height: 300px !important;
+  }
+  
+  .stats-row .card {
+    min-height: 100px !important;
   }
   
   /* Smaller charts on mobile */
@@ -1209,6 +1240,59 @@ body {
   .top-pages-table-compact td {
     padding: 0.25rem 0.1rem !important;
   }
+}
+
+/* Equal height cards per row */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row > [class*="col-"] {
+  display: flex;
+  flex-direction: column;
+}
+
+.row > [class*="col-"] .card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.row > [class*="col-"] .card .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Specific height adjustments for stats cards */
+.stats-row {
+  align-items: stretch;
+}
+
+.stats-row .card {
+  height: 100%;
+  min-height: 120px;
+}
+
+/* Device and Browser breakdown row equal height */
+.row .col-6 .card,
+.row .col-md-6 .card {
+  min-height: 400px;
+}
+
+/* Chart containers should fill available space */
+.chart-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Table containers should fill available space */
+.table-responsive {
+  flex: 1;
 }
 
 /* Enhanced Shadows and Depth */

@@ -80,7 +80,7 @@ $stats = $analytics->getEnhancedStats(null, null, $currentSiteId);
   </div>
 
   <!-- Basis Stats - Smaller cards with col-3 maximum -->
-  <div class="row mb-4">
+  <div class="row mb-4 stats-row">
     <div class="col-3 mb-3">
       <div class="card stats-card">
         <div class="card-header d-flex justify-content-between align-items-center p-2">
