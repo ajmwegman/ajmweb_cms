@@ -1,0 +1,8 @@
+{
+    "name": "ajmweb/onepage-checkout",
+    "description": "Onepage Mollie checkout integration",
+    "license": "proprietary",
+    "require": {
+        "mollie/mollie-api-php": "^2.0"
+    }
+}
