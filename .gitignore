@@ -33,3 +33,4 @@ node_modules/
 # Cache directories
 .cache/
 *.cache
+vendor/
