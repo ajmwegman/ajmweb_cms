@@ -1,10 +1,11 @@
 $(function() {
   const placeholderImage = 'https://via.placeholder.com/60x60?text=No+Image';
 
-  let cart = [
-    { id: 1, name: 'Product A', price: 10.00, quantity: 1, image: '' },
-    { id: 2, name: 'Product B', price: 15.50, quantity: 2, image: 'https://via.placeholder.com/60' }
-  ];
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
 
   function renderCart() {
     const $tbody = $('#cartTable tbody');
@@ -36,6 +37,7 @@ $(function() {
     });
 
     $('#grandTotal').text('€' + grandTotal.toFixed(2));
+    saveCart();
   }
 
   function updateQuantity(id, delta) {
