@@ -1,0 +1,16 @@
+.sidebar {
+  border-right: 1px solid #ddd;
+}
+
+.btn-interactive {
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-interactive:hover {
+  transform: scale(1.05);
+}
+
+.btn-interactive.clicked {
+  background-color: #198754;
+  color: #fff;
+}
