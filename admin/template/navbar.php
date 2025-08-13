@@ -54,6 +54,7 @@ $daytime = $login->daytime(date("H"));
                 <li><a class="dropdown-item" aria-current="reviews" href="/admin/reviews/">Reviews</a></li>
                 <li><a class="dropdown-item" aria-current="products" href="/admin/products/">Producten</a></li>
                 <li><a class="dropdown-item" aria-current="auction" href="/admin/auctions/">Veilingen</a></li>
+                <li><a class="dropdown-item" aria-current="shop" href="/admin/shop/">Winkel</a></li>
                 <li><a class="dropdown-item" aria-current="newsletter_memberlist" href="/admin/newsletter_memberlist/">Nieuwsbrief leden</a></li>
                 <li><a class="dropdown-item" aria-current="newsletter" href="/admin/newsletter/">Nieuwsbrief</a></li>
                 <li><a class="dropdown-item" aria-current="customers" href="/admin/customers/">Klanten</a></li>
