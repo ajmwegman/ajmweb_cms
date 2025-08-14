@@ -16,6 +16,10 @@ $id 	= isset($_GET["id"]) ? $_GET['id'] : 0;
     <li class="nav-item" role="presentation">
       <a class="nav-link <?php echo ($module == 'content') ? "active" : ''; ?>" id="profile-tab" href="/admin/content/" role="tab" aria-controls="content" aria-selected="false">Content</a>
     </li>
+
+    <li class="nav-item" role="presentation">
+      <a class="nav-link <?php echo ($module == 'pages') ? "active" : ''; ?>" id="pages-tab" href="/admin/pages/" role="tab" aria-controls="pages" aria-selected="false">Paginas</a>
+    </li>
 	   
     <li class="nav-item" role="presentation">
       <a class="nav-link <?php echo ($module == 'keywords') ? "active" : ''; ?>" id="settings-tab" href="/admin/keywords/" role="tab" aria-controls="keywords" aria-selected="false">Zoekwoorden</a>
@@ -32,11 +36,13 @@ $id 	= isset($_GET["id"]) ? $_GET['id'] : 0;
 <?php 
 
 //print_r($_GET);
-if ($module == 'menu') { require_once("modules/menu/index.php"); } 
-//if ($module == 'content' && $action != 'edit') { require_once("modules/content/index.php"); } 
-if ($module == 'content' && $action == 'edit') { require_once("modules/content/edit.php"); } 
-if ($module == 'keywords') { require_once("modules/keywords/index.php"); } 
-if ($module == 'config') { require_once("modules/config/index.php"); } 
+if ($module == 'menu') { require_once("modules/menu/index.php"); }
+//if ($module == 'content' && $action != 'edit') { require_once("modules/content/index.php"); }
+if ($module == 'content' && $action == 'edit') { require_once("modules/content/edit.php"); }
+if ($module == 'pages' && $action == 'edit') { require_once("modules/pages/edit.php"); }
+if ($module == 'pages' && $action != 'edit') { require_once("modules/pages/index.php"); }
+if ($module == 'keywords') { require_once("modules/keywords/index.php"); }
+if ($module == 'config') { require_once("modules/config/index.php"); }
 ?>
 
 

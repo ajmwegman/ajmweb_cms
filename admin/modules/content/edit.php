@@ -1,6 +1,7 @@
 <?php
-require_once("src/content.class.php"); 
-require_once("../admin/src/menulist.class.php"); 
+require_once __DIR__ . '/src/content.class.php';
+require_once __DIR__ . '/../../src/menulist.class.php';
+require_once __DIR__ . '/../../summernote.php';
 
 // Get ID from URL rewriting or GET parameters
 $id = $_GET['id'] ?? 0;
@@ -37,6 +38,8 @@ if ($result && is_array($result)) {
 		$keywords 	= $row['keywords'];
 		$sortnum 	= $row['sortnum'];
 		$status 	= $row['status'];
+		$meta_title 	= $row['meta_title'];
+		$meta_description = $row['meta_description'];
 
 		$selectbox = selectbox("Kies menu item", 'location', $location, array_combine($MenuLocations, $MenuNames), 'class="form-select autosave" data-field="location" data-set="'.$hash.'"');
     }

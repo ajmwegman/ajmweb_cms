@@ -133,7 +133,7 @@ Sortable.create(menuList, {
   $(".switchbox").on('click', (function () {
 
     var id = $(this).attr("data-set");
-    var status = $(this).is(":checked") ? 'y' : 'n';
+    var status = $(this).is(":checked") ? 'published' : 'draft';
 
     $.ajax({
       type: "post",

@@ -19,8 +19,8 @@ $error = '<div class="alert alert-danger" role="alert">Er is iets fout gegaan!</
 
 if(isset($_POST['id'])) {
 
- $hash = $_POST['id'];
- $status = $_POST['status'];
+$hash = $_POST['id'];
+$status = ($_POST['status'] === 'published') ? 'published' : 'draft';
 	
  $sql = "UPDATE group_content SET status=:status WHERE hash=:hash";
  $go = $db->runQuery($sql, ['status'=>$status, 'hash'=>$hash]);

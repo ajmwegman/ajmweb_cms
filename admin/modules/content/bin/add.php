@@ -61,15 +61,18 @@ if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' ) {
 	
   if ($pass == 0 ) { 
  
-	  $values = array(
-		  'hash' => $hash
-		  , 'group_id' => $group_id
-		  , 'title' => $title
-		  , 'content' => $article
-		  , 'location' => $location
-		  , 'seo_url' => $seo_url
-		  , 'keywords' => $keywords
-	  );
+          $values = array(
+                  'hash' => $hash
+                  , 'group_id' => $group_id
+                  , 'title' => $title
+                  , 'content' => $article
+                  , 'location' => $location
+                  , 'seo_url' => $seo_url
+                  , 'keywords' => $keywords
+                  , 'meta_title' => ''
+                  , 'meta_description' => ''
+                  , 'status' => 'draft'
+          );
 	  $go = $db->insertdata("group_content", $values);
 	  
 	  if($go == true) {
