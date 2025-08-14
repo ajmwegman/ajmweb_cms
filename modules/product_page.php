@@ -1,5 +1,17 @@
 <?php
-// Simple demo product page module with sidebar filters and four products
+$path = $_SERVER['DOCUMENT_ROOT'];
+require_once $path . '/system/database.php';
+
+// Fetch categories
+$categories = $pdo->query("SELECT id, name FROM product_categories ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch products with first image/variant
+$sql = "SELECT p.id, p.name, p.price, c.name AS category, i.image_url, i.variant
+        FROM products p
+        LEFT JOIN product_categories c ON p.category_id = c.id
+        LEFT JOIN product_images i ON p.id = i.product_id AND i.sort_order = 0
+        WHERE p.active = 1";
+$products = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <div class="container py-5">
   <div class="row">
@@ -7,65 +19,28 @@
       <h4 class="mb-3">Zoek</h4>
       <input type="text" id="search" class="form-control mb-4" placeholder="Zoek...">
       <h5>Categorieën</h5>
+      <?php foreach ($categories as $cat): ?>
       <div class="form-check">
-        <input class="form-check-input category-filter" type="checkbox" value="electronics" id="cat1">
-        <label class="form-check-label" for="cat1">Elektronica</label>
+        <input class="form-check-input category-filter" type="checkbox" value="<?= htmlspecialchars($cat['name']) ?>" id="cat<?= $cat['id'] ?>">
+        <label class="form-check-label" for="cat<?= $cat['id'] ?>"><?= htmlspecialchars($cat['name']) ?></label>
       </div>
-      <div class="form-check">
-        <input class="form-check-input category-filter" type="checkbox" value="books" id="cat2">
-        <label class="form-check-label" for="cat2">Boeken</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input category-filter" type="checkbox" value="home" id="cat3">
-        <label class="form-check-label" for="cat3">Huis</label>
-      </div>
+      <?php endforeach; ?>
     </aside>
     <div class="col-md-9">
       <div class="row" id="product-list">
-        <div class="col-md-6 mb-4 product-card" data-category="electronics">
+        <?php foreach ($products as $p): ?>
+        <div class="col-md-6 mb-4 product-card" data-category="<?= htmlspecialchars($p['category']) ?>">
           <div class="card h-100">
-            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product 1">
+            <img src="<?= htmlspecialchars($p['image_url'] ?: 'https://via.placeholder.com/300x200') ?>" class="card-img-top" alt="<?= htmlspecialchars($p['name']) ?>">
             <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Product 1</h5>
-              <p class="card-text mb-4">&euro;10,00</p>
-              <button class="btn btn-primary btn-cart btn-interactive w-100 mb-2" data-id="1" data-name="Product 1" data-price="10" data-image="https://via.placeholder.com/300x200">In winkelmand</button>
-              <button class="btn btn-outline-secondary btn-fav btn-interactive w-100" data-id="1">Favoriet</button>
+              <h5 class="card-title"><?= htmlspecialchars($p['name']) ?></h5>
+              <p class="card-text mb-4">&euro;<?= number_format($p['price'], 2, ',', '.') ?></p>
+              <button class="btn btn-primary btn-cart btn-interactive w-100 mb-2" data-id="<?= $p['id'] ?>" data-name="<?= htmlspecialchars($p['name']) ?>" data-price="<?= $p['price'] ?>" data-image="<?= htmlspecialchars($p['image_url']) ?>" data-variant="<?= htmlspecialchars($p['variant']) ?>">In winkelmand</button>
+              <button class="btn btn-outline-secondary btn-fav btn-interactive w-100" data-id="<?= $p['id'] ?>">Favoriet</button>
             </div>
           </div>
         </div>
-        <div class="col-md-6 mb-4 product-card" data-category="books">
-          <div class="card h-100">
-            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product 2">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Product 2</h5>
-              <p class="card-text mb-4">&euro;15,50</p>
-              <button class="btn btn-primary btn-cart btn-interactive w-100 mb-2" data-id="2" data-name="Product 2" data-price="15.5" data-image="https://via.placeholder.com/300x200">In winkelmand</button>
-              <button class="btn btn-outline-secondary btn-fav btn-interactive w-100" data-id="2">Favoriet</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mb-4 product-card" data-category="home">
-          <div class="card h-100">
-            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product 3">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Product 3</h5>
-              <p class="card-text mb-4">&euro;7,25</p>
-              <button class="btn btn-primary btn-cart btn-interactive w-100 mb-2" data-id="3" data-name="Product 3" data-price="7.25" data-image="https://via.placeholder.com/300x200">In winkelmand</button>
-              <button class="btn btn-outline-secondary btn-fav btn-interactive w-100" data-id="3">Favoriet</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mb-4 product-card" data-category="electronics">
-          <div class="card h-100">
-            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product 4">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Product 4</h5>
-              <p class="card-text mb-4">&euro;22,00</p>
-              <button class="btn btn-primary btn-cart btn-interactive w-100 mb-2" data-id="4" data-name="Product 4" data-price="22" data-image="https://via.placeholder.com/300x200">In winkelmand</button>
-              <button class="btn btn-outline-secondary btn-fav btn-interactive w-100" data-id="4">Favoriet</button>
-            </div>
-          </div>
-        </div>
+        <?php endforeach; ?>
       </div>
     </div>
   </div>
