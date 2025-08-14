@@ -12,6 +12,7 @@ include("../../system/database.php");
 require_once("../../src/database.class.php");
 require_once("../../src/site.class.php");
 require_once("../../src/users.class.php");
+require_once("../../functions/csrf.php");
 
 $db    = new database($pdo);
 $site  = new site($pdo);
@@ -27,6 +28,14 @@ if (isset($_SESSION['session_hash'])) {
     $user_id = $user->getUserIdByHash($hash);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!validate_csrf_token($_POST['csrf_token'] ?? '')) {
+            $response = array(
+                "status" => "error",
+                "message" => "Ongeldige CSRF-token."
+            );
+            echo json_encode($response);
+            exit;
+        }
         // Ontvang de product-ID en de favorietenstatus (aan/uit) via POST
         $product_id = $_POST['product_id'];
         $favorite_status = $_POST['favorite_status'];

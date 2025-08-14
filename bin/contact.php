@@ -18,6 +18,7 @@ require_once ("../src/site.class.php");
 require_once ('../src/Exception.php');
 require_once ('../src/PHPMailer.php');
 require_once ('../src/SMTP.php');
+require_once ("../functions/csrf.php");
 
 $db   	 = new database($pdo);
 $site  	 = new site($pdo);
@@ -38,6 +39,11 @@ $email   = isset($_POST['email']) ? $_POST['email'] : '';
 $phone   = isset($_POST['phone']) ? $_POST['phone'] : '';
 $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
 $message = isset($_POST['message']) ? $_POST['message'] : '';
+
+if (!validate_csrf_token($_POST['csrf_token'] ?? '')) {
+    echo '<div class="alert alert-danger mt-4" role="alert">Ongeldige CSRF-token.</div>';
+    exit;
+}
 
 if(empty($name) || empty($email) || empty($subject) || empty($message)  ) {
     

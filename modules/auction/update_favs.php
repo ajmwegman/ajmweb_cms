@@ -9,6 +9,7 @@ require_once("../../system/database.php");
 require_once("../../src/database.class.php");
 require_once("../../src/auction.class.php");
 require_once("../../src/site.class.php");
+require_once("../../functions/csrf.php");
 
 $auction = new Auction($pdo); // Create an instance of the auction class
 $site    = new site($pdo); // Create an instance of the auction class
@@ -20,6 +21,16 @@ if (!isset($_SESSION['loggedin']) || !isset($_SESSION['session_hash'])) {
     $asErrors[] = $empty_login;
 } else {
     $hash = $_SESSION['session_hash'];
+}
+
+if (!validate_csrf_token($_POST['csrf_token'] ?? '')) {
+    $response = array(
+        'status' => 'error',
+        'message' => 'Ongeldige CSRF-token.'
+    );
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
 }
 
 $productId = $_POST['product_id'];

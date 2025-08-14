@@ -1,6 +1,7 @@
 <section class="container mt-5">
     <div class="row">
-        
+        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+
         <div class="col-md-3">
 <?php
 $uniqueCategories = $auction->getUniqueCategories(); // Aangenomen dat $auction je object is
@@ -221,7 +222,7 @@ $('.fav-btn').click(function() {
     $.ajax({
         url: baseUrl + '/modules/auction/update_favs.php',
         type: 'POST',
-        data: { product_id: product_id },
+        data: { product_id: product_id, csrf_token: $('input[name="csrf_token"]').val() },
         dataType: 'json',
         success: function(response) {
             //console.log("AJAX-aanroep geslaagd", response); // Controleer de respons van de AJAX-aanroep

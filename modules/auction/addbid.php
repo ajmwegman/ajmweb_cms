@@ -9,6 +9,7 @@ require_once("../../system/database.php");
 require_once("../../src/database.class.php");
 require_once("../../src/auction.class.php");
 require_once("../../src/site.class.php");
+require_once("../../functions/csrf.php");
 
 $auction = new Auction($pdo); // Create an instance of the auction class
 $site    = new site($pdo); // Create an instance of the auction class
@@ -23,6 +24,16 @@ $expired_auction = "De veiling is afgelopen. U kunt geen bod meer plaatsen.";
 /* Checks */
 $bid = isset($_POST['bid']) ? $_POST['bid'] : '';
 $lotid = isset($_POST['lotid']) ? $_POST['lotid'] : '';
+
+if (!validate_csrf_token($_POST['csrf_token'] ?? '')) {
+    $response = array(
+        'status' => 'error',
+        'message' => 'Ongeldige CSRF-token.'
+    );
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
 
 $checkBid = $auction->checkBid($bid, $lotid);
 

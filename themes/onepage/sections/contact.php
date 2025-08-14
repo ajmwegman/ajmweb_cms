@@ -35,6 +35,7 @@
           <div class="col-lg-8 mt-5 mt-lg-0">
 
             <form action="bin/contact.php" method="post" role="form" id="contactform" enctype="multipart/form-data">
+              <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
               <div class="row">
                 <div class="col-md-6 form-group">
                   <input type="text" name="name" class="form-control" id="name" placeholder="Naam" required>

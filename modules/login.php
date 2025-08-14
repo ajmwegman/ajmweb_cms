@@ -13,6 +13,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
             <h3 class="card-title">Registratie</h3>
             <div id="registrationMessage"></div>
             <form id="registrationForm" method="post">
+              <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
               <div class="mb-3">
                 <label for="email" class="form-label">E-mailadres</label>
                 <input type="email" class="form-control" id="email" name="email" required>
@@ -32,6 +33,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
             <h3 class="card-title">Inloggen</h3>
               <div id="loginMessage"></div>
             <form id="loginForm" method="post">
+              <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
               <div class="mb-3">
                 <label for="loginEmail" class="form-label">E-mailadres</label>
                 <input type="email" class="form-control" id="loginEmail" name="loginEmail" required>

@@ -3,10 +3,29 @@ class site {
 
     /** @var PDO */
     private $pdo;
+    private $cacheDir;
 
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
+        $this->cacheDir = __DIR__ . '/../cache/';
+    }
+
+    private function getCache(string $key, int $ttl = 300)
+    {
+        $file = $this->cacheDir . md5($key) . '.cache';
+        if (file_exists($file) && (filemtime($file) + $ttl) > time()) {
+            return unserialize(file_get_contents($file));
+        }
+        return false;
+    }
+
+    private function setCache(string $key, $data): void
+    {
+        if (!is_dir($this->cacheDir)) {
+            mkdir($this->cacheDir, 0777, true);
+        }
+        file_put_contents($this->cacheDir . md5($key) . '.cache', serialize($data));
     }
     
     /* START GETTNG DATA FOR WEBSITES */
@@ -140,22 +159,29 @@ class site {
 		}
 	}
 	
-	function getActiveContent( $groupid ) {
+        function getActiveContent( $groupid ) {
 
-		if(!$groupid) {
-			return "E01";
-		} else {
+                if(!$groupid) {
+                        return "E01";
+                } else {
 
-			$sql = "SELECT * FROM group_content WHERE group_id = :groupid AND status = 'y' ORDER BY sortnum ASC";
+                        $cacheKey = 'active_content_'.$groupid;
+                        $cached = $this->getCache($cacheKey, 600);
+                        if ($cached !== false) {
+                            return $cached;
+                        }
 
-			$stmt = $this->pdo->prepare( $sql );
-			$stmt->execute( [ 'groupid' => $groupid ] );
+                        $sql = "SELECT * FROM group_content WHERE group_id = :groupid AND status = 'y' ORDER BY sortnum ASC";
 
-			$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			
-			return($row);	
-		}
-	}
+                        $stmt = $this->pdo->prepare( $sql );
+                        $stmt->execute( [ 'groupid' => $groupid ] );
+
+                        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        $this->setCache($cacheKey, $row);
+
+                        return($row);
+                }
+        }
     
     function getWebsiteInfo( $groupid ) {
 
@@ -176,20 +202,27 @@ class site {
     
     function getSingleContent( $seo_url ) {
 
-		if(!$seo_url) {
-			return "E01";
-		} else {
+                if(!$seo_url) {
+                        return "E01";
+                } else {
 
-			$sql = "SELECT * FROM group_content WHERE seo_url = :seo_url LIMIT 1";
+                        $cacheKey = 'single_content_'.$seo_url;
+                        $cached = $this->getCache($cacheKey, 600);
+                        if ($cached !== false) {
+                            return $cached;
+                        }
 
-			$stmt = $this->pdo->prepare( $sql );
-			$stmt->execute( [ 'seo_url' => $seo_url ] );
+                        $sql = "SELECT * FROM group_content WHERE seo_url = :seo_url LIMIT 1";
 
-			$row = $stmt->fetch();
-			
-			return($row);
+                        $stmt = $this->pdo->prepare( $sql );
+                        $stmt->execute( [ 'seo_url' => $seo_url ] );
+
+                        $row = $stmt->fetch();
+                        $this->setCache($cacheKey, $row);
+
+                        return($row);
         }
-	}
+        }
     
    function getLatestReview() {
 
@@ -203,15 +236,48 @@ class site {
 			return($row);
 	}
     function getCategoryContent($group_id, $location, $limit) {
-        
+
+        $cacheKey = 'category_content_'.$group_id.'_'.$location.'_'.$limit;
+        $cached = $this->getCache($cacheKey, 600);
+        if ($cached !== false) {
+            return $cached;
+        }
+
         $sql = "SELECT * FROM group_content WHERE group_id = :group_id AND location = :location ORDER BY sortnum ASC LIMIT ".$limit;
 
-		$stmt = $this->pdo->prepare( $sql );
-		$stmt->execute( [ 'group_id' => $group_id, 'location' => $location ] );
+                $stmt = $this->pdo->prepare( $sql );
+                $stmt->execute( [ 'group_id' => $group_id, 'location' => $location ] );
 
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			
+        $this->setCache($cacheKey, $row);
+
         return($row);
+    }
+
+    function getProductById($id) {
+
+        if(!$id) {
+            return "E01";
+        } else {
+
+            $cacheKey = 'product_'.$id;
+            $cached = $this->getCache($cacheKey, 600);
+            if ($cached !== false) {
+                return $cached;
+            }
+
+            $sql = "SELECT * FROM group_products WHERE id = :id LIMIT 1";
+
+            $stmt = $this->pdo->prepare( $sql );
+            $stmt->execute( [ 'id' => $id ] );
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                $this->setCache($cacheKey, $row);
+            }
+
+            return $row;
+        }
     }
     
     function getKeywords($groupid ) {

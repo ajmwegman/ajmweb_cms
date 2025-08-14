@@ -101,6 +101,7 @@ if ( $productData ) {
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 ?>
         <form action="" method="post" name="form" class="form form-inline">
+              <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
           <div class="mb-3 mt-4">
             <label for="bid" class="form-label">Doe een bod</label>
@@ -171,7 +172,7 @@ $('#fav-btn').click(function() {
     $.ajax({
         url: baseUrl + '/modules/auction/update_favs.php',
         type: 'POST',
-        data: { product_id: lotid },
+        data: { product_id: lotid, csrf_token: $('input[name="csrf_token"]').val() },
         dataType: 'json',
         success: function(response) {
             //console.log("AJAX-aanroep geslaagd", response); // Controleer de respons van de AJAX-aanroep
@@ -226,9 +227,11 @@ $('#fav-btn').click(function() {
 
             var bidAmount = $('#bid').val();
             /*var lotid = $('#lotid').val();*/
+            var csrf_token = $('input[name="csrf_token"]').val();
             var data = {
                 bid: bidAmount,
-                lotid: lotid
+                lotid: lotid,
+                csrf_token: csrf_token
             };
 
             $.ajax({

@@ -11,6 +11,7 @@ include( "../system/database.php" );
 require_once ("../src/database.class.php");
 require_once ("../src/site.class.php");
 require_once ("../src/users.class.php");
+require_once ("../functions/csrf.php");
 
 $db   	 = new database($pdo);
 $site  	 = new site($pdo);
@@ -28,6 +29,12 @@ $error = '
 </div>';
 
   // Haal de gegevens op van het POST-verzoek (vanuit het formulier)
+  if (!validate_csrf_token($_POST['csrf_token'] ?? '')) {
+      header("Content-Type: application/json");
+      echo json_encode(["success" => false, "message" => "Ongeldige CSRF-token."]);
+      exit;
+  }
+
   $email         = $_POST["email"];
   $inputPassword = $_POST["password"];
 

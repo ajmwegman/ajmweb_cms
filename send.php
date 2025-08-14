@@ -16,6 +16,7 @@ require_once ("src/site.class.php");
 require_once ('src/Exception.php');
 require_once ('src/PHPMailer.php');
 require_once ('src/SMTP.php');
+require_once ("functions/csrf.php");
 
 $site  	 = new site($pdo);
 
@@ -55,7 +56,9 @@ $success_output = '';
 $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
 $recaptcha_response = $_POST['recaptcha_response'];
 
-if(isValid()) {
+if (!validate_csrf_token($_POST['csrf_token'] ?? '')) {
+    $error_output = 'Ongeldige CSRF-token.';
+} elseif(isValid()) {
 
     $message = $_POST['message'];
     $name    = $_POST['name'];

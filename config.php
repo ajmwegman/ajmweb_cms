@@ -2,10 +2,17 @@
 session_start();
 $sessid = session_id();
 
+// Force HTTPS
+if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    exit;
+}
+
 error_reporting( E_ALL );
 ini_set( "display_errors", 1 );
 
 include( "system/database.php" );
+require_once("functions/csrf.php");
 
 # locations
 $site_location = 'https://'.$_SERVER['HTTP_HOST'].'/';

@@ -5,6 +5,7 @@ $(document).ready(function() {
     // Verkrijg de ingevoerde waarden
     var email = $("#loginEmail").val();
     var password = $("#loginPassword").val();
+    var csrf_token = $(this).find('input[name="csrf_token"]').val();
 
     // Verstuur de gegevens naar de PHP-backend via een AJAX-verzoek
     $.ajax({
@@ -12,7 +13,8 @@ $(document).ready(function() {
       type: "POST",
       data: {
         email: email,
-        password: password
+        password: password,
+        csrf_token: csrf_token
       },
       dataType: "json", // Verwacht een JSON-response van de server
       success: function(data) {
