@@ -2,11 +2,60 @@
 class users {
 
     private $pdo;
-    
-	public function __construct($pdo)
-        {
-            $this->pdo = $pdo;
+
+    /**
+     * Toegestane gebruikersrollen
+     *
+     * @var array
+     */
+    private $allowedRoles = ['user', 'admin'];
+
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    /**
+     * Valideer of een rol toegestaan is
+     *
+     * @param string $role
+     * @return bool
+     */
+    public function validateRole(string $role): bool
+    {
+        return in_array($role, $this->allowedRoles, true);
+    }
+
+    /**
+     * Haal alle gebruikers op met hun rol
+     *
+     * @return array
+     */
+    public function getAllUsers(): array
+    {
+        $sql = "SELECT id, email, role FROM site_users ORDER BY email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Werk de rol van een gebruiker bij na validatie
+     *
+     * @param int $userId
+     * @param string $role
+     * @return bool
+     */
+    public function updateUserRole(int $userId, string $role): bool
+    {
+        if (!$this->validateRole($role)) {
+            return false;
         }
+
+        $sql = "UPDATE site_users SET role = :role WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['role' => $role, 'id' => $userId]);
+    }
     
     public function getUserDataByUserId($hash) {
         // Controleer of de userId leeg is
