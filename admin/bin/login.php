@@ -43,11 +43,14 @@ if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' ) {
     
      if ($pass == 0 ) { 
         echo '<div class="alert alert-success" role="alert">'.$success.'</div>';
-        
+
          $userinfo = $login->getUserInfo('username', $username);
-         
+
         $_SESSION['loggedin'] = 'yes';
         $_SESSION['sess_hash'] = $userinfo['hash'];
+        // Sla gebruikersrol op in de sessie
+        $role = ($userinfo['user_level'] == '1') ? 'admin' : 'user';
+        $_SESSION['role'] = $role;
          
         if(isset($_POST['remember']) && $_POST['remember'] == 'on') {
              // Set a secure remember me cookie

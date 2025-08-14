@@ -61,5 +61,11 @@ if (!$userinfo) {
 // XSS Bescherming
 $firstname = htmlspecialchars($userinfo['firstname'], ENT_QUOTES, 'UTF-8');
 
+// Sla de gebruikersrol op in de sessie
+$_SESSION['role'] = ($userinfo['user_level'] == '1') ? 'admin' : 'user';
+
+// Controleer of de gebruiker de juiste rol heeft
+require_once __DIR__ . '/../functions/role_middleware.php';
+
 ?>
 

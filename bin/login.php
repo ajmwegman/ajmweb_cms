@@ -51,6 +51,8 @@ $error = '
                 
             $_SESSION['loggedin'] = true;
             $_SESSION['session_hash'] = $newHash;
+            // Sla gebruikersrol op in de sessie
+            $_SESSION['role'] = $user['role'] ?? 'user';
             
             $response = ["success" => true, "message" => "Aanmelden gelukt!"];
             

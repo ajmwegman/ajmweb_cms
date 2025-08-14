@@ -49,12 +49,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $timestamp = time();
 
-        $values = ['email' => $email, 'password' => $hashedPassword, 'regdate' => date("Y-m-d")];
-      
+        $values = ['email' => $email, 'password' => $hashedPassword, 'regdate' => date("Y-m-d"), 'role' => 'user'];
+
         $go = $db->insertdata("site_users", $values);
         $response = ["success" => true, "message" => "Succesvol geregistreerd!"];
-        
+
         $_SESSION['loggedin'] = true;
+        $_SESSION['role'] = 'user';
     }
   }
 } else {
