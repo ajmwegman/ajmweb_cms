@@ -1,6 +1,8 @@
 <?php
 class review {
-	
+
+    private PDO $pdo;
+
 /*
 id
 subject
@@ -13,8 +15,8 @@ reviewdate
 modified
 active
 */
-	function __construct($pdo) {
-		$this->pdo = $pdo;
+        function __construct(PDO $pdo) {
+                $this->pdo = $pdo;
     }
 
 	function getAllReviews() {
