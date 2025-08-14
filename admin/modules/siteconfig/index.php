@@ -1,5 +1,5 @@
 <?php
-require_once("src/site_config.php");
+require_once __DIR__ . "/src/site_config.php";
 
 $site_config = new siteConfig($pdo);
 $menu = new menu($pdo);	
@@ -35,10 +35,10 @@ echo "<small>Site ID: " . $sid . "</small>";
             <?php echo $area; ?>
         </div>
         <div class="tab-pane fade" id="colors" role="tabpanel" aria-labelledby="colors-tab">
-            <?php require_once("forms/colors.php"); ?>
+            <?php require_once __DIR__ . "/forms/colors.php"; ?>
         </div>
         <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
-            <?php require_once("forms/seo.php"); ?>
+            <?php require_once __DIR__ . "/forms/seo.php"; ?>
         </div>
     </div>
 </div>
