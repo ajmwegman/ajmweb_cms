@@ -19,50 +19,27 @@ echo "<small>Site ID: " . $sid . "</small>";
 ?>
 
 <div class="container mt-5">
-    <div class="accordion" id="myAccordion">
-
-        <!-- Eerste item: Werkgebieden -->
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <strong>Werkgebieden</strong>
-                </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#myAccordion">
-                <div class="accordion-body">
-                    <?php echo $area; ?>
-                </div>
-            </div>
+    <ul class="nav nav-tabs" id="siteConfigTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="area-tab" data-bs-toggle="tab" data-bs-target="#area" type="button" role="tab" aria-controls="area" aria-selected="true">Werkgebieden</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="colors-tab" data-bs-toggle="tab" data-bs-target="#colors" type="button" role="tab" aria-controls="colors" aria-selected="false">Kleuren</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo" type="button" role="tab" aria-controls="seo" aria-selected="false">SEO</button>
+        </li>
+    </ul>
+    <div class="tab-content pt-3" id="siteConfigTabsContent">
+        <div class="tab-pane fade show active" id="area" role="tabpanel" aria-labelledby="area-tab">
+            <?php echo $area; ?>
         </div>
-
-        <!-- Tweede item: Kleuren -->
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    <strong>Kleuren</strong>
-                </button>
-            </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#myAccordion">
-                <div class="accordion-body">
-                    <?php require_once("forms/colors.php"); ?>
-                </div>
-            </div>
+        <div class="tab-pane fade" id="colors" role="tabpanel" aria-labelledby="colors-tab">
+            <?php require_once("forms/colors.php"); ?>
         </div>
-
-        <!-- Derde item: SEO -->
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    <strong>SEO</strong>
-                </button>
-            </h2>
-            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#myAccordion">
-                <div class="accordion-body">
-                    <?php require_once("forms/seo.php"); ?>
-                </div>
-            </div>
+        <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
+            <?php require_once("forms/seo.php"); ?>
         </div>
-
     </div>
 </div>
 
