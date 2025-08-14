@@ -91,8 +91,8 @@ if ($content_id) {
                                 <div class="form-group">
                                     <label for="status">Status:</label>
                                     <select name="status" id="status" class="form-control">
-                                        <option value="y" <?php echo $content['status'] == 'y' ? 'selected' : ''; ?>>Actief</option>
-                                        <option value="n" <?php echo $content['status'] == 'n' ? 'selected' : ''; ?>>Inactief</option>
+                                        <option value="draft" <?php echo $content['status'] == 'draft' ? 'selected' : ''; ?>>Draft</option>
+                                        <option value="published" <?php echo $content['status'] == 'published' ? 'selected' : ''; ?>>Published</option>
                                     </select>
                                 </div>
                                 

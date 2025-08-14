@@ -19,7 +19,7 @@ if ( isset( $_SESSION[ 'group_id' ] ) ) {
         <div class="col">
         
             <div class="form-check-inline form-switch mt-2">
-                <input class="form-check-input switchbox" type="checkbox" data-set="<?php echo $data['hash']; ?>" <?php echo ($data['status'] == 'y') ? 'checked' : ''; ?>>
+                <input class="form-check-input switchbox" type="checkbox" data-set="<?php echo $data['hash']; ?>" <?php echo ($data['status'] == 'published') ? 'checked' : ''; ?>>
             </div>
 
             

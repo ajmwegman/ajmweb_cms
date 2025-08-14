@@ -38,7 +38,7 @@ $selectbox = selectbox("Kies menu item", 'location', '', array_combine($MenuLoca
             <div class="card-header">
             <div class="row">
   <div class="col-8"><h5>Titel</h5></div>
-  <div class="col-2"><h5>Aan/Uit</h5></div>
+  <div class="col-2"><h5>Status</h5></div>
   <div class="col-2 text-end"><h5>Acties</h5></div>
 </div>
             </div>

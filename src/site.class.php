@@ -92,7 +92,7 @@ class site {
 			return "E01";
 		} else {
 
-			$sql = "SELECT COUNT(*) AS total FROM group_content WHERE location = :location AND status = 'y'";
+                        $sql = "SELECT COUNT(*) AS total FROM group_content WHERE location = :location AND status = 'published'";
 
 			$stmt = $this->pdo->prepare( $sql );
 			$stmt->execute( [ 'location' => $location ] );
@@ -128,7 +128,7 @@ class site {
 			return "E01";
 		} else {
 
-			$sql = "SELECT * FROM group_content WHERE group_id = :groupid AND location = :location AND status = 'y' ORDER BY sortnum ASC";
+                        $sql = "SELECT * FROM group_content WHERE group_id = :groupid AND location = :location AND status = 'published' ORDER BY sortnum ASC";
 
 			$stmt = $this->pdo->prepare( $sql );
 			$stmt->execute( [ 'groupid' => $groupid, 'location' => $location ] );
@@ -146,7 +146,7 @@ class site {
 			return "E01";
 		} else {
 
-			$sql = "SELECT * FROM group_content WHERE group_id = :groupid AND status = 'y' ORDER BY sortnum ASC";
+                        $sql = "SELECT * FROM group_content WHERE group_id = :groupid AND status = 'published' ORDER BY sortnum ASC";
 
 			$stmt = $this->pdo->prepare( $sql );
 			$stmt->execute( [ 'groupid' => $groupid ] );
