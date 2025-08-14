@@ -30,29 +30,6 @@
   </div>
   </div>
 
-  <div class="row mt-4">
-    <div class="col-md-12">
-      <h4>SEO Taken</h4>
-      <ul class="list-group">
-        <li class="list-group-item">
-          <input class="form-check-input me-1" type="checkbox" id="task-title">
-          <label class="form-check-label" for="task-title">Gebruik een duidelijke en unieke websitenaam</label>
-        </li>
-        <li class="list-group-item">
-          <input class="form-check-input me-1" type="checkbox" id="task-keywords">
-          <label class="form-check-label" for="task-keywords">Voeg relevante zoekwoorden toe</label>
-        </li>
-        <li class="list-group-item">
-          <input class="form-check-input me-1" type="checkbox" id="task-description">
-          <label class="form-check-label" for="task-description">Schrijf een beknopte beschrijving van ongeveer 150 tekens</label>
-        </li>
-        <li class="list-group-item">
-          <input class="form-check-input me-1" type="checkbox" id="task-sitemap">
-          <label class="form-check-label" for="task-sitemap">Dien de sitemap in bij zoekmachines</label>
-        </li>
-      </ul>
-    </div>
-  </div>
   </div>
 </div>
 
