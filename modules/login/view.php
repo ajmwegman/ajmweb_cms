@@ -1,8 +1,3 @@
-<?php
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-    header("Location: /users/index.php");
-} else {
-?>
 
 <section class="mt-5">
     <div class="container mt-5">
@@ -50,4 +45,3 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 </section>
 <script src="/js/login.js"></script>
 <script src="/js/registration.js"></script>
-<?php } ?>
