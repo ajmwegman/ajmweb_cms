@@ -1,6 +1,6 @@
 $(function(){
     function load(page){
-        $("#orderlist").load("/admin/modules/orders/bin/summary.php?page="+page);
+        $("#orderlist").load("/admin/modules/orders/bin/list.php?page="+page);
     }
     load(1);
 

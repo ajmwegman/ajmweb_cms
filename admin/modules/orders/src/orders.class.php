@@ -14,6 +14,13 @@ class orders {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getOrder($id) {
+        $sql = "SELECT * FROM orders WHERE id = :id LIMIT 1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function countOrders() {
         $sql = "SELECT COUNT(*) as cnt FROM orders";
         $stmt = $this->pdo->query($sql);
