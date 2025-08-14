@@ -171,6 +171,7 @@
         <?php echo selectboxFont('Slogan Font Familie', 'sloganFontFamily', $data['sloganFontFamily'] ?? '', 'class="form-select autosave_config_site" data-field="sloganFontFamily" data-set="'.$data['id'].'"'); ?>
     </div>
 </div>
+</div>
 <hr>
 <div class="container mt-3">
     <h3>Navigation Menu Instellingen</h3>
