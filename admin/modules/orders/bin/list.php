@@ -39,7 +39,7 @@ $totalPages = $perPage > 0 ? ceil($total / $perPage) : 1;
         </select>
       </td>
       <td><a href="<?php echo $order['invoice_pdf']; ?>" target="_blank">Download</a></td>
-      <td></td>
+      <td><a href="/admin/modules/orders/bin/detail.php?id=<?php echo $order['id']; ?>" class="btn btn-sm btn-primary">Bekijken</a></td>
     </tr>
   <?php } ?>
   </tbody>

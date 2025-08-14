@@ -348,8 +348,29 @@ class site {
         }
         return $text;
     }
-    
-    
+
+
+    public function getOrdersByUser($userId) {
+        $sql = "SELECT * FROM orders WHERE user_id = :uid ORDER BY created_at DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['uid' => $userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getOrder($id) {
+        $sql = "SELECT * FROM orders WHERE id = :id LIMIT 1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateOrderStatus($id, $status) {
+        $sql = "UPDATE orders SET status = :status WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['status' => $status, 'id' => $id]);
+    }
+
+   
    public function getUserByHash($hash)
 {
     try {
