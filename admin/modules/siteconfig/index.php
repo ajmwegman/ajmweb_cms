@@ -44,3 +44,4 @@ echo "<small>Site ID: " . $sid . "</small>";
 </div>
 
 <script src="/admin/modules/siteconfig/js/js.js"></script>
+<script src="/admin/modules/siteconfig/js/seo_tools.js"></script>
