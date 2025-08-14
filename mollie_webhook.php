@@ -11,15 +11,15 @@ $paymentId = $_POST['id'] ?? null;
 if ($paymentId) {
     try {
         $payment = $mollie->payments->get($paymentId);
-        // Sla status op in een eenvoudig bestand zodat deze later kan worden opgehaald
-        $statusFile = __DIR__ . '/uploads/payment_' . $paymentId . '.json';
-        file_put_contents($statusFile, json_encode([
-            'status' => $payment->status,
-            'amount' => $payment->amount->value,
-            'updated' => date('c'),
-        ]));
+
+        if ($payment->isPaid()) {
+            $orderId = $payment->metadata->order_id ?? null;
+            if ($orderId) {
+                $stmt = $pdo->prepare("UPDATE orders SET status='betaald', paid_at=NOW() WHERE id=?");
+                $stmt->execute([$orderId]);
+            }
+        }
     } catch (\Exception $e) {
-        // Eventuele fouten loggen
         error_log($e->getMessage());
     }
 }
