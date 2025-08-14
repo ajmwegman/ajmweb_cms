@@ -3,9 +3,8 @@
 <html lang="nl"><head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title><?php echo $title; ?> | producten</title>
-  <meta content="<?php echo $meta_description; ?>" name="description">
+  <?php $meta_title = $title . ' | producten'; ?>
+  <?php require('head.php'); ?>
   <meta content="<?php echo $meta_keywords; ?>" name="keywords">
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

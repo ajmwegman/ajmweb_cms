@@ -1,42 +1,37 @@
-<?php 
-require_once("config.php"); 
-?>
-<!DOCTYPE html>
-<html lang="nl">
+<?php
+require_once __DIR__ . '/system/database.php';
 
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+$baseUrl = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/';
 
-  <title><?php echo $info['web_naam']; ?></title>
-  <meta content="<?php echo $info['description']; ?>" name="description">
-  <meta content="<?php echo $info['keywords']; ?>" name="keywords">
+$urls = [];
+// Active pages
+try {
+    $stmt = $pdo->query("SELECT seo_url FROM group_content WHERE status = 'y'");
+    foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $path) {
+        if (!empty($path)) {
+            $urls[] = $baseUrl . ltrim($path, '/');
+        }
+    }
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
+    // Active products
+    $stmt = $pdo->query("SELECT seoTitle FROM group_products WHERE status = 'y'");
+    foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $path) {
+        if (!empty($path)) {
+            $urls[] = $baseUrl . 'product/' . ltrim($path, '/');
+        }
+    }
+} catch (Exception $e) {
+    echo 'Database error: ' . $e->getMessage();
+    exit(1);
+}
 
-  <!-- Favicons -- >
-  <link href="favicon.png" rel="icon">
-  <link href="apple-touch-icon.png" rel="apple-touch-icon">
+$xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"/>');
+foreach ($urls as $url) {
+    $u = $xml->addChild('url');
+    $u->addChild('loc', htmlspecialchars($url));
+}
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+file_put_contents(__DIR__ . '/sitemap.xml', $xml->asXML());
 
-  <!-- Vendor CSS Files -->
-  <link href="<?php echo $site_location.$theme; ?>assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="<?php echo $site_location.$theme; ?>assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="<?php echo $site_location.$theme; ?>assets/css/main.css" rel="stylesheet">
-
-</head>
-
-<body>
-<div id="display" class="alert-fixed"></div>
-<?php 
-require_once($theme."sections/header.php"); 
-require_once($theme."sections/jumbotron_small.php"); 
-require_once("siteindex.php");
-//require_once($theme."sections/contact.php");
-require_once($theme."sections/footer.php");
+echo "Generated sitemap.xml with " . count($urls) . " URLs\n";
 ?>

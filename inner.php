@@ -54,9 +54,11 @@ $title = $article['title'];
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title><?php echo $title." | ".$info['web_naam']; ?></title>
-  <meta content="<?php echo $info['description']; ?>" name="description">
+  <?php
+  $meta_title = $title . " | " . $info['web_naam'];
+  $meta_description = $info['description'];
+  ?>
+  <?php require("head.php"); ?>
   <meta content="<?php echo $info['keywords']; ?>" name="keywords">
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -97,7 +99,6 @@ $( document ).ready( function () {
 	
 });
 </script>
-<?php require("head.php"); ?>
 </head>
 
 <body>

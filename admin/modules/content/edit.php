@@ -38,6 +38,13 @@ if ($result && is_array($result)) {
 		$sortnum 	= $row['sortnum'];
 		$status 	= $row['status'];
 
+                $meta_title     = $row['meta_title'] ?? '';
+                $meta_description = $row['meta_description'] ?? '';
+                $og_title       = $row['og_title'] ?? '';
+                $og_description = $row['og_description'] ?? '';
+                $og_image       = $row['og_image'] ?? '';
+
+
 		$selectbox = selectbox("Kies menu item", 'location', $location, array_combine($MenuLocations, $MenuNames), 'class="form-select autosave" data-field="location" data-set="'.$hash.'"');
     }
 } else {

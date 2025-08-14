@@ -30,6 +30,11 @@ $description   = $row['description'];
 $category      = $row['category'];
 $stock         = $row['stock'];
 $btw         = $row['btw'];
+$meta_title      = $row['meta_title'] ?? '';
+$meta_description = $row['meta_description'] ?? '';
+$og_title        = $row['og_title'] ?? '';
+$og_description  = $row['og_description'] ?? '';
+$og_image        = $row['og_image'] ?? '';
 }
 
 $img = $products->getImageName($id );

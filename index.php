@@ -3,9 +3,8 @@
 <html lang="nl"><head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title><?php echo $title; ?></title>
-  <meta content="<?php echo $meta_description; ?>" name="description">
+  <?php $meta_title = $title; ?>
+  <?php require('head.php'); ?>
   <meta content="<?php echo $meta_keywords; ?>" name="keywords">
 
   <!-- Favicons -- >
