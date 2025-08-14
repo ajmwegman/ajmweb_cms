@@ -2,23 +2,41 @@
 class users {
 
     private $pdo;
-    
-	public function __construct($pdo)
-        {
-            $this->pdo = $pdo;
-        }
-    
-    public function getUserDataByUserId($hash) {
+
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    public function getUserDataByUserId($hash)
+    {
         // Controleer of de userId leeg is
         if (!$hash) {
             return "Er mag niet worden aangeroepen op deze wijze.";
         }
 
-        // Bereid de SQL-query voor om te joinen tussen site_users en site_users_address
-        $sql = "SELECT site_users.*, site_users_address.*
-                FROM site_users
-                LEFT JOIN site_users_address ON site_users.id = site_users_address.userid
-                WHERE site_users.hash = :hash";
+        $sql = "SELECT u.*, 
+                       ba.company_name AS company_name,
+                       ba.kvk_number AS kvk_number,
+                       ba.vat_number AS vat_number,
+                       ba.phone_number AS phone_number,
+                       ba.street AS street,
+                       ba.postal_code AS postal_code,
+                       ba.city AS city,
+                       ba.country AS country,
+                       sa.company_name AS shipping_company_name,
+                       sa.kvk_number AS shipping_kvk_number,
+                       sa.vat_number AS shipping_vat_number,
+                       sa.phone_number AS shipping_phone_number,
+                       sa.street AS shipping_street,
+                       sa.postal_code AS shipping_postal_code,
+                       sa.city AS shipping_city,
+                       sa.country AS shipping_country
+                FROM site_users u
+                LEFT JOIN user_addresses ba ON u.id = ba.user_id AND ba.type = 'billing'
+                LEFT JOIN user_addresses sa ON u.id = sa.user_id AND sa.type = 'shipping'
+                WHERE u.hash = :hash";
+
         $stmt = $this->pdo->prepare($sql);
 
         // Voer de query uit
@@ -37,7 +55,7 @@ class users {
             return "Geen gegevens gevonden voor deze userId.";
         }
 
-        // Als er geen adresgegevens zijn, dwing het invullen van het adresformulier
+        // Als er geen factuuradresgegevens zijn, dwing het invullen van het adresformulier
         if (empty($row['street']) || empty($row['postal_code'])) {
             return "address_form_first";
         }
@@ -91,11 +109,11 @@ class users {
         return false;
     }
 
-    public function insertOrUpdateUserData($userId, $bedrijfsnaam, $kvknummer, $btwnummer, $telefoonnummer, $straat, $postcode, $stad, $land)
+    public function insertOrUpdateUserData($userId, $bedrijfsnaam, $kvknummer, $btwnummer, $telefoonnummer, $straat, $postcode, $stad, $land, $type = 'billing')
     {
         try {
-            $sql = "INSERT INTO site_users_address (userid, company_name, kvk_number, vat_number, phone_number, street, postal_code, city, country)
-                    VALUES (:userid, :company_name, :kvk_number, :vat_number, :phone_number, :street, :postal_code, :city, :country)
+            $sql = "INSERT INTO user_addresses (user_id, type, company_name, kvk_number, vat_number, phone_number, street, postal_code, city, country)
+                    VALUES (:user_id, :type, :company_name, :kvk_number, :vat_number, :phone_number, :street, :postal_code, :city, :country)
                     ON DUPLICATE KEY UPDATE
                     company_name = VALUES(company_name),
                     kvk_number = VALUES(kvk_number),
@@ -107,7 +125,8 @@ class users {
                     country = VALUES(country)";
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindParam(':userid', $userId);
+            $stmt->bindParam(':user_id', $userId);
+            $stmt->bindParam(':type', $type);
             $stmt->bindParam(':company_name', $bedrijfsnaam);
             $stmt->bindParam(':kvk_number', $kvknummer);
             $stmt->bindParam(':vat_number', $btwnummer);
