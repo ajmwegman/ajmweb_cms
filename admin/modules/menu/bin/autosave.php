@@ -2,7 +2,7 @@
 @session_start();
 
 error_reporting( E_ALL ^ E_DEPRECATED );
-ini_set( "display_errors", 1 ); //Array ( [order] => Array ( [0] => item3 [1] => item2 [2] => item1 ) )
+ini_set( "display_errors", 1 );
 
 $path = $_SERVER['DOCUMENT_ROOT'];
 

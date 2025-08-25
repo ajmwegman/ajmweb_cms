@@ -29,6 +29,12 @@ require_once( "../admin/template/navtabs.php" );
     </div>
   </div>
 -->
+<!-- Loading indicator -->
+<div id="loading" class="alert alert-info" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+<!-- Display messages -->
+<div id="display" class="alert alert-success" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
 <div class="row mt-4">
   <div class="col">
     <div class="card shadow">
@@ -57,4 +63,9 @@ require_once( "../admin/template/navtabs.php" );
 
 <!-- Button trigger modal -->
 <?php include("forms/add.php"); ?>
+
+<!-- CSS voor modal toegankelijkheid -->
+<link rel="stylesheet" href="/admin/modules/menu/css/modal-fixes.css">
+
+<script src="/admin/js/global.js" type="text/javascript"></script>
 <script src="/admin/modules/menu/js/menulist.js"  type="text/javascript"></script>

@@ -1,0 +1,108 @@
+/* Modal Toegankelijkheid Verbeteringen */
+
+/* Zorg ervoor dat de modal correct wordt weergegeven */
+.modal {
+    z-index: 1050;
+}
+
+/* Focus management voor modal */
+.modal:not(.show) {
+    display: none !important;
+}
+
+/* Zorg ervoor dat focus niet buiten de modal kan */
+.modal.show {
+    display: block !important;
+}
+
+/* Verbeterde focus styling */
+.modal input:focus,
+.modal button:focus,
+.modal select:focus,
+.modal textarea:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Zorg ervoor dat de modal backdrop correct werkt */
+.modal-backdrop {
+    z-index: 1040;
+}
+
+/* Verbeterde button styling */
+.btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Zorg ervoor dat form labels duidelijk zijn */
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Help text styling */
+.form-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Modal header verbeteringen */
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem 1.5rem;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* Modal body verbeteringen */
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Modal footer verbeteringen */
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+    padding: 1rem 1.5rem;
+    gap: 0.5rem;
+}
+
+/* Zorg ervoor dat de modal responsive is */
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+    }
+}
+
+/* Focus trap voor modal */
+.modal:focus {
+    outline: none;
+}
+
+/* Zorg ervoor dat de modal correct wordt afgesloten */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+/* Verbeterde toegankelijkheid voor screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
