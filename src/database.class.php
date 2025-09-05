@@ -33,8 +33,8 @@ class database {
     {
         $this->pdo = $pdo;
     }
-  
-	public function runQuery($sql, $parameters = []) {
+
+        public function runQuery($sql, $parameters = []) {
     
         $stmt = $this->pdo->prepare($sql);
     
@@ -54,8 +54,16 @@ class database {
 		} else {
 		  return false;
 		}
-	}*/
-    
+        }*/
+
+    /**
+     * Provide access to the underlying PDO instance
+     */
+    public function getPdo(): PDO
+    {
+        return $this->pdo;
+    }
+
   public function countQuery($sql, $parameters = []) {
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute($parameters);
