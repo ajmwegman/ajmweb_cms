@@ -32,14 +32,30 @@ class photoslider {
     }
     
     function getPhotosliderSettings($group_id) {
-        $sql = "SELECT * FROM group_photoslider_settings WHERE group_id = :group_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['group_id' => $group_id]);
-        $row = $stmt->fetch();
-        if(!empty($row)) {
-            return($row);
-        } else {
-            return false;
+        try {
+            $sql = "SELECT * FROM group_photoslider_settings WHERE group_id = :group_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute(['group_id' => $group_id]);
+            $row = $stmt->fetch();
+            if(!empty($row)) {
+                return($row);
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // If the settings table doesn't exist yet, return default settings
+            if ($e->getCode() == '42S02') {
+                return [
+                    'group_id'   => $group_id,
+                    'hash'       => '',
+                    'height'     => 480,
+                    'speed'      => 4000,
+                    'buttons'    => 'y',
+                    'indicators' => 'y',
+                    'folder'     => ''
+                ];
+            }
+            throw $e;
         }
     }
 
