@@ -74,8 +74,13 @@ try {
     echo "<h3>Database Summary:</h3>";
     echo "<p>Total analytics records: " . $totalRecords . "</p>";
     
-} catch (Exception $e) {
+} catch (PDOException $e) {
+    error_log('PDOException in test_url_filtering.php: ' . $e->getMessage());
     echo "<h3>Error:</h3>";
-    echo "<p style='color: red;'>" . $e->getMessage() . "</p>";
+    echo "<p style='color: red;'>A database error occurred. Please try again later.</p>";
+} catch (Exception $e) {
+    error_log('Exception in test_url_filtering.php: ' . $e->getMessage());
+    echo "<h3>Error:</h3>";
+    echo "<p style='color: red;'>An unexpected error occurred. Please try again later.</p>";
 }
 ?>
