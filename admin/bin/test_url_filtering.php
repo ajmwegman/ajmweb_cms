@@ -3,6 +3,24 @@
 require_once("../../system/database.php");
 require_once("../src/analytics.class.php");
 
+function renderTable(array $headers, array $rows): string
+{
+    $headerHtml = '';
+    foreach ($headers as $header) {
+        $headerHtml .= "<th>{$header}</th>";
+    }
+
+    $rowsHtml = '';
+    foreach ($rows as $row) {
+        $cells = array_map(fn($cell) => "<td>{$cell}</td>", $row);
+        $rowsHtml .= '<tr>' . implode('', $cells) . '</tr>';
+    }
+
+    return trim(<<<HTML
+<table border='1' style='border-collapse: collapse; width: 100%;'><tr>{$headerHtml}</tr>{$rowsHtml}</table>
+HTML);
+}
+
 try {
     $analytics = new Analytics($pdo);
     
@@ -15,17 +33,15 @@ try {
     if (empty($topPages)) {
         echo "<p>No legitimate pages found in analytics data.</p>";
     } else {
-        echo "<table border='1' style='border-collapse: collapse; width: 100%;'>";
-        echo "<tr><th>Page URL</th><th>Visits</th><th>Percentage</th></tr>";
-        
-        foreach ($topPages as $page) {
-            echo "<tr>";
-            echo "<td>" . htmlspecialchars($page['page_url']) . "</td>";
-            echo "<td>" . $page['count'] . "</td>";
-            echo "<td>" . $page['percentage'] . "%</td>";
-            echo "</tr>";
-        }
-        echo "</table>";
+        $rows = array_map(
+            fn($page) => [
+                htmlspecialchars($page['page_url']),
+                $page['count'],
+                $page['percentage'] . '%',
+            ],
+            $topPages
+        );
+        echo renderTable(['Page URL', 'Visits', 'Percentage'], $rows);
     }
     
     // Check for any suspicious URLs in the database
@@ -52,17 +68,15 @@ try {
         echo "<p style='color: green;'>✓ No suspicious URLs found in database.</p>";
     } else {
         echo "<p style='color: red;'>⚠ Found suspicious URLs in database:</p>";
-        echo "<table border='1' style='border-collapse: collapse; width: 100%;'>";
-        echo "<tr><th>Suspicious URL</th><th>Count</th></tr>";
-        
-        foreach ($suspiciousUrls as $url) {
-            echo "<tr>";
-            echo "<td>" . htmlspecialchars($url['page_url']) . "</td>";
-            echo "<td>" . $url['count'] . "</td>";
-            echo "</tr>";
-        }
-        echo "</table>";
-        
+        $rows = array_map(
+            fn($url) => [
+                htmlspecialchars($url['page_url']),
+                $url['count'],
+            ],
+            $suspiciousUrls
+        );
+        echo renderTable(['Suspicious URL', 'Count'], $rows);
+
         echo "<p><strong>Note:</strong> These URLs will be filtered out from the Top Pages display.</p>";
     }
     
