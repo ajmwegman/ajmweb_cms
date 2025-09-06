@@ -38,8 +38,9 @@ if ($result && is_array($result)) {
 		$keywords 	= $row['keywords'];
 		$sortnum 	= $row['sortnum'];
 		$status 	= $row['status'];
-		$meta_title 	= $row['meta_title'];
-		$meta_description = $row['meta_description'];
+		// Provide fallbacks for optional SEO fields to avoid undefined index warnings
+		$meta_title       = $row['meta_title'] ?? '';
+		$meta_description = $row['meta_description'] ?? '';
 
 		$selectbox = selectbox("Kies menu item", 'location', $location, array_combine($MenuLocations, $MenuNames), 'class="form-select autosave" data-field="location" data-set="'.$hash.'"');
     }
