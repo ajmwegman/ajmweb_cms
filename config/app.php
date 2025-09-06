@@ -4,7 +4,7 @@ return [
     'db_name' => 'ajmweb_wm',
     'db_user' => 'ajmweb_wm',
     'db_password' => 'ASDFGH01',
-    'site_location' => 'http://localhost/',
+    'site_location' => Core::url(),
     'theme' => 'themes/onepage'
 ];
 ?>

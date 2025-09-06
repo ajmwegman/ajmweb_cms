@@ -30,5 +30,18 @@ class Core
         }
         return self::$config[$key] ?? null;
     }
+
+    public static function url(string $path = ''): string
+    {
+        $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+        $scheme = $isSecure ? 'https://' : 'http://';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+        $basePath = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
+        $base = $scheme . $host . ($basePath ? $basePath . '/' : '/');
+
+        return $base . ltrim($path, '/');
+    }
 }
 ?>
