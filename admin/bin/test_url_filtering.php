@@ -1,7 +1,7 @@
 <?php
 // Test script for URL filtering
-require_once("../../system/database.php");
-require_once("../src/analytics.class.php");
+require_once __DIR__ . '/../../system/database.php';
+require_once __DIR__ . '/../src/analytics.class.php';
 
 try {
     $analytics = new Analytics($pdo);
