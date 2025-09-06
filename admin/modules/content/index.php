@@ -1,6 +1,6 @@
 <?php
-require_once("src/content.class.php"); 
-require_once("../admin/src/menulist.class.php"); 
+require_once __DIR__ . '/src/content.class.php';
+require_once __DIR__ . '/../../src/menulist.class.php';
 
 $content = new content($pdo);	
 $menu = new menu($pdo);	
@@ -10,7 +10,7 @@ $MenuNames = $menu->getMenuNames( $group_id );
 
 echo "<h2>" . $menu->getGroupName( $group_id ) . "</h2>";
 
-require_once("../admin/template/navtabs.php");
+require_once __DIR__ . '/../../template/navtabs.php';
 
 // Get page and id parameters from URL rewriting OR admin module parameters
 $page = $_GET['page'] ?? '';
@@ -44,7 +44,7 @@ $selectbox = selectbox("Kies menu item", 'location', '', array_combine($MenuLoca
             </div>
 		<div class="card-body">
             <div id="menulist">
-                <?php require("../admin/modules/content/bin/summary.php"); ?>
+                <?php require __DIR__ . '/bin/summary.php'; ?>
             </div>
 		</div>
 		</div>
